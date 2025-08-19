@@ -34,11 +34,14 @@ class GameRoom {
   /**
    * Add a player to the room and assign to team
    * @param {string} socketId - Socket connection ID
-   * @param {Object} playerData - Player information (name, team)
+   * @param {Object} playerData - Player information (name, team, userId)
    */
   addPlayer(socketId, playerData) {
+    const userId = playerData.userId || socketId;
+    
     this.players[socketId] = {
       id: socketId,
+      userId: userId,
       name: playerData.name,
       team: playerData.team
     };
@@ -48,9 +51,14 @@ class GameRoom {
       this.teams[playerData.team] = { name: playerData.team, players: [] };
     }
     
-    // Add player to team (avoid duplicates)
-    if (!this.teams[playerData.team].players.includes(socketId)) {
-      this.teams[playerData.team].players.push(socketId);
+    // Clean team array and use only userId for membership
+    this.teams[playerData.team].players = this.teams[playerData.team].players.filter(id => 
+      id.startsWith('user_') // Keep only user IDs, remove socket IDs
+    );
+    
+    // Add userId if not already present
+    if (!this.teams[playerData.team].players.includes(userId)) {
+      this.teams[playerData.team].players.push(userId);
     }
   }
 
@@ -61,8 +69,9 @@ class GameRoom {
   removePlayer(socketId) {
     const player = this.players[socketId];
     if (player && player.team && this.teams[player.team]) {
-      // Remove from team
-      this.teams[player.team].players = this.teams[player.team].players.filter(id => id !== socketId);
+      // Remove from team using userId to handle reconnections properly
+      const userId = player.userId || socketId;
+      this.teams[player.team].players = this.teams[player.team].players.filter(id => id !== userId);
       // Clean up empty teams
       if (this.teams[player.team].players.length === 0) {
         delete this.teams[player.team];
@@ -92,6 +101,8 @@ class GameRoom {
     if (Object.keys(this.teams).length === 2) {
       this.gameState = 'GAMEPLAY';
       this.currentGame = new GameplayManager(this);
+      // Initialize first turn
+      this.currentGame.initializeFirstTurn();
       return true;
     }
     return false;
@@ -157,6 +168,13 @@ class GameplayManager {
     this.responses = [];
     this.timer = null;
   }
+  
+  initializeFirstTurn() {
+    // Set first team as guessing team and select their first announcer
+    const firstTeam = this.getCurrentGuessingTeam();
+    const firstAnnouncer = this.getCurrentAnnouncer();
+    console.log(`First turn: Team ${firstTeam}, Announcer ${firstAnnouncer}`);
+  }
 
   getCurrentGuessingTeam() {
     return this.teamOrder[this.currentTurn % 2];
@@ -165,7 +183,14 @@ class GameplayManager {
   getCurrentAnnouncer() {
     const team = this.getCurrentGuessingTeam();
     const teamPlayers = this.room.teams[team].players;
-    return teamPlayers[this.announcerIndex[team] % teamPlayers.length];
+    const announcerUserId = teamPlayers[this.announcerIndex[team] % teamPlayers.length];
+    
+    // Find the current socket ID for this user
+    const playerEntry = Object.entries(this.room.players).find(([socketId, player]) => 
+      player.userId === announcerUserId
+    );
+    
+    return playerEntry ? playerEntry[0] : null;
   }
 
   nextTurn() {

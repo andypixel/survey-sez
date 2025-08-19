@@ -44,14 +44,29 @@ function App() {
 
   useEffect(() => {
     socket.on('connect', () => {
+      console.log('Socket connected:', socket.id);
       setMyId(socket.id);
+      if (roomId) {
+        socket.emit('joinRoom', roomId);
+      }
+    });
+    
+    socket.on('disconnect', () => {
+      console.log('Socket disconnected');
+    });
+    
+    socket.on('reconnect', () => {
+      console.log('Socket reconnected, syncing with server...');
       if (roomId) {
         socket.emit('joinRoom', roomId);
       }
     });
 
     socket.on('roomSetup', (data) => userSetupWorkflow.handleRoomSetup(data));
-    socket.on('gameState', (state) => gameplayWorkflow.handleGameState(state));
+    socket.on('gameState', (state) => {
+      console.log('Received gameState from server:', state.gameState, state.roomId);
+      gameplayWorkflow.handleGameState(state);
+    });
     socket.on('categoryAdded', (data) => gameplayWorkflow.handleCategoryAdded(data));
     socket.on('roomSetup', (data) => {
       if (showUserSetup) {
@@ -70,6 +85,12 @@ function App() {
       setSetupError(error.message);
       setTimeout(() => setSetupError(''), 3000);
     });
+    
+    socket.on('gameError', (error) => {
+      console.log('Received game error:', error);
+      // TODO: Add proper game error state management
+      alert(error.message);
+    });
 
     return () => {
       socket.off('connect');
@@ -78,7 +99,9 @@ function App() {
       socket.off('categoryError');
       socket.off('setupError');
       socket.off('categoryAdded');
-
+      socket.off('gameError');
+      socket.off('disconnect');
+      socket.off('reconnect');
     };
   }, [roomId, myId]);
   
@@ -110,6 +133,7 @@ function App() {
       myId={myId}
       myUserId={myUserId}
       onAddCategory={(e) => gameplayWorkflow.handleAddCategory(e)}
+      onStartGame={(e) => gameplayWorkflow.handleStartGame(e)}
       categoryError={categoryError}
     />
   );

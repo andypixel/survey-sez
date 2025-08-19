@@ -46,6 +46,16 @@ async function initializeData() {
   });
 }
 
+// Debounced save to prevent concurrent writes
+let saveTimeout = null;
+function debouncedSave() {
+  if (saveTimeout) clearTimeout(saveTimeout);
+  saveTimeout = setTimeout(async () => {
+    await saveAllData();
+    saveTimeout = null;
+  }, 5000); // Save 5 seconds after last change
+}
+
 // TODO: Replace interval-based saving with event-driven persistence for better performance
 setInterval(async () => {
   await saveAllData();
@@ -108,6 +118,35 @@ function getOrCreateUserSession(socketId) {
   }
   return userSessions[socketId];
 }
+
+// Debug endpoint - available in all environments
+app.get('/debug/state', (req, res) => {
+  const state = {
+    rooms: Object.keys(rooms).reduce((acc, roomId) => {
+      const room = rooms[roomId];
+      acc[roomId] = {
+        roomId: room.roomId,
+        gameState: room.gameState,
+        teams: room.teams,
+        players: room.players,
+        playerCount: Object.keys(room.players).length,
+        teamCount: Object.keys(room.teams).length
+      };
+      return acc;
+    }, {}),
+    userSessions: Object.keys(userSessions).reduce((acc, socketId) => {
+      const session = userSessions[socketId];
+      acc[socketId] = {
+        userId: session.userId,
+        currentRoom: session.currentRoom,
+        userData: session.userData
+      };
+      return acc;
+    }, {}),
+    totalConnections: Object.keys(userSessions).length
+  };
+  res.json(state);
+});
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
@@ -187,7 +226,7 @@ io.on('connection', (socket) => {
       const isRejoin = existingUserData && existingUserData.name === data.playerName && existingUserData.team === teamId;
       
       // Add player to room and save user data
-      room.addPlayer(socket.id, { name: data.playerName, team: teamId });
+      room.addPlayer(socket.id, { name: data.playerName, team: teamId, userId: userId });
       userSession.setUserData(roomId, { 
         userId: userId,
         name: data.playerName, 
@@ -199,6 +238,9 @@ io.on('connection', (socket) => {
       
       // Send current game state to new player
       socket.emit('gameState', room.getState());
+      
+      // Trigger debounced save after state change
+      debouncedSave();
       
       // Broadcast updates to other users (avoid cascading refreshes on rejoins)
       if (!isRejoin) {
@@ -225,6 +267,46 @@ io.on('connection', (socket) => {
           });
         }
       }
+    }
+  });
+  
+  /**
+   * Handle game start request
+   * Validates teams and starts gameplay phase
+   */
+  socket.on('startGame', (data) => {
+    console.log('Server received startGame event:', data);
+    const roomId = userSession.currentRoom;
+    console.log('Current room:', roomId);
+    
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      console.log('Room teams:', Object.keys(room.teams));
+      
+      // Validate that we have exactly 2 teams to start
+      if (Object.keys(room.teams).length !== 2) {
+        console.log('Not enough teams to start game');
+        socket.emit('gameError', { message: 'Need exactly 2 teams to start the game' });
+        return;
+      }
+      
+      // Update game settings
+      room.gameSettings.timeLimit = data.timeLimit || 30;
+      room.gameSettings.turnsPerTeam = data.rounds || 10;
+      
+      // Start the game
+      console.log('Attempting to start game...');
+      if (room.startGame()) {
+        // Broadcast game state to all players in room
+        io.to(roomId).emit('gameState', room.getState());
+        debouncedSave();
+        console.log(`Game started in room ${roomId}`);
+      } else {
+        console.log('Failed to start game');
+        socket.emit('gameError', { message: 'Failed to start game' });
+      }
+    } else {
+      console.log('No current room for user');
     }
   });
   
