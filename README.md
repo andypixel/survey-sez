@@ -33,6 +33,8 @@ cd client && npm start
 
 5. Open multiple browser tabs to `http://localhost:3000` to test multiplayer
 
+6. Use http://localhost:3001/debug/state to view current application state
+
 ### Data Management
 - Development data is stored in `data/` directory (not committed to git)
 - Run `npm run init-data` to create initial data files
