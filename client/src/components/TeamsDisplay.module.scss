@@ -1,0 +1,39 @@
+.container {
+  margin-bottom: 20px;
+
+  h3 {
+    margin-bottom: 15px;
+  }
+}
+
+.teamsGrid {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.team {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+
+  strong {
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+.playerList {
+  font-size: 14px;
+}
+
+.player {
+  &.currentUser {
+    color: #ff4444;
+  }
+
+  &.otherUser {
+    color: #333;
+  }
+}

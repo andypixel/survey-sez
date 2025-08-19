@@ -1,0 +1,62 @@
+.container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+}
+
+.teamOptions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.teamOption {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.newTeamInput {
+  padding: 5px;
+  font-size: 14px;
+  width: 150px;
+  margin-left: 10px;
+}
+
+.button {
+  padding: 10px 20px;
+  font-size: 16px;
+  align-self: flex-start;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}

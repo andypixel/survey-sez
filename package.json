@@ -1,0 +1,26 @@
+{
+  "name": "realtime-game-prototype",
+  "version": "1.0.0",
+  "description": "Real-time multiplayer game prototype",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "npm run init-data && npm run kill-port && sleep 1 && nodemon --ignore data/ server.js",
+    "kill-port": "./kill-server.sh",
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "npm run build",
+    "init-data": "node scripts/init-dev-data.js",
+    "reset-data": "rm -rf data/*.json && npm run init-data"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": "20.x"
+  }
+}

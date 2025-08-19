@@ -1,0 +1,61 @@
+.container {
+  margin-bottom: 20px;
+}
+
+.title {
+  margin-bottom: 15px;
+}
+
+.categoriesGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.categoryCard {
+  padding: 8px 12px;
+  background-color: #fff3e0;
+  border: 1px solid #ff9800;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.categoryName {
+  font-weight: bold;
+}
+
+.categoryEntries {
+  font-size: 12px;
+  color: #666;
+}
+
+.form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.nameInput {
+  padding: 8px;
+  font-size: 14px;
+  width: 200px;
+}
+
+.entriesInput {
+  padding: 8px;
+  font-size: 14px;
+  width: 250px;
+}
+
+.button {
+  padding: 8px 16px;
+  font-size: 14px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
