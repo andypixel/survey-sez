@@ -51,11 +51,15 @@ client/src/
 ### File Structure
 ```
 server/
+├── handlers/            # Socket event handlers (NEW)
+│   ├── GameHandler.js       # Game start, begin turn events
+│   ├── CategoryHandler.js   # Add category events
+│   └── RoomHandler.js       # Join room, user setup events
 ├── GameRoom.js          # Room management + GameplayManager
 ├── UserSession.js       # User session tracking
 └── storage/
     └── JsonFileStorage.js    # File-based persistence
-server.js                # Main server, socket event handlers
+server.js                # Main server, handler registration
 data/                    # JSON data files (git-ignored)
 ├── categories.json      # Universal + custom categories
 ├── rooms.json           # Room states

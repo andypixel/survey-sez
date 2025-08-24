@@ -10,12 +10,18 @@ Open multiple tabs to `http://localhost:3000` to test multiplayer.
 
 ### Adding a New Socket Event
 
-1. **Server side** (`server.js`):
+1. **Add to appropriate handler** (e.g., `server/handlers/GameHandler.js`):
 ```javascript
+// In register() method:
 socket.on('myNewEvent', (data) => {
+  this.handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
+});
+
+// Add handler method:
+static handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data) {
   // Handle event
   io.to(roomId).emit('responseEvent', result);
-});
+}
 ```
 
 2. **Client workflow** (e.g., `GameplayWorkflow.js`):
@@ -64,7 +70,7 @@ onClick={() => window.gameplayWorkflow.handleMyAction()}
 |------|----------------|
 | Add UI component | `client/src/components/` |
 | Add game logic | `server/GameRoom.js` |
-| Add socket event | `server.js` + workflow file |
+| Add socket event | `server/handlers/` + workflow file |
 | Add new page/phase | `client/src/pages/` + `App.jsx` routing |
 | Change data structure | `server/storage/` + update getState() |
 
