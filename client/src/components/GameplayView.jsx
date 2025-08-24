@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
 import TeamGuesses from './TeamGuesses';
+import CategoryItems from './CategoryItems';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
   const currentGame = gameState.currentGame;
   const [guessInput, setGuessInput] = useState('');
-
   const handleGuessSubmit = (e) => {
     e.preventDefault();
     if (guessInput.trim()) {
@@ -15,6 +15,13 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
       setGuessInput('');
     }
   };
+
+  const handleEntryToggle = (entry) => {
+    gameplay.handleToggleEntry(entry);
+  };
+
+  // Convert server array back to Set for component compatibility
+  const markedEntries = new Set(currentGame.markedEntries || []);
   
   if (isAnnouncer) {
     return (
@@ -28,14 +35,13 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         {currentGame.currentCategory ? (
           <div className={styles.announcerView}>
             <h3>{currentGame.currentCategory.name}</h3>
-            <div className={styles.categoryDetails}>
-              <h4>Category Items:</h4>
-              <ul>
-                {currentGame.currentCategory.entries.map((entry, index) => (
-                  <li key={index}>{entry}</li>
-                ))}
-              </ul>
-            </div>
+            <CategoryItems 
+              category={currentGame.currentCategory}
+              responses={currentGame.responses}
+              markedEntries={markedEntries}
+              onEntryToggle={handleEntryToggle}
+              showCheckboxes={true}
+            />
             {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
               <div className={styles.timer}>
                 Time: {gameState.gameSettings.timeLimit}s
@@ -91,14 +97,13 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           <div className={styles.guesserView}>
             <h3>Category: {currentGame.currentCategory.name}</h3>
             {currentGame.turnPhase === 'RESULTS' && (
-              <div className={styles.categoryDetails}>
-                <h4>Category Items:</h4>
-                <ul>
-                  {currentGame.currentCategory.entries.map((entry, index) => (
-                    <li key={index}>{entry}</li>
-                  ))}
-                </ul>
-              </div>
+              <CategoryItems 
+                category={currentGame.currentCategory}
+                responses={currentGame.responses}
+                markedEntries={markedEntries}
+                onEntryToggle={handleEntryToggle}
+                showCheckboxes={false}
+              />
             )}
             {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
               <div className={styles.timer}>
@@ -140,14 +145,13 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         <div className={styles.spectatorView}>
           <h3>Category: {currentGame.currentCategory.name}</h3>
           {currentGame.turnPhase === 'RESULTS' && (
-            <div className={styles.categoryDetails}>
-              <h4>Category Items:</h4>
-              <ul>
-                {currentGame.currentCategory.entries.map((entry, index) => (
-                  <li key={index}>{entry}</li>
-                ))}
-              </ul>
-            </div>
+            <CategoryItems 
+              category={currentGame.currentCategory}
+              responses={currentGame.responses}
+              markedEntries={markedEntries}
+              onEntryToggle={handleEntryToggle}
+              showCheckboxes={false}
+            />
           )}
           {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
             <div className={styles.timer}>

@@ -33,6 +33,10 @@ class GameHandler {
     socket.on('submitGuess', (data) => {
       this.handleSubmitGuess(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
     });
+
+    socket.on('toggleEntry', (data) => {
+      this.handleToggleEntry(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
+    });
   }
 
   /**
@@ -153,6 +157,25 @@ class GameHandler {
             room.currentGame.turnPhase === GAME_RULES.TURN_PHASES.ACTIVE_GUESSING) {
           
           if (room.currentGame.addGuess(data.guess, player.name)) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle entry toggle from announcer
+   */
+  static handleToggleEntry(socket, io, userSession, getOrCreateRoom, debouncedSave, data) {
+    const roomId = userSession.currentRoom;
+    if (roomId && data.entry) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.toggleEntry(data.entry)) {
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }

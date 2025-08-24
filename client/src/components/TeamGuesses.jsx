@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './GameplayView.module.scss';
+import styles from './TeamGuesses.module.scss';
 
 function TeamGuesses({ responses }) {
   return (

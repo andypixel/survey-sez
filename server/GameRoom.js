@@ -224,6 +224,7 @@ class GameplayManager {
     this.timer = null;
     this.usedCategoryIds = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
+    this.markedEntries = new Set();
   }
   
   initializeFirstTurn() {
@@ -297,6 +298,15 @@ class GameplayManager {
     return false;
   }
 
+  toggleEntry(entry) {
+    if (this.markedEntries.has(entry)) {
+      this.markedEntries.delete(entry);
+    } else {
+      this.markedEntries.add(entry);
+    }
+    return true;
+  }
+
   getCurrentGuessingTeam() {
     return this.teamOrder[this.currentTurn % 2];
   }
@@ -326,6 +336,7 @@ class GameplayManager {
     this.currentCategory = null;
     this.selectedCategory = null;
     this.responses = [];
+    this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     
     // Select category for new announcer
@@ -347,6 +358,7 @@ class GameplayManager {
       selectedCategory: this.selectedCategory,
       responses: this.responses,
       turnPhase: this.turnPhase,
+      markedEntries: Array.from(this.markedEntries),
       isComplete: this.isGameComplete()
     };
   }

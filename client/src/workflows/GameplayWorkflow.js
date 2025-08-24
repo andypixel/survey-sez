@@ -162,6 +162,13 @@ class GameplayWorkflow {
       this.socket.emit('submitGuess', { guess: guess.trim() });
     }
   }
+
+  /**
+   * Handle entry toggle from announcer
+   */
+  handleToggleEntry(entry) {
+    this.socket.emit('toggleEntry', { entry });
+  }
 }
 
 export default GameplayWorkflow;
