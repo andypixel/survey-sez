@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
+import TeamGuesses from './TeamGuesses';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
@@ -40,17 +41,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                 Time: {gameState.gameSettings.timeLimit}s
               </div>
             )}
-            <div className={styles.guesses}>
-              <h4>Team Guesses:</h4>
-              <div className={styles.guessesFeed}>
-                {currentGame.responses.map((response, index) => (
-                  <div key={index} className={styles.guess}>
-                    <span className={styles.guessText}>{response.text}</span>
-                    {response.player && <span className={styles.playerName}>- {response.player}</span>}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <TeamGuesses responses={currentGame.responses} />
             {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
               <button 
                 className={styles.endButton}
@@ -114,31 +105,21 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                 Time: {gameState.gameSettings.timeLimit}s
               </div>
             )}
-            <div className={styles.guesses}>
-              <h4>Team Guesses:</h4>
-              <div className={styles.guessesFeed}>
-                {currentGame.responses.map((response, index) => (
-                  <div key={index} className={styles.guess}>
-                    <span className={styles.guessText}>{response.text}</span>
-                    {response.player && <span className={styles.playerName}>- {response.player}</span>}
-                  </div>
-                ))}
-              </div>
-              {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
-                <form className={styles.guessForm} onSubmit={handleGuessSubmit}>
-                  <input 
-                    type="text" 
-                    placeholder="Enter your guess..."
-                    className={styles.guessInput}
-                    value={guessInput}
-                    onChange={(e) => setGuessInput(e.target.value)}
-                  />
-                  <button type="submit" className={styles.guessButton}>
-                    Submit
-                  </button>
-                </form>
-              )}
-            </div>
+            <TeamGuesses responses={currentGame.responses} />
+            {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+              <form className={styles.guessForm} onSubmit={handleGuessSubmit}>
+                <input 
+                  type="text" 
+                  placeholder="Enter your guess..."
+                  className={styles.guessInput}
+                  value={guessInput}
+                  onChange={(e) => setGuessInput(e.target.value)}
+                />
+                <button type="submit" className={styles.guessButton}>
+                  Submit
+                </button>
+              </form>
+            )}
           </div>
         )}
       </div>
@@ -173,17 +154,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
               Time: {gameState.gameSettings.timeLimit}s
             </div>
           )}
-          <div className={styles.guesses}>
-            <h4>Team Guesses:</h4>
-            <div className={styles.guessesFeed}>
-              {currentGame.responses.map((response, index) => (
-                <div key={index} className={styles.guess}>
-                  <span className={styles.guessText}>{response.text}</span>
-                  {response.player && <span className={styles.playerName}>- {response.player}</span>}
-                </div>
-              ))}
-            </div>
-          </div>
+          <TeamGuesses responses={currentGame.responses} />
         </div>
       )}
     </div>
