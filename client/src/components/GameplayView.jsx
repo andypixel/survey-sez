@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
   const currentGame = gameState.currentGame;
+  const [guessInput, setGuessInput] = useState('');
+
+  const handleGuessSubmit = (e) => {
+    e.preventDefault();
+    if (guessInput.trim()) {
+      gameplay.handleSubmitGuess(guessInput);
+      setGuessInput('');
+    }
+  };
   
   if (isAnnouncer) {
     return (
@@ -113,16 +122,20 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                   </div>
                 ))}
               </div>
-              <form className={styles.guessForm}>
-                <input 
-                  type="text" 
-                  placeholder="Enter your guess..."
-                  className={styles.guessInput}
-                />
-                <button type="submit" className={styles.guessButton}>
-                  Submit
-                </button>
-              </form>
+              {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+                <form className={styles.guessForm} onSubmit={handleGuessSubmit}>
+                  <input 
+                    type="text" 
+                    placeholder="Enter your guess..."
+                    className={styles.guessInput}
+                    value={guessInput}
+                    onChange={(e) => setGuessInput(e.target.value)}
+                  />
+                  <button type="submit" className={styles.guessButton}>
+                    Submit
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         )}

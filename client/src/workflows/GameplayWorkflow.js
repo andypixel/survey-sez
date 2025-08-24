@@ -153,6 +153,15 @@ class GameplayWorkflow {
   handleContinueTurn() {
     this.socket.emit('continueTurn');
   }
+
+  /**
+   * Handle guess submission from guessing team members
+   */
+  handleSubmitGuess(guess) {
+    if (guess.trim()) {
+      this.socket.emit('submitGuess', { guess: guess.trim() });
+    }
+  }
 }
 
 export default GameplayWorkflow;

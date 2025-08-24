@@ -285,6 +285,18 @@ class GameplayManager {
     return true;
   }
 
+  addGuess(guessText, playerName) {
+    if (this.turnPhase === GAME_RULES.TURN_PHASES.ACTIVE_GUESSING) {
+      this.responses.push({
+        text: guessText,
+        player: playerName,
+        timestamp: Date.now()
+      });
+      return true;
+    }
+    return false;
+  }
+
   getCurrentGuessingTeam() {
     return this.teamOrder[this.currentTurn % 2];
   }

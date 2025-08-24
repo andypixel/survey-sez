@@ -29,6 +29,10 @@ class GameHandler {
     socket.on('continueTurn', () => {
       this.handleContinueTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
+
+    socket.on('submitGuess', (data) => {
+      this.handleSubmitGuess(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
+    });
   }
 
   /**
@@ -123,6 +127,32 @@ class GameHandler {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
           if (room.currentGame.continueTurn()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle guess submission from guessing team members
+   */
+  static handleSubmitGuess(socket, io, userSession, getOrCreateRoom, debouncedSave, data) {
+    const roomId = userSession.currentRoom;
+    if (roomId && data.guess) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const userId = room.getUserForSocket(socket.id);
+        const player = room.players[userId];
+        
+        // Validate player is on guessing team and not the announcer
+        if (player && 
+            player.team === room.currentGame.getCurrentGuessingTeam() && 
+            socket.id !== room.currentGame.getCurrentAnnouncerSocket() &&
+            room.currentGame.turnPhase === GAME_RULES.TURN_PHASES.ACTIVE_GUESSING) {
+          
+          if (room.currentGame.addGuess(data.guess, player.name)) {
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
