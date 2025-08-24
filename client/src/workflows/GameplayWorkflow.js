@@ -1,10 +1,24 @@
+/**
+ * Handles all gameplay-related actions and state management
+ * Manages categories, game start, and turn progression
+ */
 class GameplayWorkflow {
+  /**
+   * @param {Socket} socket - Socket.IO client instance
+   * @param {Object} callbacks - State setters and getters from App.jsx
+   * @param {Object} storage - localStorage utilities
+   */
   constructor(socket, callbacks, storage) {
     this.socket = socket;
     this.callbacks = callbacks;
     this.storage = storage;
   }
 
+  /**
+   * Processes gameState updates from server (main state sync method)
+   * Server is always source of truth - overwrites local state
+   * @param {Object} state - Complete game state from server
+   */
   handleGameState(state) {
     console.log('GameplayWorkflow: Processing gameState update');
     
@@ -38,6 +52,11 @@ class GameplayWorkflow {
     }
   }
 
+  /**
+   * Handles custom category creation from CategoriesDisplay form
+   * Does optimistic update then syncs with server
+   * @param {Event} e - Form submit event with categoryName and categoryEntries
+   */
   handleAddCategory(e) {
     e.preventDefault();
     const name = e.target.categoryName.value.trim();
@@ -110,6 +129,13 @@ class GameplayWorkflow {
       timeLimit,
       rounds
     });
+  }
+
+  /**
+   * Handle begin turn - announcer starts the turn with selected category
+   */
+  handleBeginTurn() {
+    this.socket.emit('beginTurn');
   }
 }
 

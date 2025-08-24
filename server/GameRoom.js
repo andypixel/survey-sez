@@ -1,5 +1,12 @@
 /**
  * Manages game room state, players, teams, and game lifecycle
+ * 
+ * Key State Properties:
+ * - gameState: 'ONBOARDING' | 'GAMEPLAY' | 'SUMMARY'
+ * - players: { [socketId]: playerData } - current connections
+ * - teams: { [teamName]: { name, players: [userId] } } - persistent team membership
+ * - categories: { universal: [], userCustom: { "[roomId]-[userId]": [] } }
+ * - currentGame: GameplayManager instance during GAMEPLAY phase
  */
 class GameRoom {
   /**
@@ -157,6 +164,21 @@ class GameRoom {
   }
 }
 
+/**
+ * Manages turn-based gameplay logic within a room
+ * 
+ * Turn Flow:
+ * 1. initializeFirstTurn() - Select first announcer + category preview
+ * 2. Announcer sees selectedCategory + "Begin Turn" button
+ * 3. beginTurn() - Move selectedCategory to currentCategory, start timer
+ * 4. Turn completion triggers nextTurn()
+ * 
+ * Key Properties:
+ * - currentTurn: Alternates between teams (0,1,2,3...)
+ * - selectedCategory: Category chosen for announcer preview
+ * - currentCategory: Active category during turn
+ * - usedCategoryIds: Prevents category reuse
+ */
 class GameplayManager {
   constructor(room) {
     this.room = room;
@@ -165,8 +187,10 @@ class GameplayManager {
     this.teamOrder = Object.keys(room.teams);
     this.announcerIndex = { [this.teamOrder[0]]: 0, [this.teamOrder[1]]: 0 };
     this.currentCategory = null;
+    this.selectedCategory = null;
     this.responses = [];
     this.timer = null;
+    this.usedCategoryIds = new Set();
   }
   
   initializeFirstTurn() {
@@ -174,6 +198,52 @@ class GameplayManager {
     const firstTeam = this.getCurrentGuessingTeam();
     const firstAnnouncer = this.getCurrentAnnouncer();
     console.log(`First turn: Team ${firstTeam}, Announcer ${firstAnnouncer}`);
+    
+    // Select category for announcer to preview
+    this.selectedCategory = this.selectCategoryForAnnouncer();
+  }
+
+  selectCategoryForAnnouncer() {
+    const announcerSocketId = this.getCurrentAnnouncer();
+    if (!announcerSocketId) return null;
+    
+    const announcerPlayer = this.room.players[announcerSocketId];
+    if (!announcerPlayer) return null;
+    
+    const announcerUserId = announcerPlayer.userId;
+    const userKey = `${this.room.roomId}-${announcerUserId}`;
+    
+    // Get announcer's unused custom categories
+    const userCategories = this.room.categories.userCustom[userKey] || [];
+    const unusedUserCategories = userCategories.filter(cat => !this.usedCategoryIds.has(cat.id));
+    
+    let selectedCategory = null;
+    
+    if (unusedUserCategories.length > 0) {
+      // Select random unused custom category
+      const randomIndex = Math.floor(Math.random() * unusedUserCategories.length);
+      selectedCategory = unusedUserCategories[randomIndex];
+    } else {
+      // Fall back to unused universal categories
+      const unusedUniversal = this.room.categories.universal.filter(cat => !this.usedCategoryIds.has(cat.id));
+      if (unusedUniversal.length > 0) {
+        const randomIndex = Math.floor(Math.random() * unusedUniversal.length);
+        selectedCategory = unusedUniversal[randomIndex];
+      }
+    }
+    
+    return selectedCategory;
+  }
+
+  beginTurn() {
+    const selectedCategory = this.selectCategoryForAnnouncer();
+    if (selectedCategory) {
+      this.currentCategory = selectedCategory;
+      this.usedCategoryIds.add(selectedCategory.id);
+      this.responses = [];
+      return true;
+    }
+    return false;
   }
 
   getCurrentGuessingTeam() {
@@ -215,6 +285,7 @@ class GameplayManager {
       currentGuessingTeam: this.getCurrentGuessingTeam(),
       currentAnnouncer: this.getCurrentAnnouncer(),
       currentCategory: this.currentCategory,
+      selectedCategory: this.selectedCategory,
       responses: this.responses,
       isComplete: this.isGameComplete()
     };

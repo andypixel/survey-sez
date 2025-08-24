@@ -310,6 +310,23 @@ io.on('connection', (socket) => {
     }
   });
   
+  // Handle begin turn
+  socket.on('beginTurn', () => {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === 'GAMEPLAY' && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncer();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.beginTurn()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  });
+  
   // Handle adding custom category
   socket.on('addCategory', async (data) => {
     const roomId = userSession.currentRoom;

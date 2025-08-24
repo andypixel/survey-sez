@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "npm run init-data && npm run kill-port && sleep 1 && nodemon --ignore data/ server.js",
+    "dev-all": "npm run init-data && npm run kill-port && sleep 1 && concurrently \"nodemon --ignore data/ server.js\" \"cd client && npm start\"",
     "kill-port": "./kill-server.sh",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build",
@@ -18,6 +19,7 @@
     "cors": "^2.8.5"
   },
   "devDependencies": {
+    "concurrently": "^9.2.0",
     "nodemon": "^3.0.1"
   },
   "engines": {

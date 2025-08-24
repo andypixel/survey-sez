@@ -21,20 +21,26 @@ function App() {
   const [roomSetupData, setRoomSetupData] = useState(null);
   const [setupError, setSetupError] = useState('');
 
-  // Storage utilities
+  // Storage utilities for localStorage operations
   const storage = { getUserData, saveUserData };
   
-  // Workflow callbacks
+  // Workflow callbacks - provides state setters/getters to workflow classes
+  // This allows workflows to update React state and access current values
   const callbacks = {
     setRoomId, setIsInRoom, setGameState, setShowUserSetup, setRoomSetupData,
     setSetupError, setCategoryError, getMyId: () => myId, getMyUserId: () => myUserId,
     getRoomId: () => roomId, getGameState: () => gameState
   };
   
-  // Initialize workflows
+  // Initialize workflow classes - these handle business logic and socket events
+  // Each workflow manages a specific phase: room joining, user setup, gameplay
   const roomJoinWorkflow = new RoomJoinWorkflow(socket, callbacks);
   const userSetupWorkflow = new UserSetupWorkflow(socket, callbacks, storage);
   const gameplayWorkflow = new GameplayWorkflow(socket, callbacks, storage);
+  
+  // Make gameplayWorkflow globally accessible so components can call methods
+  // Alternative: pass as props, but global access is simpler for deep components
+  window.gameplayWorkflow = gameplayWorkflow;
 
   useEffect(() => {
     setMyUserId(getGlobalUserId());

@@ -9,6 +9,7 @@ pkill -f "nodemon.*server.js" 2>/dev/null || true
 
 # Kill by port
 lsof -ti:3001 | xargs kill -9 2>/dev/null || true
+lsof -ti:3000 | xargs kill -9 2>/dev/null || true
 
 # Wait a moment for processes to die
 sleep 2

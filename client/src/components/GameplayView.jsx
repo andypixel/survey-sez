@@ -40,7 +40,17 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           </div>
         ) : (
           <div className={styles.categorySelection}>
-            <p>Waiting for category selection...</p>
+            <div className={styles.categoryPreview}>
+              <span className={styles.categoryLabel}>Category:</span>
+              <span className={styles.categoryName}>{currentGame.selectedCategory?.name || 'Loading...'}</span>
+            </div>
+            <button 
+              className={styles.beginButton}
+              onClick={() => window.gameplayWorkflow?.handleBeginTurn()}
+              disabled={!currentGame.selectedCategory}
+            >
+              Begin Turn
+            </button>
           </div>
         )}
       </div>
