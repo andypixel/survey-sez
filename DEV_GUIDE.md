@@ -1,10 +1,6 @@
 # Developer Quick Reference
 
-## Getting Started
-```bash
-npm run dev-all  # Starts both backend and frontend
-```
-Open multiple tabs to `http://localhost:3000` to test multiplayer.
+*For basic setup, see [README.md](README.md)*
 
 ## Common Development Tasks
 

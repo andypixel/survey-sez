@@ -1,5 +1,7 @@
 # Survey-Sez Architecture Overview
 
+*This document provides technical details about the system design. For getting started, see [README.md](README.md). For development tasks, see [DEV_GUIDE.md](DEV_GUIDE.md).*
+
 ## High-Level Architecture
 
 ```

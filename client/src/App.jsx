@@ -7,6 +7,7 @@ import RoomJoinWorkflow from './workflows/RoomJoinWorkflow';
 import UserSetupWorkflow from './workflows/UserSetupWorkflow';
 import GameplayWorkflow from './workflows/GameplayWorkflow';
 import { getGlobalUserId, getUserData, saveUserData } from './utils/storage';
+import ErrorHandler from './utils/ErrorHandler';
 
 const socket = io(process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001');
 
@@ -83,19 +84,18 @@ function App() {
     });
     
     socket.on('categoryError', (error) => {
-      setCategoryError(error.message);
-      setTimeout(() => setCategoryError(''), 3000);
+      ErrorHandler.handleSocketError(error, 'Category', setCategoryError);
     });
     
     socket.on('setupError', (error) => {
-      setSetupError(error.message);
-      setTimeout(() => setSetupError(''), 3000);
+      ErrorHandler.handleSocketError(error, 'Setup', setSetupError);
     });
     
     socket.on('gameError', (error) => {
-      console.log('Received game error:', error);
-      // TODO: Add proper game error state management
-      alert(error.message);
+      ErrorHandler.handleSocketError(error, 'Game', (msg) => {
+        // For game errors, we'll use alert for now but could be improved with a toast system
+        alert(msg);
+      });
     });
 
     return () => {

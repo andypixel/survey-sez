@@ -50,7 +50,9 @@ class RoomHandler {
       } else if (data.existingTeam) {
         teamId = data.existingTeam;
       } else {
-        socket.emit('setupError', { message: 'Invalid team selection' });
+        const error = 'Invalid team selection';
+        console.error('[RoomHandler] User setup failed:', error);
+        socket.emit('setupError', { message: error });
         return;
       }
       

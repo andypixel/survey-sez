@@ -1,63 +1,63 @@
-# Real-time Game Prototype
+# Survey-Sez
 
-A minimal multiplayer game prototype using Node.js, React, and Socket.IO.
+A real-time multiplayer word-guessing game where teams compete in turn-based rounds. Players create custom categories and take turns being the "Announcer" who reveals category items while their team guesses.
 
 ## Features
-- Real-time multiplayer interaction
-- Shared game state across all clients
-- Click-to-move player system
-- Global score counter
-- Instant updates via WebSocket
+- Real-time multiplayer gameplay with WebSocket connections
+- Turn-based team competition with rotating announcers
+- Custom category creation scoped to individual users
+- Three-phase game lifecycle: Onboarding → Gameplay → Summary
+- Persistent user sessions across reconnections
 
-## Local Development
+## Quick Start
 
-1. Install backend dependencies:
 ```bash
-npm install
+# Install dependencies (both backend and frontend)
+npm install && cd client && npm install && cd ..
+
+# Start both servers with one command
+npm run dev-all
 ```
 
-2. Install frontend dependencies:
+Open multiple browser tabs to `http://localhost:3000` to test multiplayer.
+
+## Game Overview
+
+**Onboarding Phase**: Players join teams (max 2) and create custom categories  
+**Gameplay Phase**: Teams alternate turns with rotating announcers revealing category items  
+**Summary Phase**: Review all played categories and responses  
+
+See [GAME_LIFECYCLE.md](GAME_LIFECYCLE.md) for detailed game rules.
+
+## Development
+
+### Commands
+- `npm run dev-all` - Start both backend and frontend
+- `npm run dev` - Backend only (port 3001)
+- `npm run reset-data` - Clear and reinitialize data files
+- `npm run init-data` - Create initial data files
+
+### Debugging
+- Visit `http://localhost:3001/debug/state` to view server state
+- Check browser console for client-side logs
+- Server logs show socket events and errors
+
+### Documentation
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design, data flow, file structure
+- **[DEV_GUIDE.md](DEV_GUIDE.md)** - Common development tasks and patterns
+- **[GAME_LIFECYCLE.md](GAME_LIFECYCLE.md)** - Complete game rules and phases
+
+## Tech Stack
+- **Backend**: Node.js, Express, Socket.IO, JSON file storage
+- **Frontend**: React, Socket.IO client, SCSS modules
+- **Real-time**: WebSocket connections for instant multiplayer updates
+- **Deployment**: Heroku-ready with automatic frontend build
+
+## Deployment
+
 ```bash
-cd client && npm install
-```
-
-3. Start the backend server (automatically initializes data files):
-```bash
-npm run dev
-```
-
-4. In another terminal, start the React frontend:
-```bash
-cd client && npm start
-```
-
-5. Open multiple browser tabs to `http://localhost:3000` to test multiplayer
-
-6. Use http://localhost:3001/debug/state to view current application state
-
-### Data Management
-- Development data is stored in `data/` directory (not committed to git)
-- Run `npm run init-data` to create initial data files
-- Run `npm run reset-data` to clear and reinitialize data files
-
-## Heroku Deployment
-
-1. Create a Heroku app:
-```bash
-heroku create your-game-name
-```
-
-2. Deploy:
-```bash
-git add .
-git commit -m "Initial commit"
+heroku create your-app-name
 git push heroku main
 ```
 
-The app will automatically build the React frontend and serve it from the Node.js backend.
-
-## Architecture
-- **Backend**: Express.js server with Socket.IO for WebSocket connections
-- **Frontend**: React app with Socket.IO client
-- **State**: In-memory storage (easily replaceable with Redis/MongoDB)
-- **Deployment**: Heroku with automatic GitHub integration
+The app automatically builds the React frontend and serves it from the Node.js backend.

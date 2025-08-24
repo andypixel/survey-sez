@@ -35,8 +35,9 @@ class GameHandler {
       
       // Validate that we have exactly 2 teams to start
       if (Object.keys(room.teams).length !== 2) {
-        console.log('Not enough teams to start game');
-        socket.emit('gameError', { message: 'Need exactly 2 teams to start the game' });
+        const error = 'Need exactly 2 teams to start the game';
+        console.error('[GameHandler] Start game failed:', error);
+        socket.emit('gameError', { message: error });
         return;
       }
       
@@ -52,11 +53,14 @@ class GameHandler {
         debouncedSave();
         console.log(`Game started in room ${roomId}`);
       } else {
-        console.log('Failed to start game');
-        socket.emit('gameError', { message: 'Failed to start game' });
+        const error = 'Failed to start game';
+        console.error('[GameHandler] Start game failed:', error);
+        socket.emit('gameError', { message: error });
       }
     } else {
-      console.log('No current room for user');
+      const error = 'No current room found';
+      console.error('[GameHandler] Start game failed:', error);
+      socket.emit('gameError', { message: error });
     }
   }
 

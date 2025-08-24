@@ -1,3 +1,5 @@
+import ErrorHandler from '../utils/ErrorHandler';
+
 /**
  * Handles all gameplay-related actions and state management
  * Manages categories, game start, and turn progression

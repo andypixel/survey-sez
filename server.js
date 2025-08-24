@@ -199,7 +199,7 @@ io.on('connection', (socket) => {
       if (socketsInRoom) {
         socketsInRoom.forEach(socketId => {
           const otherUserSession = userSessions[socketId];
-          if (otherUserSession && otherUserSession.getUserData(roomId)?.setupComplete) {
+          if (otherUserSession && otherUserSession.getUserData(roomId) && otherUserSession.getUserData(roomId).setupComplete) {
             io.to(socketId).emit('gameState', room.getState());
           }
         });

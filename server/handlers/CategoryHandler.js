@@ -33,7 +33,9 @@ class CategoryHandler {
       const customExists = userCustom.some(cat => cat.id === fullId);
       
       if (universalExists || customExists) {
-        socket.emit('categoryError', { message: 'A category with this name already exists' });
+        const error = 'A category with this name already exists';
+        console.error('[CategoryHandler] Add category failed:', error);
+        socket.emit('categoryError', { message: error });
         return;
       }
       
@@ -61,8 +63,9 @@ class CategoryHandler {
       try {
         await storage.saveCategories(categoriesData);
       } catch (error) {
-        console.error('Error saving categories:', error);
-        socket.emit('categoryError', { message: 'Failed to save category' });
+        const errorMsg = 'Failed to save category';
+        console.error('[CategoryHandler] Save category failed:', error);
+        socket.emit('categoryError', { message: errorMsg });
         return;
       }
       
@@ -85,7 +88,9 @@ class CategoryHandler {
         });
       }
     } else {
-      socket.emit('categoryError', { message: 'Category must have a name' });
+      const error = 'Category must have a name';
+      console.error('[CategoryHandler] Add category failed:', error);
+      socket.emit('categoryError', { message: error });
     }
   }
 }
