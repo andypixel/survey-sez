@@ -225,6 +225,12 @@ class GameplayManager {
     this.usedCategoryIds = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     this.markedEntries = new Set();
+    this.teamScores = {};
+    
+    // Initialize team scores
+    this.teamOrder.forEach(team => {
+      this.teamScores[team] = 0;
+    });
   }
   
   initializeFirstTurn() {
@@ -282,8 +288,30 @@ class GameplayManager {
   }
 
   continueTurn() {
+    // Add current turn score to team total
+    const currentTeam = this.getCurrentGuessingTeam();
+    const turnScore = this.getCurrentTurnScore();
+    this.teamScores[currentTeam] += turnScore;
+    
     this.nextTurn();
     return true;
+  }
+
+  getCurrentTurnScore() {
+    if (!this.currentCategory) return 0;
+    
+    let score = 0;
+    this.currentCategory.entries.forEach(entry => {
+      const isAutoGuessed = this.responses.some(response => 
+        response.text.toLowerCase() === entry.toLowerCase()
+      );
+      const isManuallyMarked = this.markedEntries.has(entry);
+      if (isAutoGuessed || isManuallyMarked) {
+        score++;
+      }
+    });
+    
+    return score;
   }
 
   addGuess(guessText, playerName) {
@@ -359,6 +387,8 @@ class GameplayManager {
       responses: this.responses,
       turnPhase: this.turnPhase,
       markedEntries: Array.from(this.markedEntries),
+      teamScores: this.teamScores,
+      currentTurnScore: this.getCurrentTurnScore(),
       isComplete: this.isGameComplete()
     };
   }

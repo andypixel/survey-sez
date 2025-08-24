@@ -19,7 +19,10 @@
 client/src/
 ├── components/          # Reusable UI components
 │   ├── CategoriesDisplay.jsx    # Shows user's custom categories + add form
+│   ├── CategoryItems.jsx        # Displays category entries with marking functionality
 │   ├── GameplayView.jsx         # Main gameplay interface (announcer/guesser/spectator views)
+│   ├── ScoreDisplay.jsx         # Shows team scores and turn scores
+│   ├── TeamGuesses.jsx          # Displays team guesses with player attribution
 │   ├── TeamsDisplay.jsx         # Shows teams and players
 │   └── UserStatus.jsx           # Shows current user info
 ├── contexts/            # React Context providers

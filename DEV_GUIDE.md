@@ -77,6 +77,7 @@ onClick={() => gameplay.handleMyAction()}
 | Add new page/phase | `client/src/pages/` + `App.jsx` routing |
 | Change data structure | `server/storage/` + update getState() |
 | Modify game rules | `server/config/GameRules.js` |
+| Modify scoring logic | `server/GameRoom.js` GameplayManager class |
 
 ### Testing Multiplayer
 

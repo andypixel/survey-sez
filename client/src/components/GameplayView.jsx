@@ -3,6 +3,7 @@ import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
 import TeamGuesses from './TeamGuesses';
 import CategoryItems from './CategoryItems';
+import ScoreDisplay from './ScoreDisplay';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
@@ -31,6 +32,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           <p>Round: {Math.floor(currentGame.currentTurn / 2) + 1} / {gameState.gameSettings.turnsPerTeam}</p>
           <p>Turn: {currentGame.currentTurn + 1}</p>
         </div>
+        
+        <ScoreDisplay gameState={gameState} showTurnScore={true} />
         
         {currentGame.currentCategory ? (
           <div className={styles.announcerView}>
@@ -93,6 +96,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           <p>Announcer: {gameState.players[currentGame.currentAnnouncer]?.name}</p>
         </div>
         
+        <ScoreDisplay gameState={gameState} showTurnScore={true} />
+        
         {currentGame.currentCategory && (
           <div className={styles.guesserView}>
             <h3>Category: {currentGame.currentCategory.name}</h3>
@@ -140,6 +145,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         <p>Guessing Team: {currentGame.currentGuessingTeam}</p>
         <p>Announcer: {gameState.players[currentGame.currentAnnouncer]?.name}</p>
       </div>
+      
+      <ScoreDisplay gameState={gameState} showTurnScore={true} />
       
       {currentGame.currentCategory && (
         <div className={styles.spectatorView}>

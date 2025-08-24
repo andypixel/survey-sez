@@ -59,8 +59,16 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
   - Timer disappears
   - Guesses text entry field removed
   - Category details with marked entries shown to all players
+  - **Turn Score Displayed**: Number of correctly guessed entries shown to all players
   - Announcer sees "Continue" button
-- **Turn Advancement**: When Announcer clicks Continue, next turn begins with new team/announcer
+- **Turn Advancement**: When Announcer clicks Continue:
+  - Turn score is added to the guessing team's running total
+  - Next turn begins with new team/announcer
+
+### Scoring System
+- **Turn Score**: Count of category entries marked as correctly guessed (auto-matched + manually marked)
+- **Team Totals**: Running score for each team, visible to all players at all times
+- **Score Display**: Shows both current turn score (during Results phase) and team running totals
 
 ### Round Progression
 - Teams alternate being Guessing/Spectating
