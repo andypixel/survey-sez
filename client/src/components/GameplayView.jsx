@@ -26,9 +26,11 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                 ))}
               </ul>
             </div>
-            <div className={styles.timer}>
-              Time: {gameState.gameSettings.timeLimit}s
-            </div>
+            {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+              <div className={styles.timer}>
+                Time: {gameState.gameSettings.timeLimit}s
+              </div>
+            )}
             <div className={styles.guesses}>
               <h4>Team Guesses:</h4>
               <div className={styles.guessesFeed}>
@@ -39,6 +41,22 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                 ))}
               </div>
             </div>
+            {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+              <button 
+                className={styles.endButton}
+                onClick={() => gameplay.handleEndTurn()}
+              >
+                End Turn
+              </button>
+            )}
+            {currentGame.turnPhase === 'RESULTS' && (
+              <button 
+                className={styles.continueButton}
+                onClick={() => gameplay.handleContinueTurn()}
+              >
+                Continue
+              </button>
+            )}
           </div>
         ) : (
           <div className={styles.categorySelection}>
@@ -71,9 +89,21 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         {currentGame.currentCategory && (
           <div className={styles.guesserView}>
             <h3>Category: {currentGame.currentCategory.name}</h3>
-            <div className={styles.timer}>
-              Time: {gameState.gameSettings.timeLimit}s
-            </div>
+            {currentGame.turnPhase === 'RESULTS' && (
+              <div className={styles.categoryDetails}>
+                <h4>Category Items:</h4>
+                <ul>
+                  {currentGame.currentCategory.entries.map((entry, index) => (
+                    <li key={index}>{entry}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+              <div className={styles.timer}>
+                Time: {gameState.gameSettings.timeLimit}s
+              </div>
+            )}
             <div className={styles.guesses}>
               <h4>Team Guesses:</h4>
               <div className={styles.guessesFeed}>
@@ -113,9 +143,21 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
       {currentGame.currentCategory && (
         <div className={styles.spectatorView}>
           <h3>Category: {currentGame.currentCategory.name}</h3>
-          <div className={styles.timer}>
-            Time: {gameState.gameSettings.timeLimit}s
-          </div>
+          {currentGame.turnPhase === 'RESULTS' && (
+            <div className={styles.categoryDetails}>
+              <h4>Category Items:</h4>
+              <ul>
+                {currentGame.currentCategory.entries.map((entry, index) => (
+                  <li key={index}>{entry}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+          {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+            <div className={styles.timer}>
+              Time: {gameState.gameSettings.timeLimit}s
+            </div>
+          )}
           <div className={styles.guesses}>
             <h4>Team Guesses:</h4>
             <div className={styles.guessesFeed}>

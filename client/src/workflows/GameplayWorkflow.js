@@ -139,6 +139,20 @@ class GameplayWorkflow {
   handleBeginTurn() {
     this.socket.emit('beginTurn');
   }
+
+  /**
+   * Handle end turn - announcer ends the active guessing phase
+   */
+  handleEndTurn() {
+    this.socket.emit('endTurn');
+  }
+
+  /**
+   * Handle continue turn - announcer advances to next turn
+   */
+  handleContinueTurn() {
+    this.socket.emit('continueTurn');
+  }
 }
 
 export default GameplayWorkflow;

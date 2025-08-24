@@ -21,6 +21,14 @@ class GameHandler {
     socket.on('beginTurn', () => {
       this.handleBeginTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
+
+    socket.on('endTurn', () => {
+      this.handleEndTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
+
+    socket.on('continueTurn', () => {
+      this.handleContinueTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
   }
 
   /**
@@ -77,6 +85,44 @@ class GameHandler {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
           if (room.currentGame.beginTurn()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle end turn request
+   */
+  static handleEndTurn(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.endTurn()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle continue turn request (advance to next turn)
+   */
+  static handleContinueTurn(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.continueTurn()) {
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
