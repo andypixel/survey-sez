@@ -8,6 +8,7 @@ import UserSetupWorkflow from './workflows/UserSetupWorkflow';
 import GameplayWorkflow from './workflows/GameplayWorkflow';
 import { getGlobalUserId, getUserData, saveUserData } from './utils/storage';
 import ErrorHandler from './utils/ErrorHandler';
+import { WorkflowProvider } from './contexts/WorkflowContext';
 
 const socket = io(process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001');
 
@@ -39,9 +40,12 @@ function App() {
   const userSetupWorkflow = new UserSetupWorkflow(socket, callbacks, storage);
   const gameplayWorkflow = new GameplayWorkflow(socket, callbacks, storage);
   
-  // Make gameplayWorkflow globally accessible so components can call methods
-  // Alternative: pass as props, but global access is simpler for deep components
-  window.gameplayWorkflow = gameplayWorkflow;
+  // Workflows object for context provider
+  const workflows = {
+    roomJoin: roomJoinWorkflow,
+    userSetup: userSetupWorkflow,
+    gameplay: gameplayWorkflow
+  };
 
   useEffect(() => {
     setMyUserId(getGlobalUserId());
@@ -111,37 +115,32 @@ function App() {
     };
   }, [roomId, myId]);
   
-  if (showUserSetup && roomSetupData) {
-    const existingUserData = getUserData(roomSetupData.roomId);
-    return (
-      <UserSetup 
-        roomSetupData={roomSetupData}
-        existingUserData={existingUserData}
-        onUserSetup={(e) => userSetupWorkflow.handleUserSetup(e)}
-        setupError={setupError}
-      />
-    );
-  }
-  
-  if (!isInRoom) {
-    return (
-      <RoomJoin 
-        roomId={roomId}
-        onRoomJoin={(e) => roomJoinWorkflow.handleRoomJoin(e)}
-      />
-    );
-  }
-
   return (
-    <GameRoom 
-      gameState={gameState}
-      roomId={roomId}
-      myId={myId}
-      myUserId={myUserId}
-      onAddCategory={(e) => gameplayWorkflow.handleAddCategory(e)}
-      onStartGame={(e) => gameplayWorkflow.handleStartGame(e)}
-      categoryError={categoryError}
-    />
+    <WorkflowProvider workflows={workflows}>
+      {showUserSetup && roomSetupData ? (
+        <UserSetup 
+          roomSetupData={roomSetupData}
+          existingUserData={getUserData(roomSetupData.roomId)}
+          onUserSetup={(e) => userSetupWorkflow.handleUserSetup(e)}
+          setupError={setupError}
+        />
+      ) : !isInRoom ? (
+        <RoomJoin 
+          roomId={roomId}
+          onRoomJoin={(e) => roomJoinWorkflow.handleRoomJoin(e)}
+        />
+      ) : (
+        <GameRoom 
+          gameState={gameState}
+          roomId={roomId}
+          myId={myId}
+          myUserId={myUserId}
+          onAddCategory={(e) => gameplayWorkflow.handleAddCategory(e)}
+          onStartGame={(e) => gameplayWorkflow.handleStartGame(e)}
+          categoryError={categoryError}
+        />
+      )}
+    </WorkflowProvider>
   );
 }
 

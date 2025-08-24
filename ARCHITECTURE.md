@@ -22,6 +22,8 @@ client/src/
 │   ├── GameplayView.jsx         # Main gameplay interface (announcer/guesser/spectator views)
 │   ├── TeamsDisplay.jsx         # Shows teams and players
 │   └── UserStatus.jsx           # Shows current user info
+├── contexts/            # React Context providers
+│   └── WorkflowContext.jsx      # Provides workflow instances to components
 ├── pages/               # Full-page components
 │   ├── GameRoom.jsx             # Main game room (onboarding + gameplay)
 │   ├── RoomJoin.jsx             # Room entry form
@@ -40,7 +42,7 @@ client/src/
 **Workflows**: Business logic classes that handle socket events and state updates
 - Each workflow manages a specific phase of the app
 - They receive socket instance, callbacks, and storage utilities
-- Made globally accessible via `window.workflowName` for component access
+- Provided to components via React Context (WorkflowProvider/useWorkflows)
 
 **State Flow**: 
 1. User action → Component calls workflow method
@@ -175,4 +177,4 @@ data/                    # JSON data files (git-ignored)
 - **State sync**: Server is source of truth, client does optimistic updates
 - **Team membership**: Always stored as user IDs, never socket IDs
 - **Category scoping**: Custom categories are user-scoped, not team-scoped
-- **Workflow access**: Made global via `window.workflowName` for component use
+- **Workflow access**: Use `useWorkflows()` hook within WorkflowProvider, not global window access

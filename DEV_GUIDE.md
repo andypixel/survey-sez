@@ -27,9 +27,16 @@ handleMyAction() {
 }
 ```
 
-3. **Component** calls workflow method:
+3. **Component** uses workflow via context:
 ```javascript
-onClick={() => window.gameplayWorkflow.handleMyAction()}
+// Import hook
+import { useWorkflows } from '../contexts/WorkflowContext';
+
+// In component
+const { gameplay } = useWorkflows();
+
+// Use workflow
+onClick={() => gameplay.handleMyAction()}
 ```
 
 ### Adding New Game State

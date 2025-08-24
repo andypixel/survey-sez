@@ -1,7 +1,9 @@
 import React from 'react';
 import styles from './GameplayView.module.scss';
+import { useWorkflows } from '../contexts/WorkflowContext';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
+  const { gameplay } = useWorkflows();
   const currentGame = gameState.currentGame;
   
   if (isAnnouncer) {
@@ -46,7 +48,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </div>
             <button 
               className={styles.beginButton}
-              onClick={() => window.gameplayWorkflow?.handleBeginTurn()}
+              onClick={() => gameplay.handleBeginTurn()}
               disabled={!currentGame.selectedCategory}
             >
               Begin Turn
