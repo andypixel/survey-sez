@@ -1,3 +1,5 @@
+const GAME_RULES = require('../config/GameRules');
+
 /**
  * Handles category-related socket events
  */
@@ -19,6 +21,15 @@ class CategoryHandler {
     const playerData = userSession.getUserData(roomId);
     
     if (roomId && playerData && data.name) {
+      // Validate category name length
+      if (data.name.length < GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH || 
+          data.name.length > GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH) {
+        const error = `Category name must be ${GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH}-${GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH} characters`;
+        console.error('[CategoryHandler] Add category failed:', error);
+        socket.emit('categoryError', { message: error });
+        return;
+      }
+      
       const categoryId = data.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const fullId = `${roomId}-${playerData.team}-${categoryId}`;
       

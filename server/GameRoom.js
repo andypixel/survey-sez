@@ -1,3 +1,5 @@
+const GAME_RULES = require('./config/GameRules');
+
 /**
  * Manages game room state, players, teams, and game lifecycle
  * 
@@ -19,10 +21,10 @@ class GameRoom {
     this.connectedSockets = {}; // socketId -> userId mapping
     this.players = {}; // userId -> player data (persistent)
     this.teams = {}; // teamName -> team data
-    this.gameState = 'ONBOARDING'; // ONBOARDING, GAMEPLAY, SUMMARY
+    this.gameState = GAME_RULES.PHASES.ONBOARDING;
     this.gameSettings = {
-      timeLimit: 30,
-      turnsPerTeam: 3
+      timeLimit: GAME_RULES.DEFAULT_TIME_LIMIT,
+      turnsPerTeam: GAME_RULES.DEFAULT_ROUNDS
     };
     this.categories = {
       universal: categoriesData.universal,
@@ -83,11 +85,11 @@ class GameRoom {
   }
 
   /**
-   * Check if new teams can be created (max 2 teams)
+   * Check if new teams can be created
    * @returns {boolean} True if team creation is allowed
    */
   canCreateTeam() {
-    return Object.keys(this.teams).length < 2;
+    return Object.keys(this.teams).length < GAME_RULES.MAX_TEAMS;
   }
 
   /**
@@ -100,8 +102,8 @@ class GameRoom {
 
   // Game state management
   startGame() {
-    if (Object.keys(this.teams).length === 2) {
-      this.gameState = 'GAMEPLAY';
+    if (Object.keys(this.teams).length >= GAME_RULES.MIN_TEAMS_TO_START) {
+      this.gameState = GAME_RULES.PHASES.GAMEPLAY;
       this.currentGame = new GameplayManager(this);
       // Initialize first turn
       this.currentGame.initializeFirstTurn();
@@ -111,11 +113,11 @@ class GameRoom {
   }
 
   endGame() {
-    this.gameState = 'SUMMARY';
+    this.gameState = GAME_RULES.PHASES.SUMMARY;
   }
 
   resetGame() {
-    this.gameState = 'ONBOARDING';
+    this.gameState = GAME_RULES.PHASES.ONBOARDING;
     this.currentGame = null;
   }
 

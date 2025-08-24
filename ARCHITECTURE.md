@@ -55,7 +55,9 @@ client/src/
 ### File Structure
 ```
 server/
-├── handlers/            # Socket event handlers (NEW)
+├── config/              # Game configuration
+│   └── GameRules.js         # Centralized game rules and validation
+├── handlers/            # Socket event handlers
 │   ├── GameHandler.js       # Game start, begin turn events
 │   ├── CategoryHandler.js   # Add category events
 │   └── RoomHandler.js       # Join room, user setup events

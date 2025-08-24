@@ -1,3 +1,5 @@
+const GAME_RULES = require('../config/GameRules');
+
 /**
  * Handles all game-related socket events
  */
@@ -33,17 +35,17 @@ class GameHandler {
       const room = getOrCreateRoom(roomId);
       console.log('Room teams:', Object.keys(room.teams));
       
-      // Validate that we have exactly 2 teams to start
-      if (Object.keys(room.teams).length !== 2) {
-        const error = 'Need exactly 2 teams to start the game';
+      // Validate that we have enough teams to start
+      if (Object.keys(room.teams).length < GAME_RULES.MIN_TEAMS_TO_START) {
+        const error = `Need at least ${GAME_RULES.MIN_TEAMS_TO_START} teams to start the game`;
         console.error('[GameHandler] Start game failed:', error);
         socket.emit('gameError', { message: error });
         return;
       }
       
       // Update game settings
-      room.gameSettings.timeLimit = data.timeLimit || 30;
-      room.gameSettings.turnsPerTeam = data.rounds || 10;
+      room.gameSettings.timeLimit = data.timeLimit || GAME_RULES.DEFAULT_TIME_LIMIT;
+      room.gameSettings.turnsPerTeam = data.rounds || GAME_RULES.DEFAULT_ROUNDS;
       
       // Start the game
       console.log('Attempting to start game...');
@@ -71,7 +73,7 @@ class GameHandler {
     const roomId = userSession.currentRoom;
     if (roomId) {
       const room = getOrCreateRoom(roomId);
-      if (room.gameState === 'GAMEPLAY' && room.currentGame) {
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
           if (room.currentGame.beginTurn()) {

@@ -76,6 +76,7 @@ onClick={() => gameplay.handleMyAction()}
 | Add socket event | `server/handlers/` + workflow file |
 | Add new page/phase | `client/src/pages/` + `App.jsx` routing |
 | Change data structure | `server/storage/` + update getState() |
+| Modify game rules | `server/config/GameRules.js` |
 
 ### Testing Multiplayer
 
@@ -91,6 +92,20 @@ onClick={() => gameplay.handleMyAction()}
 - **Categories**: Global universal + user-scoped custom
 - **Rooms**: Full room state including teams and game progress
 - **Users**: Session data for reconnection handling
+
+### Game Configuration
+
+Modify game rules in `server/config/GameRules.js`:
+```javascript
+const GAME_RULES = {
+  MAX_TEAMS: 2,              // Maximum teams per room
+  DEFAULT_TIME_LIMIT: 30,    // Default turn time in seconds
+  DEFAULT_ROUNDS: 3,         // Default number of rounds
+  VALIDATION: {
+    MAX_CATEGORY_NAME_LENGTH: 50  // Category name limits
+  }
+};
+```
 
 ### Performance Notes
 
