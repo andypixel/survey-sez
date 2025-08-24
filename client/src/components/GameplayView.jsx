@@ -45,7 +45,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
               <div className={styles.guessesFeed}>
                 {currentGame.responses.map((response, index) => (
                   <div key={index} className={styles.guess}>
-                    {response.text}
+                    <span className={styles.guessText}>{response.text}</span>
+                    {response.player && <span className={styles.playerName}>- {response.player}</span>}
                   </div>
                 ))}
               </div>
@@ -118,7 +119,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
               <div className={styles.guessesFeed}>
                 {currentGame.responses.map((response, index) => (
                   <div key={index} className={styles.guess}>
-                    {response.text}
+                    <span className={styles.guessText}>{response.text}</span>
+                    {response.player && <span className={styles.playerName}>- {response.player}</span>}
                   </div>
                 ))}
               </div>
@@ -176,7 +178,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             <div className={styles.guessesFeed}>
               {currentGame.responses.map((response, index) => (
                 <div key={index} className={styles.guess}>
-                  {response.text}
+                  <span className={styles.guessText}>{response.text}</span>
+                  {response.player && <span className={styles.playerName}>- {response.player}</span>}
                 </div>
               ))}
             </div>
