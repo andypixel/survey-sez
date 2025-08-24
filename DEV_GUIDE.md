@@ -91,3 +91,4 @@ onClick={() => window.gameplayWorkflow.handleMyAction()}
 - In-memory storage - replace with Redis for production
 - Debounced saves prevent excessive file writes
 - Socket rooms used for efficient broadcasting
+- User data persists across reconnections (stored by user ID, not socket ID)

@@ -72,7 +72,7 @@ class GameHandler {
     if (roomId) {
       const room = getOrCreateRoom(roomId);
       if (room.gameState === 'GAMEPLAY' && room.currentGame) {
-        const announcerSocketId = room.currentGame.getCurrentAnnouncer();
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
           if (room.currentGame.beginTurn()) {
             io.to(roomId).emit('gameState', room.getState());

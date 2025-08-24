@@ -16,7 +16,8 @@ class GameRoom {
    */
   constructor(roomId, categoriesData) {
     this.roomId = roomId;
-    this.players = {}; // socketId -> player data
+    this.connectedSockets = {}; // socketId -> userId mapping
+    this.players = {}; // userId -> player data (persistent)
     this.teams = {}; // teamName -> team data
     this.gameState = 'ONBOARDING'; // ONBOARDING, GAMEPLAY, SUMMARY
     this.gameSettings = {
@@ -44,13 +45,17 @@ class GameRoom {
    * @param {Object} playerData - Player information (name, team, userId)
    */
   addPlayer(socketId, playerData) {
-    const userId = playerData.userId || socketId;
+    const userId = playerData.userId;
     
-    this.players[socketId] = {
-      id: socketId,
+    // Map socket to user
+    this.connectedSockets[socketId] = userId;
+    
+    // Store player data by userId (persistent across reconnections)
+    this.players[userId] = {
       userId: userId,
       name: playerData.name,
-      team: playerData.team
+      team: playerData.team,
+      lastSocketId: socketId // Track current connection
     };
     
     // Create team if it doesn't exist
@@ -58,33 +63,23 @@ class GameRoom {
       this.teams[playerData.team] = { name: playerData.team, players: [] };
     }
     
-    // Clean team array and use only userId for membership
-    this.teams[playerData.team].players = this.teams[playerData.team].players.filter(id => 
-      id.startsWith('user_') // Keep only user IDs, remove socket IDs
-    );
-    
-    // Add userId if not already present
+    // Add userId to team if not already present
     if (!this.teams[playerData.team].players.includes(userId)) {
       this.teams[playerData.team].players.push(userId);
     }
   }
 
   /**
-   * Remove a player from the room and clean up empty teams
+   * Remove a player connection (but keep user data for reconnection)
    * @param {string} socketId - Socket connection ID
    */
   removePlayer(socketId) {
-    const player = this.players[socketId];
-    if (player && player.team && this.teams[player.team]) {
-      // Remove from team using userId to handle reconnections properly
-      const userId = player.userId || socketId;
-      this.teams[player.team].players = this.teams[player.team].players.filter(id => id !== userId);
-      // Clean up empty teams
-      if (this.teams[player.team].players.length === 0) {
-        delete this.teams[player.team];
-      }
+    const userId = this.connectedSockets[socketId];
+    if (userId && this.players[userId]) {
+      // Just remove the socket mapping, keep user data for reconnection
+      delete this.connectedSockets[socketId];
+      // Note: We don't remove from teams or delete player data to allow reconnection
     }
-    delete this.players[socketId];
   }
 
   /**
@@ -151,15 +146,50 @@ class GameRoom {
     };
   }
 
+  /**
+   * Get current socket ID for a user (for sending targeted messages)
+   * @param {string} userId - User ID
+   * @returns {string|null} Current socket ID or null if not connected
+   */
+  getSocketForUser(userId) {
+    return Object.keys(this.connectedSockets).find(socketId => 
+      this.connectedSockets[socketId] === userId
+    ) || null;
+  }
+
+  /**
+   * Get user ID for a socket
+   * @param {string} socketId - Socket ID
+   * @returns {string|null} User ID or null
+   */
+  getUserForSocket(socketId) {
+    return this.connectedSockets[socketId] || null;
+  }
+
   getState() {
+    // Convert players to socket-based format for client compatibility
+    const playersForClient = {};
+    Object.keys(this.connectedSockets).forEach(socketId => {
+      const userId = this.connectedSockets[socketId];
+      const player = this.players[userId];
+      if (player) {
+        playersForClient[socketId] = {
+          id: socketId,
+          userId: userId,
+          name: player.name,
+          team: player.team
+        };
+      }
+    });
+
     return {
       roomId: this.roomId,
-      players: this.players,
+      players: playersForClient,
       teams: this.teams,
       gameState: this.gameState,
       gameSettings: this.gameSettings,
       categories: this.categories,
-      currentGame: this.currentGame?.getState() || null
+      currentGame: this.currentGame ? this.currentGame.getState() : null
     };
   }
 }
@@ -204,13 +234,9 @@ class GameplayManager {
   }
 
   selectCategoryForAnnouncer() {
-    const announcerSocketId = this.getCurrentAnnouncer();
-    if (!announcerSocketId) return null;
+    const announcerUserId = this.getCurrentAnnouncer();
+    if (!announcerUserId) return null;
     
-    const announcerPlayer = this.room.players[announcerSocketId];
-    if (!announcerPlayer) return null;
-    
-    const announcerUserId = announcerPlayer.userId;
     const userKey = `${this.room.roomId}-${announcerUserId}`;
     
     // Get announcer's unused custom categories
@@ -253,14 +279,12 @@ class GameplayManager {
   getCurrentAnnouncer() {
     const team = this.getCurrentGuessingTeam();
     const teamPlayers = this.room.teams[team].players;
-    const announcerUserId = teamPlayers[this.announcerIndex[team] % teamPlayers.length];
-    
-    // Find the current socket ID for this user
-    const playerEntry = Object.entries(this.room.players).find(([socketId, player]) => 
-      player.userId === announcerUserId
-    );
-    
-    return playerEntry ? playerEntry[0] : null;
+    return teamPlayers[this.announcerIndex[team] % teamPlayers.length];
+  }
+
+  getCurrentAnnouncerSocket() {
+    const announcerUserId = this.getCurrentAnnouncer();
+    return this.room.getSocketForUser(announcerUserId);
   }
 
   nextTurn() {
@@ -283,7 +307,8 @@ class GameplayManager {
       currentTurn: this.currentTurn,
       turnsCompleted: this.turnsCompleted,
       currentGuessingTeam: this.getCurrentGuessingTeam(),
-      currentAnnouncer: this.getCurrentAnnouncer(),
+      currentAnnouncer: this.getCurrentAnnouncerSocket(), // Return socket ID for client compatibility
+      currentAnnouncerUserId: this.getCurrentAnnouncer(), // Also provide user ID
       currentCategory: this.currentCategory,
       selectedCategory: this.selectedCategory,
       responses: this.responses,
