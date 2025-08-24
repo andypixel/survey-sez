@@ -264,10 +264,9 @@ class GameplayManager {
   }
 
   beginTurn() {
-    const selectedCategory = this.selectCategoryForAnnouncer();
-    if (selectedCategory) {
-      this.currentCategory = selectedCategory;
-      this.usedCategoryIds.add(selectedCategory.id);
+    if (this.selectedCategory) {
+      this.currentCategory = this.selectedCategory;
+      this.usedCategoryIds.add(this.selectedCategory.id);
       this.responses = [];
       return true;
     }
