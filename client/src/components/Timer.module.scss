@@ -1,0 +1,31 @@
+.timer {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+  transition: all 0.3s ease;
+}
+
+.normal {
+  background: #28a745;
+  color: white;
+}
+
+.warning {
+  background: #ffc107;
+  color: #212529;
+}
+
+.critical {
+  background: #dc3545;
+  color: white;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}

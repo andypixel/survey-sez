@@ -4,6 +4,7 @@ import { useWorkflows } from '../contexts/WorkflowContext';
 import TeamGuesses from './TeamGuesses';
 import CategoryItems from './CategoryItems';
 import ScoreDisplay from './ScoreDisplay';
+import Timer from './Timer';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
@@ -112,9 +113,11 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           
           {/* Timer - only during ACTIVE_GUESSING */}
           {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
-            <div className={styles.timer}>
-              Time: {gameState.gameSettings.timeLimit}s
-            </div>
+            <Timer 
+              timeLimit={gameState.gameSettings.timeLimit}
+              isActive={true}
+              onTimeUp={() => gameplay.handleEndGuessing()}
+            />
           )}
           
           {/* Team Guesses - always visible during active game */}
