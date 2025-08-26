@@ -49,6 +49,10 @@ class GameHandler {
     socket.on('resumeGame', () => {
       this.handleResumeGame(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
+
+    socket.on('restartGame', () => {
+      this.handleRestartGame(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
   }
 
   /**
@@ -114,7 +118,7 @@ class GameHandler {
   }
 
   /**
-   * Handle end turn request
+   * Handle end guessing request
    */
   static handleEndGuessing(socket, io, userSession, getOrCreateRoom, debouncedSave) {
     const roomId = userSession.currentRoom;
@@ -123,7 +127,9 @@ class GameHandler {
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
+          console.log('EndGuessing called, current phase:', room.currentGame.turnPhase);
           if (room.currentGame.endGuessing()) {
+            console.log('EndGuessing successful, new phase:', room.currentGame.turnPhase);
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
@@ -133,7 +139,7 @@ class GameHandler {
   }
 
   /**
-   * Handle reveal results request (RESULTS -> SUMMARY)
+   * Handle reveal results request (RESULTS -> TURN_SUMMARY)
    */
   static handleRevealResults(socket, io, userSession, getOrCreateRoom, debouncedSave) {
     const roomId = userSession.currentRoom;
@@ -142,7 +148,9 @@ class GameHandler {
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
+          console.log('RevealResults called, current phase:', room.currentGame.turnPhase);
           if (room.currentGame.revealResults()) {
+            console.log('RevealResults successful, new phase:', room.currentGame.turnPhase);
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
@@ -155,13 +163,18 @@ class GameHandler {
    * Handle continue turn request (advance to next turn)
    */
   static handleContinueTurn(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    console.log('handleContinueTurn called by socket:', socket.id);
     const roomId = userSession.currentRoom;
     if (roomId) {
       const room = getOrCreateRoom(roomId);
+      console.log('Room found:', roomId, 'gameState:', room.gameState, 'hasCurrentGame:', !!room.currentGame);
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        console.log('Announcer check - expected:', announcerSocketId, 'actual:', socket.id, 'match:', announcerSocketId === socket.id);
         if (announcerSocketId === socket.id) {
+          console.log('Calling continueTurn...');
           if (room.currentGame.continueTurn()) {
+            console.log('continueTurn successful, emitting gameState');
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
@@ -244,6 +257,28 @@ class GameHandler {
           debouncedSave();
         }
       }
+    }
+  }
+
+  /**
+   * Handle restart game request
+   */
+  static handleRestartGame(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    console.log('handleRestartGame called by socket:', socket.id);
+    const roomId = userSession.currentRoom;
+    console.log('Room ID:', roomId);
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      console.log('Room found, current gameState:', room.gameState);
+      if (room.resetGame()) {
+        console.log('Game reset successful, emitting gameState');
+        io.to(roomId).emit('gameState', room.getState());
+        debouncedSave();
+      } else {
+        console.log('Game reset failed');
+      }
+    } else {
+      console.log('No room ID found');
     }
   }
 }

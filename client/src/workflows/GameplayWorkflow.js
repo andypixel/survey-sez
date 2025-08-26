@@ -133,6 +133,10 @@ class GameplayWorkflow {
     });
   }
   
+  handleEndGuessing() {
+    this.socket.emit('endGuessing');
+  }
+  
   handleRevealResults() {
     this.socket.emit('revealResults');
   }
@@ -143,6 +147,10 @@ class GameplayWorkflow {
   
   handleResumeGame() {
     this.socket.emit('resumeGame');
+  }
+  
+  handleRestartGame() {
+    this.socket.emit('restartGame');
   }
 
   /**

@@ -111,8 +111,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         <div className={styles.gameView}>
           <h3>Category: {currentGame.currentCategory.name}</h3>
           
-          {/* Category Items - Announcer always sees, others only in SUMMARY */}
-          {(isAnnouncer || currentGame.turnPhase === 'SUMMARY') && (
+          {/* Category Items - Announcer always sees, others only in TURN_SUMMARY */}
+          {(isAnnouncer || currentGame.turnPhase === 'TURN_SUMMARY') && (
             <CategoryItems 
               category={currentGame.currentCategory}
               responses={currentGame.responses}
@@ -179,7 +179,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </button>
           )}
           
-          {isAnnouncer && currentGame.turnPhase === 'SUMMARY' && (
+          {isAnnouncer && currentGame.turnPhase === 'TURN_SUMMARY' && (
             <button 
               className={styles.continueButton}
               onClick={() => gameplay.handleContinueTurn()}

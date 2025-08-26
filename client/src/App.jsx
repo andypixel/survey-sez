@@ -137,6 +137,7 @@ function App() {
           myUserId={myUserId}
           onAddCategory={(e) => gameplayWorkflow.handleAddCategory(e)}
           onStartGame={(e) => gameplayWorkflow.handleStartGame(e)}
+          onRestartGame={() => gameplayWorkflow.handleRestartGame()}
           categoryError={categoryError}
         />
       )}

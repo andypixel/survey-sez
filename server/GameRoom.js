@@ -113,12 +113,22 @@ class GameRoom {
   }
 
   endGame() {
+    // Preserve final game data before clearing currentGame
+    if (this.currentGame) {
+      this.finalGameData = {
+        teamScores: this.currentGame.teamScores,
+        playedCategories: [] // TODO: Implement game history if needed
+      };
+    }
     this.gameState = GAME_RULES.PHASES.GAME_OVER;
+    this.currentGame = null;
   }
 
   resetGame() {
     this.gameState = GAME_RULES.PHASES.ONBOARDING;
     this.currentGame = null;
+    this.finalGameData = null;
+    return true;
   }
 
   /**
@@ -191,7 +201,8 @@ class GameRoom {
       gameState: this.gameState,
       gameSettings: this.gameSettings,
       categories: this.categories,
-      currentGame: this.currentGame ? this.currentGame.getState() : null
+      currentGame: this.currentGame ? this.currentGame.getState() : null,
+      finalGameData: this.finalGameData
     };
   }
 }
@@ -304,12 +315,27 @@ class GameplayManager {
   }
 
   continueTurn() {
+    console.log('continueTurn called - currentTurn:', this.currentTurn, 'turnsPerTeam:', this.room.gameSettings.turnsPerTeam);
+    
     // Add current turn score to team total
     const currentTeam = this.getCurrentGuessingTeam();
     const turnScore = this.getCurrentTurnScore();
     this.teamScores[currentTeam] += turnScore;
     
+    // Advance turn first
     this.nextTurn();
+    
+    // Check if game is complete after advancing
+    const isComplete = this.isGameComplete();
+    console.log('Game complete check after advance:', isComplete, 'calculation:', this.currentTurn, '>=', this.room.gameSettings.turnsPerTeam * 2);
+    
+    if (isComplete) {
+      console.log('Ending game...');
+      this.room.endGame();
+      return true;
+    }
+    
+    console.log('Game continues...');
     return true;
   }
 
@@ -388,7 +414,9 @@ class GameplayManager {
   }
 
   isGameComplete() {
-    return this.turnsCompleted >= this.room.gameSettings.turnsPerTeam;
+    // Game is complete when both teams have completed the required number of turns
+    // Since currentTurn alternates between teams, we need currentTurn >= turnsPerTeam * 2
+    return this.currentTurn >= this.room.gameSettings.turnsPerTeam * 2;
   }
 
   getState() {

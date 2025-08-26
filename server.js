@@ -130,10 +130,12 @@ app.get('/debug/state', (req, res) => {
       acc[roomId] = {
         roomId: room.roomId,
         gameState: room.gameState,
+        gameSettings: room.gameSettings,
         teams: room.teams,
         players: room.players,
         playerCount: Object.keys(room.players).length,
-        teamCount: Object.keys(room.teams).length
+        teamCount: Object.keys(room.teams).length,
+        currentGame: room.currentGame ? room.currentGame.getState() : null
       };
       return acc;
     }, {}),

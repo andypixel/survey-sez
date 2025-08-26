@@ -1,7 +1,10 @@
 # To do
 
 - Onboarding phase is not updating in real time as teams are created
-- Game End screen; start new round (allow users to add more categories but also reuse unused categories from last round)
+- Game restart
+    - Unused custom categories can be reused in this room
+    - ALL custom categories can be reused if the user joins a different room
+- Team summary component during gameplay: team names, player names, number of custom categories each
 - Provision database for production build
 - Hosting
 - What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?

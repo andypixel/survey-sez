@@ -2,10 +2,23 @@ import React from 'react';
 import TeamsDisplay from '../components/TeamsDisplay.jsx';
 import CategoriesDisplay from '../components/CategoriesDisplay.jsx';
 import GameplayView from '../components/GameplayView.jsx';
+import GameOverView from '../components/GameOverView.jsx';
 import UserStatus from '../components/UserStatus.jsx';
 import styles from './GameRoom.module.scss';
 
-function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame }) {
+function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame }) {
+  // Show game over view if game is complete
+  if (gameState.gameState === 'GAME_OVER') {
+    return (
+      <div className={styles.container}>
+        <GameOverView 
+          gameState={gameState}
+          onRestart={onRestartGame}
+        />
+      </div>
+    );
+  }
+  
   // Show gameplay view if game is in progress
   if (gameState.gameState === 'GAMEPLAY' && gameState.currentGame) {
     console.log('GameRoom - Game in progress:', gameState.gameState, gameState.currentGame);
