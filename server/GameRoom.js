@@ -282,8 +282,13 @@ class GameplayManager {
     return false;
   }
 
-  endTurn() {
+  endGuessing() {
     this.turnPhase = GAME_RULES.TURN_PHASES.RESULTS;
+    return true;
+  }
+  
+  revealResults() {
+    this.turnPhase = GAME_RULES.TURN_PHASES.SUMMARY;
     return true;
   }
 

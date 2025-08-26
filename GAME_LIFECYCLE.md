@@ -37,14 +37,14 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 ### Announcer Role
 - First player on Guessing team becomes Announcer
 - Announcer is shown a random category from one of the categories they created, or, if no unused categories created by them remain, one of the unused Universal categories
-- Announcer sees a "Begin turn" button
+- Announcer sees a "Start Guessing" button
   - If this category is a Universal category, they also see a "Skip" button
   - Announcer can select Skip a maximum of two times per turn
 - If Skip: a different Universal category is selected at random.
-- If Begin: category details shown to the Announcer and the timer starts
+- If Start Guessing: category details shown to the Announcer and the timer starts
 
 ### Turn Begins
-- **Announcer**: Sees category title, category details with checkboxes, timer, timer start/stop controls, "End Turn" button, and Guesses chat feed
+- **Announcer**: Sees category title, category details with checkboxes, timer, timer start/stop controls, "End Guessing" button, and Guesses chat feed
 - **Other Guessing team members**: See category title, timer, Guesses chat feed, and Guesses text entry box
 - **Spectating team**: See category title, timer, and Guesses chat feed only
 - Guessing team members submit words via Guesses text entry
@@ -54,14 +54,18 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
   - Announcer can manually check/uncheck entries using checkboxes for "close enough" guesses
 
 ### Turn Completion
-- **Announcer Control**: Announcer can click "End Turn" at any time to stop guessing phase
-- **Results Phase**: When turn ends (via "End Turn" button):
+- **Announcer Control**: Announcer can click "End Guessing" at any time to stop guessing phase
+- **Results Phase**: When guessing ends (via "End Guessing" button):
   - Timer disappears
   - Guesses text entry field removed
+  - Category details remain hidden from all players
+  - Announcer reads category entries aloud and can mark additional guesses
+  - Announcer sees "Reveal" button
+- **Summary Phase**: When Announcer clicks Reveal:
   - Category details with marked entries shown to all players
   - **Turn Score Displayed**: Number of correctly guessed entries shown to all players
-  - Announcer sees "Continue" button
-- **Turn Advancement**: When Announcer clicks Continue:
+  - Announcer sees "Next Turn" button
+- **Turn Advancement**: When Announcer clicks Next Turn:
   - Turn score is added to the guessing team's running total
   - Next turn begins with new team/announcer
 
@@ -96,6 +100,7 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 
 ### State Management
 - Game phases: `ONBOARDING` → `GAMEPLAY` → `SUMMARY`
+- Turn phases within GAMEPLAY: `ACTIVE` → `RESULTS` → `SUMMARY`
 - Turn tracking: current team, current announcer, turn/round count
 - Timer management: countdown, start/stop controls
 - Category selection: random from available pool (always select from user's unused Custom categories before falling back to Universal)

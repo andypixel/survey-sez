@@ -75,7 +75,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         {getGameInfo()}
       </div>
       
-      <ScoreDisplay gameState={gameState} showTurnScore={true} />
+      <ScoreDisplay gameState={gameState} showTurnScore={true} isAnnouncer={isAnnouncer} />
       
       {/* Category Selection (Announcer only, before turn starts) */}
       {isAnnouncer && !currentGame.currentCategory && (
@@ -89,7 +89,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             onClick={() => gameplay.handleBeginTurn()}
             disabled={!currentGame.selectedCategory}
           >
-            Begin Turn
+            Start Guessing
           </button>
         </div>
       )}
@@ -99,8 +99,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         <div className={styles.gameView}>
           <h3>Category: {currentGame.currentCategory.name}</h3>
           
-          {/* Category Items - Announcer always sees, others only in RESULTS */}
-          {(isAnnouncer || currentGame.turnPhase === 'RESULTS') && (
+          {/* Category Items - Announcer always sees, others only in SUMMARY */}
+          {(isAnnouncer || currentGame.turnPhase === 'SUMMARY') && (
             <CategoryItems 
               category={currentGame.currentCategory}
               responses={currentGame.responses}
@@ -140,18 +140,27 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           {isAnnouncer && currentGame.turnPhase === 'ACTIVE_GUESSING' && (
             <button 
               className={styles.endButton}
-              onClick={() => gameplay.handleEndTurn()}
+              onClick={() => gameplay.handleEndGuessing()}
             >
-              End Turn
+              End Guessing
             </button>
           )}
           
           {isAnnouncer && currentGame.turnPhase === 'RESULTS' && (
             <button 
+              className={styles.revealButton}
+              onClick={() => gameplay.handleRevealResults()}
+            >
+              Reveal
+            </button>
+          )}
+          
+          {isAnnouncer && currentGame.turnPhase === 'SUMMARY' && (
+            <button 
               className={styles.continueButton}
               onClick={() => gameplay.handleContinueTurn()}
             >
-              Continue
+              Next Turn
             </button>
           )}
         </div>

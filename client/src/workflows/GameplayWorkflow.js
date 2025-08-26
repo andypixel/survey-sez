@@ -132,6 +132,10 @@ class GameplayWorkflow {
       rounds
     });
   }
+  
+  handleRevealResults() {
+    this.socket.emit('revealResults');
+  }
 
   /**
    * Handle begin turn - announcer starts the turn with selected category
@@ -143,8 +147,8 @@ class GameplayWorkflow {
   /**
    * Handle end turn - announcer ends the active guessing phase
    */
-  handleEndTurn() {
-    this.socket.emit('endTurn');
+  handleEndGuessing() {
+    this.socket.emit('endGuessing');
   }
 
   /**

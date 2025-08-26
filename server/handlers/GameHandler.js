@@ -22,8 +22,12 @@ class GameHandler {
       this.handleBeginTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
 
-    socket.on('endTurn', () => {
-      this.handleEndTurn(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    socket.on('endGuessing', () => {
+      this.handleEndGuessing(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
+
+    socket.on('revealResults', () => {
+      this.handleRevealResults(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
 
     socket.on('continueTurn', () => {
@@ -104,14 +108,33 @@ class GameHandler {
   /**
    * Handle end turn request
    */
-  static handleEndTurn(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+  static handleEndGuessing(socket, io, userSession, getOrCreateRoom, debouncedSave) {
     const roomId = userSession.currentRoom;
     if (roomId) {
       const room = getOrCreateRoom(roomId);
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
-          if (room.currentGame.endTurn()) {
+          if (room.currentGame.endGuessing()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle reveal results request (RESULTS -> SUMMARY)
+   */
+  static handleRevealResults(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.revealResults()) {
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }

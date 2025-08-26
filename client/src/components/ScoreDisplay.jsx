@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './ScoreDisplay.module.scss';
 
-function ScoreDisplay({ gameState, showTurnScore = false }) {
+function ScoreDisplay({ gameState, showTurnScore = false, isAnnouncer = false }) {
   const { currentGame, teams } = gameState;
   
   if (!currentGame) return null;
@@ -18,9 +18,11 @@ function ScoreDisplay({ gameState, showTurnScore = false }) {
         ))}
       </div>
       
-      {showTurnScore && currentGame.turnPhase === 'RESULTS' && (
+      {showTurnScore && (currentGame.turnPhase === 'RESULTS' || currentGame.turnPhase === 'SUMMARY') && (
         <div className={styles.turnScore}>
-          <strong>This Turn: {currentGame.currentTurnScore} points</strong>
+          <strong>
+            This Turn: {(isAnnouncer || currentGame.turnPhase === 'SUMMARY') ? `${currentGame.currentTurnScore} points` : '???'}
+          </strong>
         </div>
       )}
     </div>
