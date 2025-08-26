@@ -44,9 +44,18 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 - If Start Guessing: category details shown to the Announcer and the timer starts
 
 ### Turn Begins
-- **Announcer**: Sees category title, category details with checkboxes, timer, timer start/stop controls, "End Guessing" button, and Guesses chat feed
-- **Other Guessing team members**: See category title, timer, Guesses chat feed, and Guesses text entry box
-- **Spectating team**: See category title, timer, and Guesses chat feed only
+- **Announcer**: Sees category title, category details with checkboxes, countdown timer, "End Guessing" button, "Pause/Resume" button, and Guesses chat feed
+- **Other Guessing team members**: See category title, countdown timer, Guesses chat feed, "Pause/Resume" button, and Guesses text entry box
+- **Spectating team**: See category title, countdown timer, "Pause/Resume" button, and Guesses chat feed only
+- **Timer Management**:
+  - Countdown timer starts automatically when guessing begins
+  - Timer changes color as time runs low (green → yellow → red with pulse)
+  - When timer reaches 0, guessing phase automatically ends
+- **Pause/Resume Functionality**:
+  - Any player can pause the timer during active guessing
+  - When paused, all interactions are disabled (guessing, entry marking, "End Guessing")
+  - Any player can resume to restore normal gameplay
+  - Pause state is synchronized across all players
 - Guessing team members submit words via Guesses text entry
 - All submitted words appear in real-time in the Guesses chat feed to both teams
 - **Correct Guess Tracking**: 
@@ -55,7 +64,8 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 
 ### Turn Completion
 - **Announcer Control**: Announcer can click "End Guessing" at any time to stop guessing phase
-- **Results Phase**: When guessing ends (via "End Guessing" button):
+- **Automatic End**: Timer automatically ends guessing phase when countdown reaches 0
+- **Results Phase**: When guessing ends (via "End Guessing" button or timer expiration):
   - Timer disappears
   - Guesses text entry field removed
   - Category details remain hidden from all players
@@ -79,11 +89,12 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 - Within each team, Announcer role rotates to next player
 - Game continues until both teams have completed _n_ turns
 
-## Phase 3: Summary
+## Phase 3: Game Over
 
 ### Results Display
 - All played categories and responses shown to all players
 - Complete game history visible
+- Final team scores displayed
 
 ### Game Reset
 - "Restart" button available to all players
@@ -99,8 +110,8 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 - **Global**: Universal categories
 
 ### State Management
-- Game phases: `ONBOARDING` → `GAMEPLAY` → `SUMMARY`
-- Turn phases within GAMEPLAY: `ACTIVE` → `RESULTS` → `SUMMARY`
+- Game phases: `ONBOARDING` → `GAMEPLAY` → `GAME_OVER`
+- Turn phases within GAMEPLAY: `ACTIVE_GUESSING` → `RESULTS` → `TURN_SUMMARY`
 - Turn tracking: current team, current announcer, turn/round count
 - Timer management: countdown, start/stop controls
 - Category selection: random from available pool (always select from user's unused Custom categories before falling back to Universal)

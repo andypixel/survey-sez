@@ -136,6 +136,14 @@ class GameplayWorkflow {
   handleRevealResults() {
     this.socket.emit('revealResults');
   }
+  
+  handlePauseGame() {
+    this.socket.emit('pauseGame');
+  }
+  
+  handleResumeGame() {
+    this.socket.emit('resumeGame');
+  }
 
   /**
    * Handle begin turn - announcer starts the turn with selected category

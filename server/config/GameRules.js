@@ -16,15 +16,15 @@ const GAME_RULES = {
   PHASES: {
     ONBOARDING: 'ONBOARDING',
     GAMEPLAY: 'GAMEPLAY', 
-    SUMMARY: 'SUMMARY'
+    GAME_OVER: 'GAME_OVER'
   },
   
-  // Turn phases (for future expansion)
+  // Turn phases (within GAMEPLAY)
   TURN_PHASES: {
     CATEGORY_SELECTION: 'CATEGORY_SELECTION',
     ACTIVE_GUESSING: 'ACTIVE_GUESSING',
     RESULTS: 'RESULTS',
-    SUMMARY: 'SUMMARY'
+    TURN_SUMMARY: 'TURN_SUMMARY'
   },
   
   // Validation rules

@@ -113,7 +113,7 @@ class GameRoom {
   }
 
   endGame() {
-    this.gameState = GAME_RULES.PHASES.SUMMARY;
+    this.gameState = GAME_RULES.PHASES.GAME_OVER;
   }
 
   resetGame() {
@@ -226,6 +226,7 @@ class GameplayManager {
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     this.markedEntries = new Set();
     this.teamScores = {};
+    this.isPaused = false;
     
     // Initialize team scores
     this.teamOrder.forEach(team => {
@@ -288,7 +289,17 @@ class GameplayManager {
   }
   
   revealResults() {
-    this.turnPhase = GAME_RULES.TURN_PHASES.SUMMARY;
+    this.turnPhase = GAME_RULES.TURN_PHASES.TURN_SUMMARY;
+    return true;
+  }
+  
+  pauseGame() {
+    this.isPaused = true;
+    return true;
+  }
+  
+  resumeGame() {
+    this.isPaused = false;
     return true;
   }
 
@@ -394,7 +405,8 @@ class GameplayManager {
       markedEntries: Array.from(this.markedEntries),
       teamScores: this.teamScores,
       currentTurnScore: this.getCurrentTurnScore(),
-      isComplete: this.isGameComplete()
+      isComplete: this.isGameComplete(),
+      isPaused: this.isPaused
     };
   }
 }

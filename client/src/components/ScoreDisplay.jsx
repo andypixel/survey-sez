@@ -18,10 +18,10 @@ function ScoreDisplay({ gameState, showTurnScore = false, isAnnouncer = false })
         ))}
       </div>
       
-      {showTurnScore && (currentGame.turnPhase === 'RESULTS' || currentGame.turnPhase === 'SUMMARY') && (
+      {showTurnScore && (currentGame.turnPhase === 'RESULTS' || currentGame.turnPhase === 'TURN_SUMMARY') && (
         <div className={styles.turnScore}>
           <strong>
-            This Turn: {(isAnnouncer || currentGame.turnPhase === 'SUMMARY') ? `${currentGame.currentTurnScore} points` : '???'}
+            This Turn: {(isAnnouncer || currentGame.turnPhase === 'TURN_SUMMARY') ? `${currentGame.currentTurnScore} points` : '???'}
           </strong>
         </div>
       )}

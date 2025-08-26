@@ -41,6 +41,14 @@ class GameHandler {
     socket.on('toggleEntry', (data) => {
       this.handleToggleEntry(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
     });
+
+    socket.on('pauseGame', () => {
+      this.handlePauseGame(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
+
+    socket.on('resumeGame', () => {
+      this.handleResumeGame(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
   }
 
   /**
@@ -202,6 +210,38 @@ class GameHandler {
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle pause game request
+   */
+  static handlePauseGame(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        if (room.currentGame.pauseGame()) {
+          io.to(roomId).emit('gameState', room.getState());
+          debouncedSave();
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle resume game request
+   */
+  static handleResumeGame(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        if (room.currentGame.resumeGame()) {
+          io.to(roomId).emit('gameState', room.getState());
+          debouncedSave();
         }
       }
     }

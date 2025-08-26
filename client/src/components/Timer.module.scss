@@ -29,3 +29,9 @@
   50% { transform: scale(1.05); }
   100% { transform: scale(1); }
 }
+
+.paused {
+  background: #6c757d !important;
+  color: white !important;
+  animation: none !important;
+}

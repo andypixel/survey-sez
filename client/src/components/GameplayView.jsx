@@ -11,16 +11,27 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
   const currentGame = gameState.currentGame;
   const [guessInput, setGuessInput] = useState('');
 
+
   const handleGuessSubmit = (e) => {
     e.preventDefault();
-    if (guessInput.trim()) {
+    if (guessInput.trim() && !currentGame.isPaused) {
       gameplay.handleSubmitGuess(guessInput);
       setGuessInput('');
     }
   };
 
   const handleEntryToggle = (entry) => {
-    gameplay.handleToggleEntry(entry);
+    if (!currentGame.isPaused) {
+      gameplay.handleToggleEntry(entry);
+    }
+  };
+
+  const handlePauseToggle = () => {
+    if (currentGame.isPaused) {
+      gameplay.handleResumeGame();
+    } else {
+      gameplay.handlePauseGame();
+    }
   };
 
   // Convert server array back to Set for component compatibility
@@ -113,11 +124,19 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           
           {/* Timer - only during ACTIVE_GUESSING */}
           {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
-            <Timer 
-              timeLimit={gameState.gameSettings.timeLimit}
-              isActive={true}
-              onTimeUp={() => gameplay.handleEndGuessing()}
-            />
+            <div className={styles.timerSection}>
+              <Timer 
+                timeLimit={gameState.gameSettings.timeLimit}
+                isPaused={currentGame.isPaused}
+                onTimeUp={() => !currentGame.isPaused && gameplay.handleEndGuessing()}
+              />
+              <button 
+                className={styles.pauseButton}
+                onClick={handlePauseToggle}
+              >
+                {currentGame.isPaused ? 'Resume' : 'Pause'}
+              </button>
+            </div>
           )}
           
           {/* Team Guesses - always visible during active game */}
@@ -132,8 +151,9 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
                 className={styles.guessInput}
                 value={guessInput}
                 onChange={(e) => setGuessInput(e.target.value)}
+                disabled={currentGame.isPaused}
               />
-              <button type="submit" className={styles.guessButton}>
+              <button type="submit" className={styles.guessButton} disabled={currentGame.isPaused}>
                 Submit
               </button>
             </form>
@@ -144,6 +164,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             <button 
               className={styles.endButton}
               onClick={() => gameplay.handleEndGuessing()}
+              disabled={currentGame.isPaused}
             >
               End Guessing
             </button>
