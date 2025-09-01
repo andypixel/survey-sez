@@ -3,7 +3,7 @@ import TeamsDisplay from '../components/TeamsDisplay.jsx';
 import CategoriesDisplay from '../components/CategoriesDisplay.jsx';
 import GameplayView from '../components/GameplayView.jsx';
 import GameOverView from '../components/GameOverView.jsx';
-import UserStatus from '../components/UserStatus.jsx';
+import RoomSummary from '../components/RoomSummary.jsx';
 import styles from './GameRoom.module.scss';
 
 function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame }) {
@@ -38,11 +38,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
         <h1>Survey Sez - Game in Progress</h1>
         <p className={styles.roomInfo}>Room: <strong>{roomId}</strong></p>
         
-        <UserStatus 
-          gameState={gameState}
-          myId={myId}
-          myUserId={myUserId}
-        />
+        <RoomSummary gameState={gameState} />
         
         <GameplayView 
           gameState={gameState}
