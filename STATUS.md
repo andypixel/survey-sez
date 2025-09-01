@@ -1,7 +1,7 @@
 # To do
 
 - MVP
-    - Team summary component during gameplay: team names, player names, number of custom categories each
+    - ✅ Team summary component during gameplay: team names, player names, number of custom categories each
     - Provision database for production build
     - Hosting
     - What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?

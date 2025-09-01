@@ -24,7 +24,7 @@ client/src/
 │   ├── ScoreDisplay.jsx         # Shows team scores and turn scores
 │   ├── TeamGuesses.jsx          # Displays team guesses with player attribution
 │   ├── TeamsDisplay.jsx         # Shows teams and players
-│   └── UserStatus.jsx           # Shows current user info
+│   └── RoomSummary.jsx          # Shows room overview with teams, players, and category counts
 ├── contexts/            # React Context providers
 │   └── WorkflowContext.jsx      # Provides workflow instances to components
 ├── pages/               # Full-page components
