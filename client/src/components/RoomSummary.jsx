@@ -1,8 +1,8 @@
 import React from 'react';
 import styles from './RoomSummary.module.scss';
 
-function RoomSummary({ gameState }) {
-  const { teams, players, categories, roomId } = gameState;
+function RoomSummary({ gameState, myUserId }) {
+  const { teams, players, categories, roomId, currentGame } = gameState;
   
   const getPlayerCategoryCount = (userId) => {
     const userKey = `${roomId}-${userId}`;
@@ -11,6 +11,14 @@ function RoomSummary({ gameState }) {
   
   const getPlayerByUserId = (userId) => {
     return Object.values(players).find(player => player.userId === userId);
+  };
+  
+  const isAnnouncer = (userId) => {
+    return currentGame?.currentAnnouncerUserId === userId;
+  };
+  
+  const isCurrentUser = (userId) => {
+    return userId === myUserId;
   };
   
   return (
@@ -25,9 +33,10 @@ function RoomSummary({ gameState }) {
                 const player = getPlayerByUserId(userId);
                 const categoryCount = getPlayerCategoryCount(userId);
                 return (
-                  <div key={userId} className={styles.player}>
+                  <div key={userId} className={`${styles.player} ${isAnnouncer(userId) ? styles.announcer : ''} ${isCurrentUser(userId) ? styles.currentUser : ''}`}>
                     <span className={styles.playerName}>
                       {player?.name || 'Unknown'}
+                      {isAnnouncer(userId) && <span className={styles.announcerBadge}>📢</span>}
                     </span>
                     <span className={styles.categoryCount}>
                       {categoryCount} categories

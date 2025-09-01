@@ -38,7 +38,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
         <h1>Survey Sez - Game in Progress</h1>
         <p className={styles.roomInfo}>Room: <strong>{roomId}</strong></p>
         
-        <RoomSummary gameState={gameState} />
+        <RoomSummary gameState={gameState} myUserId={myUserId} />
         
         <GameplayView 
           gameState={gameState}

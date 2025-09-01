@@ -46,3 +46,23 @@
   font-size: 0.85rem;
   color: #666;
 }
+
+.announcer {
+  border-left-color: #ff6b35;
+  background: #fff5f2;
+}
+
+.announcerBadge {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.currentUser {
+  font-weight: 600;
+  box-shadow: 0 0 0 2px #28a745;
+  border-radius: 6px;
+}
+
+.currentUser.announcer {
+  box-shadow: 0 0 0 2px #28a745, inset 0 0 0 2px #ff6b35;
+}
