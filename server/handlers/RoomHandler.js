@@ -91,8 +91,8 @@ class RoomHandler {
               if (otherUserData?.setupComplete) {
                 // Send gameState to users who completed setup
                 io.to(socketId).emit('gameState', room.getState());
-              } else if (otherUserData && !otherUserData.setupComplete) {
-                // Send room setup update to users still in setup
+              } else {
+                // Send room setup update to users still in setup OR on join screen
                 io.to(socketId).emit('roomSetup', {
                   roomId,
                   existingTeams: room.getTeamNames(),
