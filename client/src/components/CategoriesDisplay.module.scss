@@ -30,6 +30,21 @@
   color: #666;
 }
 
+.used {
+  opacity: 0.6;
+  background: #f8f9fa;
+  border-color: #dee2e6;
+}
+
+.usedBadge {
+  font-size: 10px;
+  background: #6c757d;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
 .form {
   display: flex;
   gap: 10px;

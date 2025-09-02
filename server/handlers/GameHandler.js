@@ -57,6 +57,10 @@ class GameHandler {
     socket.on('skipAnnouncer', () => {
       this.handleSkipAnnouncer(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
+
+    socket.on('emergencyReset', () => {
+      this.handleEmergencyReset(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
   }
 
   /**
@@ -311,6 +315,20 @@ class GameHandler {
           io.to(roomId).emit('gameState', room.getState());
           debouncedSave();
         }
+      }
+    }
+  }
+
+  /**
+   * Handle emergency reset request
+   */
+  static handleEmergencyReset(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.emergencyReset()) {
+        io.to(roomId).emit('gameState', room.getState());
+        debouncedSave();
       }
     }
   }

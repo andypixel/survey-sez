@@ -9,7 +9,7 @@
     - ✅ Don't allow single Player Teams
     - ✅ Timer Desync Issues
     - Design refinements
-    - Emergency reset button
+    - ✅ Emergency reset button
         - Returns all players to ONBOARDING; maintains all unused categories
     - Prevent duplicate entries for custom categories
     - Game restart

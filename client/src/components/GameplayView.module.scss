@@ -230,3 +230,22 @@
     background: #5a6268;
   }
 }
+
+.emergencySection {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.emergencyButton {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  
+  &:hover {
+    background: #c82333;
+  }
+}

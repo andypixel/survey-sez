@@ -118,6 +118,20 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         </div>
       )}
       
+      {/* Emergency Reset button - available to all players during gameplay */}
+      <div className={styles.emergencySection}>
+        <button 
+          className={styles.emergencyButton}
+          onClick={() => {
+            if (window.confirm('Emergency reset will end this game but keep used categories. Continue?')) {
+              gameplay.handleEmergencyReset();
+            }
+          }}
+        >
+          Emergency Reset
+        </button>
+      </div>
+      
       {/* Active Game Content */}
       {currentGame.currentCategory && (
         <div className={styles.gameView}>

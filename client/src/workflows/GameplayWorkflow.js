@@ -157,6 +157,10 @@ class GameplayWorkflow {
     this.socket.emit('skipAnnouncer');
   }
 
+  handleEmergencyReset() {
+    this.socket.emit('emergencyReset');
+  }
+
   /**
    * Handle begin turn - announcer starts the turn with selected category
    */

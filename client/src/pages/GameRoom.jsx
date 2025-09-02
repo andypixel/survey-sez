@@ -100,6 +100,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
         myUserId={myUserId}
         onAddCategory={onAddCategory}
         categoryError={categoryError}
+        usedCategoryIds={gameState.usedCategoryIds}
       />
     </div>
   );

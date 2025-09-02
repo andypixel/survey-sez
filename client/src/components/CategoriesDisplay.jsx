@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CategoriesDisplay.module.scss';
 
-const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError }) {
+const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError, usedCategoryIds = [] }) {
   const [submitCount, setSubmitCount] = React.useState(0);
   const defaultEntries = React.useMemo(() => 
     Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join(', '),
@@ -21,14 +21,20 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
       
       <div>
         <div className={styles.categoriesGrid}>
-          {myCategories.map(category => (
-            <div key={category.id} className={styles.categoryCard}>
-              <div className={styles.categoryName}>{category.name}</div>
-              <div className={styles.categoryEntries}>
-                {category.entries?.slice(0, 3).join(', ')}...
+          {myCategories.map(category => {
+            const isUsed = usedCategoryIds.includes(category.id);
+            return (
+              <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
+                <div className={styles.categoryName}>
+                  {category.name}
+                  {isUsed && <span className={styles.usedBadge}>USED</span>}
+                </div>
+                <div className={styles.categoryEntries}>
+                  {category.entries?.slice(0, 3).join(', ')}...
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
         
         <div>

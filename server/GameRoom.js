@@ -40,6 +40,7 @@ class GameRoom {
     });
     
     this.currentGame = null;
+    this.usedCategoryIds = new Set(); // Persistent across emergency resets
   }
 
   /**
@@ -128,6 +129,7 @@ class GameRoom {
     this.currentGame = new GameplayManager(this);
     // Initialize first turn
     this.currentGame.initializeFirstTurn();
+    return true;
   }
 
   endGame() {
@@ -146,6 +148,22 @@ class GameRoom {
     this.gameState = GAME_RULES.PHASES.ONBOARDING;
     this.currentGame = null;
     this.finalGameData = null;
+    this.usedCategoryIds = new Set(); // Clear all used categories on full reset
+    return true;
+  }
+
+  emergencyReset() {
+    // Preserve used categories from current game
+    if (this.currentGame) {
+      // Sync used categories back to room level
+      this.usedCategoryIds = new Set([...this.usedCategoryIds, ...this.currentGame.usedCategoryIds]);
+    }
+    
+    // Reset game state but keep used categories
+    this.gameState = GAME_RULES.PHASES.ONBOARDING;
+    this.currentGame = null;
+    this.finalGameData = null;
+    
     return true;
   }
 
@@ -219,6 +237,7 @@ class GameRoom {
       gameState: this.gameState,
       gameSettings: this.gameSettings,
       categories: this.categories,
+      usedCategoryIds: Array.from(this.usedCategoryIds),
       currentGame: this.currentGame ? this.currentGame.getState() : null,
       finalGameData: this.finalGameData
     };
@@ -251,7 +270,7 @@ class GameplayManager {
     this.selectedCategory = null;
     this.responses = [];
     this.timer = null;
-    this.usedCategoryIds = new Set();
+    this.usedCategoryIds = new Set(room.usedCategoryIds || []);
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     this.markedEntries = new Set();
     this.teamScores = {};
