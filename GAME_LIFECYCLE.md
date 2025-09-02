@@ -9,6 +9,7 @@ The app lifecycle is split into three main phases for each "game". All mechanism
 - Players join the room, selecting a name and team
 - New players can join at any time during this phase
 - Each room supports exactly **2 teams maximum**
+- **Minimum team size**: Each team must have at least **2 players** to start the game
 - When a new user joins:
   - If 0 or 1 teams exist: they can join existing team OR create new team
   - If 2 teams exist: they must join one of the existing teams

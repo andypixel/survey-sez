@@ -6,7 +6,8 @@
     - Hosting
     - ✅ What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?
         - ✅ "Skip this announcer" button
-        - What other cases might cause the game to stall?
+    - ✅ Don't allow single Player Teams
+    - Timer Desync Issues
     - Design refinements
     - Emergency reset button
         - Returns all players to ONBOARDING; maintains all unused categories
@@ -16,6 +17,8 @@
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
+    - No Available Categories
+        - If all custom categories used and no universal categories available, game should detect this and either end early
 
 - Backlog
     - Game restart

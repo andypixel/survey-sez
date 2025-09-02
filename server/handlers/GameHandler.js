@@ -71,9 +71,23 @@ class GameHandler {
       const room = getOrCreateRoom(roomId);
       console.log('Room teams:', Object.keys(room.teams));
       
-      // Validate that we have enough teams to start
-      if (Object.keys(room.teams).length < GAME_RULES.MIN_TEAMS_TO_START) {
+      // Validate teams and players
+      const teams = Object.values(room.teams);
+      
+      if (teams.length < GAME_RULES.MIN_TEAMS_TO_START) {
         const error = `Need at least ${GAME_RULES.MIN_TEAMS_TO_START} teams to start the game`;
+        console.error('[GameHandler] Start game failed:', error);
+        socket.emit('gameError', { message: error });
+        return;
+      }
+      
+      const teamsWithInsufficientPlayers = teams.filter(team => 
+        team.players.length < GAME_RULES.MIN_PLAYERS_PER_TEAM
+      );
+      
+      if (teamsWithInsufficientPlayers.length > 0) {
+        const teamNames = teamsWithInsufficientPlayers.map(team => team.name).join(', ');
+        const error = `Each team needs at least ${GAME_RULES.MIN_PLAYERS_PER_TEAM} players. Teams with insufficient players: ${teamNames}`;
         console.error('[GameHandler] Start game failed:', error);
         socket.emit('gameError', { message: error });
         return;

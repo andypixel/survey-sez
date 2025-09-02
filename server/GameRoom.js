@@ -112,14 +112,22 @@ class GameRoom {
 
   // Game state management
   startGame() {
-    if (Object.keys(this.teams).length >= GAME_RULES.MIN_TEAMS_TO_START) {
-      this.gameState = GAME_RULES.PHASES.GAMEPLAY;
-      this.currentGame = new GameplayManager(this);
-      // Initialize first turn
-      this.currentGame.initializeFirstTurn();
-      return true;
+    const teams = Object.values(this.teams);
+    
+    // Check minimum number of teams
+    if (teams.length < GAME_RULES.MIN_TEAMS_TO_START) {
+      return false;
     }
-    return false;
+    
+    // Check minimum players per team
+    if (!teams.every(team => team.players.length >= GAME_RULES.MIN_PLAYERS_PER_TEAM)) {
+      return false;
+    }
+    
+    this.gameState = GAME_RULES.PHASES.GAMEPLAY;
+    this.currentGame = new GameplayManager(this);
+    // Initialize first turn
+    this.currentGame.initializeFirstTurn();
   }
 
   endGame() {

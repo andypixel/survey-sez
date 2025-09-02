@@ -6,6 +6,7 @@ const GAME_RULES = {
   // Team configuration
   MAX_TEAMS: 2,
   MIN_TEAMS_TO_START: 2,
+  MIN_PLAYERS_PER_TEAM: 2,
   
   // Turn configuration
   MAX_SKIPS_PER_TURN: 2,
