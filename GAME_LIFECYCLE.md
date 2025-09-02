@@ -78,6 +78,10 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 - **Turn Advancement**: When Announcer clicks Next Turn:
   - Turn score is added to the guessing team's running total
   - Next turn begins with new team/announcer
+- **Skip Announcer**: Available to all players during category selection phase
+  - Advances to next player on current team without changing turns
+  - Use case: When announcer is offline or unresponsive
+  - Resets turn state and selects new category for new announcer
 
 ### Scoring System
 - **Turn Score**: Count of category entries marked as correctly guessed (auto-matched + manually marked)

@@ -53,6 +53,10 @@ class GameHandler {
     socket.on('restartGame', () => {
       this.handleRestartGame(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
+
+    socket.on('skipAnnouncer', () => {
+      this.handleSkipAnnouncer(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
   }
 
   /**
@@ -279,6 +283,22 @@ class GameHandler {
       }
     } else {
       console.log('No room ID found');
+    }
+  }
+
+  /**
+   * Handle skip announcer request
+   */
+  static handleSkipAnnouncer(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        if (room.currentGame.skipAnnouncer()) {
+          io.to(roomId).emit('gameState', room.getState());
+          debouncedSave();
+        }
+      }
     }
   }
 }

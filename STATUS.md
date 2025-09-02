@@ -4,8 +4,8 @@
     - ✅ Team summary component during gameplay: team names, player names, number of custom categories each
     - Provision database for production build
     - Hosting
-    - What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?
-        - "Skip this announcer" button?
+    - ✅ What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?
+        - ✅ "Skip this announcer" button
         - What other cases might cause the game to stall?
     - Design refinements
     - Emergency reset button
@@ -13,6 +13,9 @@
     - Prevent duplicate entries for custom categories
     - Game restart
         - Unused custom categories can be reused in this room
+
+- Bugs
+    - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
 
 - Backlog
     - Game restart

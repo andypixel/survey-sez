@@ -314,6 +314,23 @@ class GameplayManager {
     return true;
   }
 
+  skipAnnouncer() {
+    // Advance to next announcer on current team without changing turn
+    const currentTeam = this.getCurrentGuessingTeam();
+    this.announcerIndex[currentTeam]++;
+    
+    // Reset turn state and select new category
+    this.currentCategory = null;
+    this.selectedCategory = null;
+    this.responses = [];
+    this.markedEntries = new Set();
+    this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
+    
+    // Select category for new announcer
+    this.selectedCategory = this.selectCategoryForAnnouncer();
+    return true;
+  }
+
   continueTurn() {
     console.log('continueTurn called - currentTurn:', this.currentTurn, 'turnsPerTeam:', this.room.gameSettings.turnsPerTeam);
     

@@ -106,6 +106,18 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         </div>
       )}
       
+      {/* Skip Announcer button - available to all players during category selection */}
+      {!currentGame.currentCategory && (
+        <div className={styles.skipSection}>
+          <button 
+            className={styles.skipButton}
+            onClick={() => gameplay.handleSkipAnnouncer()}
+          >
+            Skip This Announcer
+          </button>
+        </div>
+      )}
+      
       {/* Active Game Content */}
       {currentGame.currentCategory && (
         <div className={styles.gameView}>
