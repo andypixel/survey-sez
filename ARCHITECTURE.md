@@ -81,6 +81,7 @@ data/                    # JSON data files (git-ignored)
 - `gameState`: 'ONBOARDING' | 'GAMEPLAY' | 'SUMMARY'
 - `connectedSockets`: Maps socket IDs to user IDs (temporary connections)
 - `players`: User data keyed by user ID (persistent across reconnections)
+- `teams`: Stores persistent player data including names for offline display
 - `currentGame`: GameplayManager instance during gameplay
 - `categories`: { universal: [], userCustom: {} }
 
@@ -119,7 +120,7 @@ data/                    # JSON data files (git-ignored)
 {
   roomId: string,
   players: { [socketId]: { id, userId, name, team } }, // Client format (converted from userId-keyed data)
-  teams: { [teamName]: { name, players: [userId] } }, // Always uses user IDs
+  teams: { [teamName]: { name, players: [{ userId, name }] } }, // Stores persistent player data
   gameState: 'ONBOARDING' | 'GAMEPLAY' | 'SUMMARY',
   gameSettings: { timeLimit: number, turnsPerTeam: number },
   categories: {
@@ -180,6 +181,7 @@ data/                    # JSON data files (git-ignored)
 - **User IDs vs Socket IDs**: Server stores players by user ID (persistent), converts to socket ID format for client compatibility
 - **Reconnection handling**: `connectedSockets` maps current socket → user ID, player data survives disconnection
 - **State sync**: Server is source of truth, client does optimistic updates
-- **Team membership**: Always stored as user IDs, never socket IDs
+- **Team membership**: Stores user IDs with persistent names for offline display
+- **Offline players**: Names persist in team data even when disconnected
 - **Category scoping**: Custom categories are user-scoped, not team-scoped
 - **Workflow access**: Use `useWorkflows()` hook within WorkflowProvider, not global window access

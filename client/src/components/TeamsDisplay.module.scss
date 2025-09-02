@@ -36,4 +36,14 @@
   &.otherUser {
     color: #333;
   }
+
+  &.offline {
+    color: #999;
+    opacity: 0.6;
+    font-style: italic;
+  }
+
+  &.currentUser.offline {
+    color: #6c757d;
+  }
 }

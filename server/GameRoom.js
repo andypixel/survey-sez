@@ -66,8 +66,17 @@ class GameRoom {
     }
     
     // Add userId to team if not already present
-    if (!this.teams[playerData.team].players.includes(userId)) {
-      this.teams[playerData.team].players.push(userId);
+    if (!this.teams[playerData.team].players.find(p => p.userId === userId)) {
+      this.teams[playerData.team].players.push({
+        userId: userId,
+        name: playerData.name
+      });
+    } else {
+      // Update name if player rejoins with different name
+      const existingPlayer = this.teams[playerData.team].players.find(p => p.userId === userId);
+      if (existingPlayer) {
+        existingPlayer.name = playerData.name;
+      }
     }
   }
 
@@ -401,7 +410,8 @@ class GameplayManager {
   getCurrentAnnouncer() {
     const team = this.getCurrentGuessingTeam();
     const teamPlayers = this.room.teams[team].players;
-    return teamPlayers[this.announcerIndex[team] % teamPlayers.length];
+    const playerObj = teamPlayers[this.announcerIndex[team] % teamPlayers.length];
+    return typeof playerObj === 'string' ? playerObj : playerObj.userId;
   }
 
   getCurrentAnnouncerSocket() {

@@ -12,6 +12,10 @@ The app lifecycle is split into three main phases for each "game". All mechanism
 - When a new user joins:
   - If 0 or 1 teams exist: they can join existing team OR create new team
   - If 2 teams exist: they must join one of the existing teams
+- **Offline Player Handling**: Player names are stored persistently in team data
+  - Players remain visible in team displays even when disconnected
+  - Offline players appear grayed out and italicized
+  - Player names persist throughout the entire game session
 
 ### Category Management
 - Players can add custom categories scoped to their **team** (not room-wide)

@@ -29,13 +29,20 @@ function RoomSummary({ gameState, myUserId }) {
           <div key={team.name} className={styles.team}>
             <h4 className={styles.teamName}>{team.name}</h4>
             <div className={styles.players}>
-              {team.players.map(userId => {
-                const player = getPlayerByUserId(userId);
+              {team.players.map(playerData => {
+                const userId = typeof playerData === 'string' ? playerData : playerData.userId;
+                const persistentName = typeof playerData === 'object' ? playerData.name : null;
+                
+                const connectedPlayer = getPlayerByUserId(userId);
                 const categoryCount = getPlayerCategoryCount(userId);
+                const isOnline = !!connectedPlayer;
+                
+                const displayName = connectedPlayer?.name || persistentName || 'Unknown Player';
+                
                 return (
-                  <div key={userId} className={`${styles.player} ${isAnnouncer(userId) ? styles.announcer : ''} ${isCurrentUser(userId) ? styles.currentUser : ''}`}>
+                  <div key={userId} className={`${styles.player} ${isAnnouncer(userId) ? styles.announcer : ''} ${isCurrentUser(userId) ? styles.currentUser : ''} ${!isOnline ? styles.offline : ''}`}>
                     <span className={styles.playerName}>
-                      {player?.name || 'Unknown'}
+                      {displayName}
                       {isAnnouncer(userId) && <span className={styles.announcerBadge}>📢</span>}
                     </span>
                     <span className={styles.categoryCount}>

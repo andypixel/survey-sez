@@ -66,3 +66,17 @@
 .currentUser.announcer {
   box-shadow: 0 0 0 2px #28a745, inset 0 0 0 2px #ff6b35;
 }
+
+.offline {
+  opacity: 0.5;
+  background: #f8f9fa;
+}
+
+.offline .playerName {
+  color: #6c757d;
+  font-style: italic;
+}
+
+.offline .categoryCount {
+  color: #adb5bd;
+}

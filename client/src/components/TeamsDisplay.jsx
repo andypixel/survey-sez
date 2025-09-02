@@ -10,20 +10,27 @@ const TeamsDisplay = React.memo(function TeamsDisplay({ teams, players, myId }) 
           <div key={teamName} className={styles.team}>
             <strong>{teamName}</strong>
             <div className={styles.playerList}>
-              {team.players.map(userId => {
-                // Find player by userId since teams store userIds but players object is keyed by socketId
+              {team.players.map(playerData => {
+                const userId = typeof playerData === 'string' ? playerData : playerData.userId;
+                const persistentName = typeof playerData === 'object' ? playerData.name : null;
+                
+                // Find currently connected player
                 const playerEntry = Object.entries(players).find(([socketId, player]) => 
                   player.userId === userId
                 );
-                const player = playerEntry ? playerEntry[1] : null;
+                const connectedPlayer = playerEntry ? playerEntry[1] : null;
                 const socketId = playerEntry ? playerEntry[0] : null;
+                const isOnline = !!connectedPlayer;
+                const isCurrentUser = socketId === myId;
+                
+                const displayName = connectedPlayer?.name || persistentName || 'Unknown Player';
                 
                 return (
                   <div 
                     key={userId} 
-                    className={`${styles.player} ${socketId === myId ? styles.currentUser : styles.otherUser}`}
+                    className={`${styles.player} ${isCurrentUser ? styles.currentUser : styles.otherUser} ${!isOnline ? styles.offline : ''}`}
                   >
-                    {player?.name || 'Unknown'}
+                    {displayName}
                   </div>
                 );
               })}
