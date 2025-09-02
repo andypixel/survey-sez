@@ -56,7 +56,7 @@ class GameplayWorkflow {
 
   /**
    * Handles custom category creation from CategoriesDisplay form
-   * Does optimistic update then syncs with server
+   * Sends to server and waits for response
    * @param {Event} e - Form submit event with categoryName and categoryEntries
    */
   handleAddCategory(e) {
@@ -69,37 +69,12 @@ class GameplayWorkflow {
       
       this.callbacks.setCategoryError('');
       
-      // Optimistic update
-      const roomId = this.callbacks.getRoomId();
-      const myUserId = this.callbacks.getMyUserId();
-      const gameState = this.callbacks.getGameState();
-      const myId = this.callbacks.getMyId();
-      
-      const tempCategory = {
-        id: `${roomId}-${myUserId}-${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
-        name: name,
-        entries: entries,
-        createdBy: {
-          userId: myUserId,
-          name: gameState.players[myId]?.name || 'Unknown'
-        }
-      };
-      
-      const userKey = `${roomId}-${myUserId}`;
-      
-      this.callbacks.setGameState(prevState => ({
-        ...prevState,
-        categories: {
-          ...prevState.categories,
-          userCustom: {
-            ...prevState.categories.userCustom,
-            [userKey]: [...(prevState.categories.userCustom[userKey] || []), tempCategory]
-          }
-        }
-      }));
-      
+      // Send to server without optimistic update
       this.socket.emit('addCategory', { name, entries });
-      e.target.reset();
+      
+      // Store form reference for reset on success
+      this.lastCategoryForm = e.target;
+      console.log('Stored form reference for reset:', !!this.lastCategoryForm);
     }
   }
 
@@ -114,6 +89,17 @@ class GameplayWorkflow {
         }
       }
     }));
+  }
+
+  handleCategorySuccess() {
+    console.log('handleCategorySuccess called, lastCategoryForm:', !!this.lastCategoryForm);
+    if (this.lastCategoryForm) {
+      console.log('Resetting form');
+      this.lastCategoryForm.reset();
+      this.lastCategoryForm = null;
+    } else {
+      console.log('No form to reset - form reference was lost');
+    }
   }
 
   /**

@@ -168,8 +168,63 @@ class GameRoom {
   }
 
   /**
-   * Add a custom category for a specific user
+   * Validate a custom category for a specific user
    * @param {Object} category - Category data
+   * @param {string} userId - User who created the category
+   * @returns {Object} Result with success flag and validated category or error message
+   */
+  validateCustomCategory(category, userId) {
+    // Validate category name length
+    if (category.name.length < GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH || 
+        category.name.length > GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH) {
+      return { success: false, error: `Category name must be ${GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH}-${GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH} characters` };
+    }
+    
+    // Check for duplicate category name across all users in room
+    const categoryNameLower = category.name.toLowerCase().trim();
+    const allRoomCategories = Object.values(this.categories.userCustom).flat();
+    const duplicateName = allRoomCategories.some(cat => 
+      cat.name.toLowerCase().trim() === categoryNameLower
+    );
+    
+    if (duplicateName) {
+      return { success: false, error: 'A category with this name already exists in the room' };
+    }
+    
+    // Remove duplicate entries (case-insensitive, trimmed)
+    const uniqueEntries = [];
+    const seenEntries = new Set();
+    
+    category.entries.forEach(entry => {
+      const normalizedEntry = entry.toLowerCase().trim();
+      if (normalizedEntry && !seenEntries.has(normalizedEntry)) {
+        seenEntries.add(normalizedEntry);
+        uniqueEntries.push(entry.trim());
+      }
+    });
+    
+    // Check entries count limits
+    if (uniqueEntries.length < GAME_RULES.VALIDATION.MIN_CATEGORY_ENTRIES) {
+      return { success: false, error: `Categories must have at least ${GAME_RULES.VALIDATION.MIN_CATEGORY_ENTRIES} entry` };
+    }
+    
+    if (uniqueEntries.length > GAME_RULES.VALIDATION.MAX_CATEGORY_ENTRIES) {
+      return { success: false, error: `Categories can have a maximum of ${GAME_RULES.VALIDATION.MAX_CATEGORY_ENTRIES} entries` };
+    }
+    
+    // Return validated category without adding to room state
+    const validatedCategory = {
+      ...category,
+      name: category.name.trim(),
+      entries: uniqueEntries
+    };
+    
+    return { success: true, category: validatedCategory };
+  }
+
+  /**
+   * Add a validated category to room state
+   * @param {Object} category - Already validated category data
    * @param {string} userId - User who created the category
    */
   addCustomCategory(category, userId) {

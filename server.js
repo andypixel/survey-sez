@@ -186,7 +186,7 @@ io.on('connection', (socket) => {
   // Register all event handlers
   RoomHandler.register(socket, io, userSession, getOrCreateRoom, debouncedSave, userSessions);
   GameHandler.register(socket, io, userSession, rooms, getOrCreateRoom, debouncedSave);
-  CategoryHandler.register(socket, io, userSession, getOrCreateRoom, debouncedSave, storage, categoriesData, userSessions);
+  CategoryHandler.register(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions);
   
   // Handle disconnect
   socket.on('disconnect', () => {

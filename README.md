@@ -4,10 +4,12 @@ A real-time multiplayer word-guessing game where teams compete in turn-based rou
 
 ## Features
 - Real-time multiplayer gameplay with WebSocket connections
-- Turn-based team competition with rotating announcers
-- Custom category creation scoped to individual users
+- Turn-based team competition with rotating announcers (minimum 2 players per team)
+- Custom category creation with validation (1-10 entries, unique names per room)
+- Emergency reset functionality preserving used categories
 - Three-phase game lifecycle: Onboarding → Gameplay → Summary
 - Persistent user sessions across reconnections
+- Synchronized timer system preventing desync issues
 
 ## Quick Start
 

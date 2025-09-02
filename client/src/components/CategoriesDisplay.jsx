@@ -2,15 +2,13 @@ import React from 'react';
 import styles from './CategoriesDisplay.module.scss';
 
 const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError, usedCategoryIds = [] }) {
-  const [submitCount, setSubmitCount] = React.useState(0);
   const defaultEntries = React.useMemo(() => 
     Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join(', '),
-    [submitCount]
+    []
   );
   
   const handleSubmit = (e) => {
     onAddCategory(e);
-    setSubmitCount(prev => prev + 1);
   };
   const myUserKey = Object.keys(categories?.userCustom || {}).find(key => key.endsWith(`-${myUserId}`));
   const myCategories = myUserKey ? categories.userCustom[myUserKey] : [];

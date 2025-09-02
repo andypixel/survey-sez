@@ -11,9 +11,11 @@
     - Design refinements
     - ✅ Emergency reset button
         - Returns all players to ONBOARDING; maintains all unused categories
-    - Prevent duplicate entries for custom categories
+    - ✅ Prevent duplicate entries for custom categories
     - Game restart
         - Unused custom categories can be reused in this room
+    - Add "dev mode" to only auto-populate entries in that env
+    - bug: timeout fails when skipping announcer
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?

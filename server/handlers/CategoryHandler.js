@@ -7,48 +7,24 @@ class CategoryHandler {
   /**
    * Register all category event handlers for a socket
    */
-  static register(socket, io, userSession, getOrCreateRoom, debouncedSave, storage, categoriesData, userSessions) {
+  static register(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions) {
     socket.on('addCategory', async (data) => {
-      await this.handleAddCategory(socket, io, userSession, getOrCreateRoom, debouncedSave, storage, categoriesData, userSessions, data);
+      await this.handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data);
     });
   }
 
   /**
    * Handle adding custom category
    */
-  static async handleAddCategory(socket, io, userSession, getOrCreateRoom, debouncedSave, storage, categoriesData, userSessions, data) {
+  static async handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data) {
     const roomId = userSession.currentRoom;
     const playerData = userSession.getUserData(roomId);
     
     if (roomId && playerData && data.name) {
-      // Validate category name length
-      if (data.name.length < GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH || 
-          data.name.length > GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH) {
-        const error = `Category name must be ${GAME_RULES.VALIDATION.MIN_CATEGORY_NAME_LENGTH}-${GAME_RULES.VALIDATION.MAX_CATEGORY_NAME_LENGTH} characters`;
-        console.error('[CategoryHandler] Add category failed:', error);
-        socket.emit('categoryError', { message: error });
-        return;
-      }
+      const room = getOrCreateRoom(roomId);
       
       const categoryId = data.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
       const fullId = `${roomId}-${playerData.team}-${categoryId}`;
-      
-      const room = getOrCreateRoom(roomId);
-      
-      // Check for duplicate IDs in universal categories
-      const universalExists = room.categories.universal.some(cat => cat.id === categoryId);
-      
-      // Check for duplicate IDs in user's custom categories
-      const userKey = `${roomId}-${playerData.userId}`;
-      const userCustom = room.categories.userCustom[userKey] || [];
-      const customExists = userCustom.some(cat => cat.id === fullId);
-      
-      if (universalExists || customExists) {
-        const error = 'A category with this name already exists';
-        console.error('[CategoryHandler] Add category failed:', error);
-        socket.emit('categoryError', { message: error });
-        return;
-      }
       
       const newCategory = {
         id: fullId,
@@ -56,19 +32,28 @@ class CategoryHandler {
         entries: data.entries || []
       };
       
-      // Save to persistent storage (user-scoped)
-      const storageKey = `${roomId}-${playerData.userId}`;
-      if (!categoriesData.custom[storageKey]) {
-        categoriesData.custom[storageKey] = [];
+      // Validate category first
+      const validationResult = room.validateCustomCategory(newCategory, playerData.userId);
+      
+      if (!validationResult.success) {
+        socket.emit('categoryError', { message: validationResult.error });
+        return;
       }
       
+      // Create category with creator info
       const categoryWithCreator = {
-        ...newCategory,
+        ...validationResult.category,
         createdBy: {
           userId: playerData.userId,
           name: playerData.name
         }
       };
+      
+      // Save to persistent storage (user-scoped)
+      const storageKey = `${roomId}-${playerData.userId}`;
+      if (!categoriesData.custom[storageKey]) {
+        categoriesData.custom[storageKey] = [];
+      }
       
       categoriesData.custom[storageKey].push(categoryWithCreator);
       try {
@@ -80,10 +65,20 @@ class CategoryHandler {
         return;
       }
       
-      // Update room state with the category that includes creator info
+      // Add to room state
       room.addCustomCategory(categoryWithCreator, playerData.userId);
       
-      // Send targeted category update to users who have completed setup
+      // Send success confirmation to sender
+      socket.emit('categoryAdded', {
+        userKey: `${roomId}-${playerData.userId}`,
+        category: categoryWithCreator
+      });
+      
+      // Tell sender to reset form
+      console.log('Sending categorySuccess to socket:', socket.id);
+      socket.emit('categorySuccess');
+      
+      // Send targeted category update to other users who have completed setup
       const socketsInRoom = io.sockets.adapter.rooms.get(roomId);
       if (socketsInRoom) {
         socketsInRoom.forEach(socketId => {

@@ -26,30 +26,31 @@ function App() {
   // Storage utilities for localStorage operations
   const storage = { getUserData, saveUserData };
   
-  // Workflow callbacks - provides state setters/getters to workflow classes
-  // This allows workflows to update React state and access current values
-  const callbacks = {
+  // Initialize workflow classes once
+  const [workflows] = useState(() => {
+    const roomJoinWorkflow = new RoomJoinWorkflow(socket, {}, storage);
+    const userSetupWorkflow = new UserSetupWorkflow(socket, {}, storage);
+    const gameplayWorkflow = new GameplayWorkflow(socket, {}, storage);
+    
+    return {
+      roomJoin: roomJoinWorkflow,
+      userSetup: userSetupWorkflow,
+      gameplay: gameplayWorkflow
+    };
+  });
+  
+  // Update workflow callbacks on every render (they always have current state)
+  workflows.roomJoin.callbacks = {
     setRoomId, setIsInRoom, setGameState, setShowUserSetup, setRoomSetupData,
     setSetupError, setCategoryError, getMyId: () => myId, getMyUserId: () => myUserId,
     getRoomId: () => roomId, getGameState: () => gameState
   };
-  
-  // Initialize workflow classes - these handle business logic and socket events
-  // Each workflow manages a specific phase: room joining, user setup, gameplay
-  const roomJoinWorkflow = new RoomJoinWorkflow(socket, callbacks);
-  const userSetupWorkflow = new UserSetupWorkflow(socket, callbacks, storage);
-  const gameplayWorkflow = new GameplayWorkflow(socket, callbacks, storage);
-  
-  // Workflows object for context provider
-  const workflows = {
-    roomJoin: roomJoinWorkflow,
-    userSetup: userSetupWorkflow,
-    gameplay: gameplayWorkflow
-  };
+  workflows.userSetup.callbacks = workflows.roomJoin.callbacks;
+  workflows.gameplay.callbacks = workflows.roomJoin.callbacks;
 
   useEffect(() => {
     setMyUserId(getGlobalUserId());
-    const room = roomJoinWorkflow.initializeFromUrl();
+    const room = workflows.roomJoin.initializeFromUrl();
     if (room) setRoomId(room);
   }, []);
 
@@ -73,17 +74,18 @@ function App() {
       }
     });
 
-    socket.on('roomSetup', (data) => userSetupWorkflow.handleRoomSetup(data));
+    socket.on('roomSetup', (data) => workflows.userSetup.handleRoomSetup(data));
     socket.on('gameState', (state) => {
       console.log('Received gameState from server:', state.gameState, state.roomId);
-      gameplayWorkflow.handleGameState(state);
+      workflows.gameplay.handleGameState(state);
     });
-    socket.on('categoryAdded', (data) => gameplayWorkflow.handleCategoryAdded(data));
+    socket.on('categoryAdded', (data) => workflows.gameplay.handleCategoryAdded(data));
+    socket.on('categorySuccess', () => workflows.gameplay.handleCategorySuccess());
     socket.on('roomSetup', (data) => {
       if (showUserSetup) {
-        userSetupWorkflow.handleRoomSetupUpdate(data);
+        workflows.userSetup.handleRoomSetupUpdate(data);
       } else {
-        userSetupWorkflow.handleRoomSetup(data);
+        workflows.userSetup.handleRoomSetup(data);
       }
     });
     
@@ -109,6 +111,7 @@ function App() {
       socket.off('categoryError');
       socket.off('setupError');
       socket.off('categoryAdded');
+      socket.off('categorySuccess');
       socket.off('gameError');
       socket.off('disconnect');
       socket.off('reconnect');
@@ -121,13 +124,13 @@ function App() {
         <UserSetup 
           roomSetupData={roomSetupData}
           existingUserData={getUserData(roomSetupData.roomId)}
-          onUserSetup={(e) => userSetupWorkflow.handleUserSetup(e)}
+          onUserSetup={(e) => workflows.userSetup.handleUserSetup(e)}
           setupError={setupError}
         />
       ) : !isInRoom ? (
         <RoomJoin 
           roomId={roomId}
-          onRoomJoin={(e) => roomJoinWorkflow.handleRoomJoin(e)}
+          onRoomJoin={(e) => workflows.roomJoin.handleRoomJoin(e)}
         />
       ) : (
         <GameRoom 
@@ -135,9 +138,9 @@ function App() {
           roomId={roomId}
           myId={myId}
           myUserId={myUserId}
-          onAddCategory={(e) => gameplayWorkflow.handleAddCategory(e)}
-          onStartGame={(e) => gameplayWorkflow.handleStartGame(e)}
-          onRestartGame={() => gameplayWorkflow.handleRestartGame()}
+          onAddCategory={(e) => workflows.gameplay.handleAddCategory(e)}
+          onStartGame={(e) => workflows.gameplay.handleStartGame(e)}
+          onRestartGame={() => workflows.gameplay.handleRestartGame()}
           categoryError={categoryError}
         />
       )}
