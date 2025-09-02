@@ -15,7 +15,6 @@ const GAME_RULES = {
   // Timeout configuration
   TIMEOUTS: {
     RESULTS_PHASE: 30000, // 30 seconds for reveal button
-    TURN_SUMMARY_PHASE: 30000, // 30 seconds for next turn button
   },
   
   // Game phases
@@ -43,8 +42,7 @@ const GAME_RULES = {
   
   // Timeout keys
   TIMEOUT_KEYS: {
-    RESULTS_PHASE: 'results_phase',
-    TURN_SUMMARY_PHASE: 'turn_summary_phase'
+    RESULTS_PHASE: 'results_phase'
   }
 };
 

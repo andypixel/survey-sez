@@ -176,15 +176,11 @@ class GameHandler {
       const room = getOrCreateRoom(roomId);
       console.log('Room found:', roomId, 'gameState:', room.gameState, 'hasCurrentGame:', !!room.currentGame);
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
-        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
-        console.log('Announcer check - expected:', announcerSocketId, 'actual:', socket.id, 'match:', announcerSocketId === socket.id);
-        if (announcerSocketId === socket.id) {
-          console.log('Calling continueTurn...');
-          if (room.currentGame.continueTurn()) {
-            console.log('continueTurn successful, emitting gameState');
-            io.to(roomId).emit('gameState', room.getState());
-            debouncedSave();
-          }
+        console.log('Calling continueTurn...');
+        if (room.currentGame.continueTurn()) {
+          console.log('continueTurn successful, emitting gameState');
+          io.to(roomId).emit('gameState', room.getState());
+          debouncedSave();
         }
       }
     }

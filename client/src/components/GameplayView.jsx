@@ -191,7 +191,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </button>
           )}
           
-          {isAnnouncer && currentGame.turnPhase === 'TURN_SUMMARY' && (
+          {currentGame.turnPhase === 'TURN_SUMMARY' && (
             <button 
               className={styles.continueButton}
               onClick={() => gameplay.handleContinueTurn()}

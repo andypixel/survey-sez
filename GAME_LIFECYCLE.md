@@ -79,8 +79,8 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 - **Summary Phase**: When Announcer clicks Reveal:
   - Category details with marked entries shown to all players
   - **Turn Score Displayed**: Number of correctly guessed entries shown to all players
-  - Announcer sees "Next Turn" button
-- **Turn Advancement**: When Announcer clicks Next Turn:
+  - "Next Turn" button available to all players
+- **Turn Advancement**: When any player clicks Next Turn:
   - Turn score is added to the guessing team's running total
   - Next turn begins with new team/announcer
 - **Skip Announcer**: Available to all players during category selection phase
