@@ -138,8 +138,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
             <div className={styles.timerSection}>
               <Timer 
-                timeLimit={gameState.gameSettings.timeLimit}
-                isPaused={currentGame.isPaused}
+                timerState={currentGame.timerState}
                 onTimeUp={() => !currentGame.isPaused && gameplay.handleEndGuessing()}
               />
               <button 

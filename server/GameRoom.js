@@ -257,6 +257,9 @@ class GameplayManager {
     this.teamScores = {};
     this.isPaused = false;
     this.timeoutManager = new TimeoutManager();
+    this.timerStartTime = null;
+    this.timerDuration = null;
+    this.pausedTimeRemaining = null;
     
     // Initialize team scores
     this.teamOrder.forEach(team => {
@@ -308,6 +311,12 @@ class GameplayManager {
       this.usedCategoryIds.add(this.selectedCategory.id);
       this.responses = [];
       this.turnPhase = GAME_RULES.TURN_PHASES.ACTIVE_GUESSING;
+      
+      // Start server-side timer
+      this.timerStartTime = Date.now();
+      this.timerDuration = this.room.gameSettings.timeLimit * 1000; // Convert to milliseconds
+      this.pausedTimeRemaining = null;
+      
       return true;
     }
     return false;
@@ -315,6 +324,11 @@ class GameplayManager {
 
   endGuessing() {
     this.turnPhase = GAME_RULES.TURN_PHASES.RESULTS;
+    
+    // Clear timer state
+    this.timerStartTime = null;
+    this.timerDuration = null;
+    this.pausedTimeRemaining = null;
     
     // Start timeout for results phase with offline announcer check
     this.timeoutManager.startTimeout(
@@ -337,11 +351,22 @@ class GameplayManager {
   }
   
   pauseGame() {
+    if (this.timerStartTime && !this.isPaused) {
+      // Calculate remaining time when pausing
+      const elapsed = Date.now() - this.timerStartTime;
+      this.pausedTimeRemaining = Math.max(0, this.timerDuration - elapsed);
+    }
     this.isPaused = true;
     return true;
   }
   
   resumeGame() {
+    if (this.isPaused && this.pausedTimeRemaining !== null) {
+      // Resume timer with remaining time
+      this.timerStartTime = Date.now();
+      this.timerDuration = this.pausedTimeRemaining;
+      this.pausedTimeRemaining = null;
+    }
     this.isPaused = false;
     return true;
   }
@@ -359,6 +384,11 @@ class GameplayManager {
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     this.timeoutManager.clearAll();
     
+    // Clear timer state
+    this.timerStartTime = null;
+    this.timerDuration = null;
+    this.pausedTimeRemaining = null;
+    
     // Select category for new announcer
     this.selectedCategory = this.selectCategoryForAnnouncer();
     return true;
@@ -367,6 +397,29 @@ class GameplayManager {
   canAllPlayersReveal() {
     if (this.turnPhase !== GAME_RULES.TURN_PHASES.RESULTS) return false;
     return this.timeoutManager.hasElapsed(GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE);
+  }
+
+  getTimerState() {
+    if (!this.timerStartTime || this.turnPhase !== GAME_RULES.TURN_PHASES.ACTIVE_GUESSING) {
+      return null;
+    }
+
+    if (this.isPaused) {
+      return {
+        timeRemaining: this.pausedTimeRemaining || 0,
+        isPaused: true,
+        totalDuration: this.room.gameSettings.timeLimit * 1000
+      };
+    }
+
+    const elapsed = Date.now() - this.timerStartTime;
+    const timeRemaining = Math.max(0, this.timerDuration - elapsed);
+    
+    return {
+      timeRemaining,
+      isPaused: false,
+      totalDuration: this.room.gameSettings.timeLimit * 1000
+    };
   }
 
   continueTurn() {
@@ -465,6 +518,11 @@ class GameplayManager {
     this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     
+    // Clear timer state
+    this.timerStartTime = null;
+    this.timerDuration = null;
+    this.pausedTimeRemaining = null;
+    
     // Select category for new announcer
     this.selectedCategory = this.selectCategoryForAnnouncer();
   }
@@ -491,7 +549,8 @@ class GameplayManager {
       currentTurnScore: this.getCurrentTurnScore(),
       isComplete: this.isGameComplete(),
       isPaused: this.isPaused,
-      canAllPlayersReveal: this.canAllPlayersReveal()
+      canAllPlayersReveal: this.canAllPlayersReveal(),
+      timerState: this.getTimerState()
     };
   }
 }

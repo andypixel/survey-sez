@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styles from './Timer.module.scss';
 
-function Timer({ timeLimit, isPaused, onTimeUp }) {
-  const [timeLeft, setTimeLeft] = useState(timeLimit);
+function Timer({ timerState, onTimeUp }) {
+  const [localTimeLeft, setLocalTimeLeft] = useState(0);
 
   useEffect(() => {
-    setTimeLeft(timeLimit);
-  }, [timeLimit]);
+    if (!timerState || timerState.isPaused) return;
 
-  useEffect(() => {
-    if (isPaused) return;
+    // Sync with server time
+    setLocalTimeLeft(Math.ceil(timerState.timeRemaining / 1000));
 
     const interval = setInterval(() => {
-      setTimeLeft(prev => {
+      setLocalTimeLeft(prev => {
         if (prev <= 1) {
           onTimeUp();
           return 0;
@@ -22,7 +21,19 @@ function Timer({ timeLimit, isPaused, onTimeUp }) {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isPaused, onTimeUp]);
+  }, [timerState?.timeRemaining, timerState?.isPaused, onTimeUp]);
+
+  useEffect(() => {
+    if (timerState?.isPaused) {
+      setLocalTimeLeft(Math.ceil(timerState.timeRemaining / 1000));
+    }
+  }, [timerState?.isPaused, timerState?.timeRemaining]);
+
+  if (!timerState) return null;
+
+  const timeLeft = timerState.isPaused ? 
+    Math.ceil(timerState.timeRemaining / 1000) : 
+    localTimeLeft;
 
   const getTimerClass = () => {
     if (timeLeft <= 5) return styles.critical;
@@ -31,8 +42,8 @@ function Timer({ timeLimit, isPaused, onTimeUp }) {
   };
 
   return (
-    <div className={`${styles.timer} ${getTimerClass()} ${isPaused ? styles.paused : ''}`}>
-      Time: {timeLeft}s {isPaused && '(PAUSED)'}
+    <div className={`${styles.timer} ${getTimerClass()} ${timerState.isPaused ? styles.paused : ''}`}>
+      Time: {timeLeft}s {timerState.isPaused && '(PAUSED)'}
     </div>
   );
 }

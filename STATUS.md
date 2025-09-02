@@ -7,7 +7,7 @@
     - ✅ What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?
         - ✅ "Skip this announcer" button
     - ✅ Don't allow single Player Teams
-    - Timer Desync Issues
+    - ✅ Timer Desync Issues
     - Design refinements
     - Emergency reset button
         - Returns all players to ONBOARDING; maintains all unused categories
