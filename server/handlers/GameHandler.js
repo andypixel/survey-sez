@@ -151,8 +151,11 @@ class GameHandler {
       const room = getOrCreateRoom(roomId);
       if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
-        if (announcerSocketId === socket.id) {
-          console.log('RevealResults called, current phase:', room.currentGame.turnPhase);
+        const isAnnouncer = announcerSocketId === socket.id;
+        const canAllPlayersReveal = room.currentGame.canAllPlayersReveal();
+        
+        if (isAnnouncer || canAllPlayersReveal) {
+          console.log('RevealResults called, current phase:', room.currentGame.turnPhase, 'canAllReveal:', canAllPlayersReveal);
           if (room.currentGame.revealResults()) {
             console.log('RevealResults successful, new phase:', room.currentGame.turnPhase);
             io.to(roomId).emit('gameState', room.getState());

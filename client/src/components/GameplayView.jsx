@@ -182,12 +182,12 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </button>
           )}
           
-          {isAnnouncer && currentGame.turnPhase === 'RESULTS' && (
+          {currentGame.turnPhase === 'RESULTS' && (isAnnouncer || currentGame.canAllPlayersReveal) && (
             <button 
               className={styles.revealButton}
               onClick={() => gameplay.handleRevealResults()}
             >
-              Reveal
+              {currentGame.canAllPlayersReveal ? 'Reveal (Timeout/Offline)' : 'Reveal'}
             </button>
           )}
           

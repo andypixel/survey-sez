@@ -1,4 +1,5 @@
 const GAME_RULES = require('./config/GameRules');
+const TimeoutManager = require('./utils/TimeoutManager');
 
 /**
  * Manages game room state, players, teams, and game lifecycle
@@ -247,6 +248,7 @@ class GameplayManager {
     this.markedEntries = new Set();
     this.teamScores = {};
     this.isPaused = false;
+    this.timeoutManager = new TimeoutManager();
     
     // Initialize team scores
     this.teamOrder.forEach(team => {
@@ -305,11 +307,24 @@ class GameplayManager {
 
   endGuessing() {
     this.turnPhase = GAME_RULES.TURN_PHASES.RESULTS;
+    
+    // Start timeout for results phase with offline announcer check
+    this.timeoutManager.startTimeout(
+      GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE,
+      GAME_RULES.TIMEOUTS.RESULTS_PHASE,
+      () => {
+        const announcerUserId = this.getCurrentAnnouncer();
+        const announcerSocketId = this.room.getSocketForUser(announcerUserId);
+        return !announcerSocketId; // Returns true if announcer is offline
+      }
+    );
+    
     return true;
   }
   
   revealResults() {
     this.turnPhase = GAME_RULES.TURN_PHASES.TURN_SUMMARY;
+    this.timeoutManager.clearTimeout(GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE);
     return true;
   }
   
@@ -334,10 +349,16 @@ class GameplayManager {
     this.responses = [];
     this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
+    this.timeoutManager.clearAll();
     
     // Select category for new announcer
     this.selectedCategory = this.selectCategoryForAnnouncer();
     return true;
+  }
+
+  canAllPlayersReveal() {
+    if (this.turnPhase !== GAME_RULES.TURN_PHASES.RESULTS) return false;
+    return this.timeoutManager.hasElapsed(GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE);
   }
 
   continueTurn() {
@@ -461,7 +482,8 @@ class GameplayManager {
       teamScores: this.teamScores,
       currentTurnScore: this.getCurrentTurnScore(),
       isComplete: this.isGameComplete(),
-      isPaused: this.isPaused
+      isPaused: this.isPaused,
+      canAllPlayersReveal: this.canAllPlayersReveal()
     };
   }
 }

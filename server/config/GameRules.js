@@ -12,6 +12,12 @@ const GAME_RULES = {
   DEFAULT_TIME_LIMIT: 30, // seconds
   DEFAULT_ROUNDS: 3,
   
+  // Timeout configuration
+  TIMEOUTS: {
+    RESULTS_PHASE: 30000, // 30 seconds for reveal button
+    TURN_SUMMARY_PHASE: 30000, // 30 seconds for next turn button
+  },
+  
   // Game phases
   PHASES: {
     ONBOARDING: 'ONBOARDING',
@@ -33,6 +39,12 @@ const GAME_RULES = {
     MAX_CATEGORY_NAME_LENGTH: 50,
     MIN_PLAYER_NAME_LENGTH: 1,
     MAX_PLAYER_NAME_LENGTH: 20
+  },
+  
+  // Timeout keys
+  TIMEOUT_KEYS: {
+    RESULTS_PHASE: 'results_phase',
+    TURN_SUMMARY_PHASE: 'turn_summary_phase'
   }
 };
 
