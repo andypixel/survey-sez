@@ -28,9 +28,14 @@ const TeamsDisplay = React.memo(function TeamsDisplay({ teams, players, myId }) 
                 return (
                   <div 
                     key={userId} 
-                    className={`${styles.player} ${isCurrentUser ? styles.currentUser : styles.otherUser} ${!isOnline ? styles.offline : ''}`}
+                    className={`${styles.playerContainer} ${isCurrentUser ? styles.currentUser : ''} ${!isOnline ? styles.offline : ''}`}
                   >
-                    {displayName}
+                    <div className={styles.playerCircle}>
+                      {displayName.charAt(0).toUpperCase()}
+                    </div>
+                    <div className={styles.playerName}>
+                      {displayName}
+                    </div>
                   </div>
                 );
               })}

@@ -19,10 +19,11 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
   
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>My Categories</h3>
+      <h3 className={styles.title}>Your Categories</h3>
       
-      <div>
-        <div>
+      <div className={styles.categoriesLayout}>
+        {/* Category Input Area (Left Side) */}
+        <div className={styles.inputArea}>
           <form onSubmit={handleSubmit} className={styles.form}>
             <input 
               name="categoryName"
@@ -47,26 +48,36 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
               {categoryError}
             </div>
           )}
+          <p className={styles.categoryCount}>
+            {myCategories.length} Categories Created
+          </p>
         </div>
         
-        <div className={styles.categoriesGrid}>
-          <p className={styles.categoryCount}>({availableCount} available)</p>
-          {myCategories.map(category => {
-            const isUsed = usedCategoryIds.includes(category.id);
-            return (
-              <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
-                <div className={styles.categoryName}>
-                  {category.name}
-                  {isUsed && <span className={styles.usedBadge}>USED</span>}
+        {/* Your Category List (Right Side) */}
+        <div className={styles.categoryList}>
+          <p className={styles.availabilityCount}>
+            {availableCount} of {myCategories.length} available
+          </p>
+          <div className={styles.categoriesGrid}>
+            {myCategories.map(category => {
+              const isUsed = usedCategoryIds.includes(category.id);
+              return (
+                <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
+                  <div className={styles.categoryHeader}>
+                    <span className={styles.categoryName}>{category.name}</span>
+                    <span className={`${styles.statusBadge} ${isUsed ? styles.usedBadge : styles.availableBadge}`}>
+                      {isUsed ? '✓ Used' : 'Available'}
+                    </span>
+                  </div>
+                  <div className={styles.categoryEntries}>
+                    {category.entries?.map((entry, index) => (
+                      <div key={index} className={styles.entry}>{entry}</div>
+                    ))}
+                  </div>
                 </div>
-                <div className={styles.categoryEntries}>
-                  {category.entries?.map((entry, index) => (
-                    <div key={index} className={styles.entry}>{entry}</div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

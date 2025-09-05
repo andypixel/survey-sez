@@ -54,20 +54,47 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
   // Show onboarding view
   return (
     <div className={styles.container}>
-      <h1>Survey Sez</h1>
-      <p className={styles.roomInfo}>Room: <strong>{roomId}</strong></p>
+      {/* Header */}
+      <div className={styles.header}>
+        <div className={styles.headerLeft}>
+          <h1 className={styles.gameName}>Survey Sez</h1>
+          <p className={styles.roomName}>Room: {roomId}</p>
+        </div>
+        <div className={styles.headerRight}>
+          <span className={styles.playersOnline}>
+            👥 {Object.keys(gameState.players).length} Players Online
+          </span>
+        </div>
+      </div>
       
+      {/* Tagline */}
+      <p className={styles.tagline}>
+        Create categories with 10 answers each. Other players will try to guess them!
+      </p>
+      
+      {/* Teams Section */}
       <TeamsDisplay 
         teams={gameState.teams} 
         players={gameState.players} 
         myId={myId} 
       />
       
-
+      {/* Start Game Button */}
+      <div className={styles.startGameSection}>
+        <form id="startGameForm" onSubmit={onStartGame}>
+          <button type="submit" className={styles.startGameButton}>
+            Start Game
+          </button>
+        </form>
+        <p className={styles.startGameTooltip}>
+          Anyone can start once categories are ready!
+        </p>
+      </div>
       
-      <div className={styles.gameConfig}>
-        <h3>Game Configuration</h3>
-        <form className={styles.configForm} onSubmit={onStartGame}>
+      {/* Game Configuration (Collapsible) */}
+      <details className={styles.gameConfig}>
+        <summary className={styles.gameConfigSummary}>⚙️ Game Settings</summary>
+        <div className={styles.gameConfigContent}>
           <div className={styles.inputGroup}>
             <label>Turn Timer (seconds):</label>
             <input 
@@ -76,6 +103,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
               defaultValue={30}
               min={10}
               max={120}
+              form="startGameForm"
             />
           </div>
           <div className={styles.inputGroup}>
@@ -86,15 +114,13 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
               defaultValue={10}
               min={1}
               max={50}
+              form="startGameForm"
             />
           </div>
-          <button type="submit" className={styles.startButton}>
-            Start Game
-          </button>
-        </form>
-        <p className={styles.playersOnline}>Players Online: {Object.keys(gameState.players).length}</p>
-      </div>
+        </div>
+      </details>
       
+      {/* Categories Section */}
       <CategoriesDisplay 
         categories={gameState.categories}
         myUserId={myUserId}

@@ -4,30 +4,72 @@
 
 .title {
   margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.categoriesLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.inputArea {
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryList {
+  display: flex;
+  flex-direction: column;
+}
+
+.availabilityCount {
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #555;
+}
+
+.categoryCount {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .categoriesGrid {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 15px;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .categoryCard {
-  padding: 8px 12px;
-  background-color: #fff3e0;
-  border: 1px solid #ff9800;
-  border-radius: 4px;
+  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 14px;
+}
+
+.categoryHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .categoryName {
   font-weight: bold;
+  font-size: 1rem;
 }
 
 .categoryEntries {
   font-size: 12px;
   color: #666;
+}
+
+.entry {
+  margin-bottom: 2px;
 }
 
 .used {
@@ -36,41 +78,69 @@
   border-color: #dee2e6;
 }
 
+.statusBadge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.availableBadge {
+  background: #d4edda;
+  color: #155724;
+}
+
 .usedBadge {
-  font-size: 10px;
-  background: #6c757d;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 3px;
-  margin-left: 8px;
+  background: #f8d7da;
+  color: #721c24;
 }
 
 .form {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
 .nameInput {
-  padding: 8px;
+  padding: 12px;
   font-size: 14px;
-  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
 }
 
 .entriesInput {
-  padding: 8px;
+  padding: 12px;
   font-size: 14px;
-  width: 250px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  resize: vertical;
 }
 
 .button {
-  padding: 8px 16px;
+  padding: 12px 20px;
   font-size: 14px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.button:hover {
+  background: #0056b3;
 }
 
 .error {
   color: red;
   font-size: 14px;
   margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+  .categoriesLayout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 }
