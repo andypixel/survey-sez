@@ -48,7 +48,7 @@ class GameplayWorkflow {
     const entriesText = e.target.categoryEntries?.value.trim() || '';
     
     if (name) {
-      const entries = entriesText ? entriesText.split(',').map(entry => entry.trim()).filter(entry => entry) : [];
+      const entries = entriesText ? entriesText.split('\n').map(entry => entry.trim()).filter(entry => entry) : [];
       
       this.callbacks.setCategoryError('');
       

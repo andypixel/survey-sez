@@ -54,7 +54,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
   // Show onboarding view
   return (
     <div className={styles.container}>
-      <h1>Survey Sez Prototype</h1>
+      <h1>Survey Sez</h1>
       <p className={styles.roomInfo}>Room: <strong>{roomId}</strong></p>
       
       <TeamsDisplay 

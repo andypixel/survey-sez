@@ -8,6 +8,10 @@
                 - Game name
             - Join Room
                 - Replace radio button / "create new team" / input field with input field only
+            - Game configuration
+                - Global template
+                - Game name
+                - Entry list text entry
         - Gameplay
         - Game over
     - Input sanitation sweep

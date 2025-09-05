@@ -5,7 +5,7 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
   const defaultEntries = React.useMemo(() => {
     // Only auto-populate entries in debug mode
     if (process.env.REACT_APP_DEBUG_MODE === 'true') {
-      return Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join(', ');
+      return Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join('\n');
     }
     return '';
   }, []);
@@ -19,26 +19,9 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
   
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>My Categories ({availableCount} available)</h3>
+      <h3 className={styles.title}>My Categories</h3>
       
       <div>
-        <div className={styles.categoriesGrid}>
-          {myCategories.map(category => {
-            const isUsed = usedCategoryIds.includes(category.id);
-            return (
-              <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
-                <div className={styles.categoryName}>
-                  {category.name}
-                  {isUsed && <span className={styles.usedBadge}>USED</span>}
-                </div>
-                <div className={styles.categoryEntries}>
-                  {category.entries?.slice(0, 3).join(', ')}...
-                </div>
-              </div>
-            );
-          })}
-        </div>
-        
         <div>
           <form onSubmit={handleSubmit} className={styles.form}>
             <input 
@@ -48,11 +31,11 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
               className={styles.nameInput}
               required
             />
-            <input 
+            <textarea 
               name="categoryEntries"
-              type="text" 
-              placeholder="Optional: comma-separated entries"
+              placeholder="Optional: one entry per line"
               className={styles.entriesInput}
+              rows={5}
               defaultValue={defaultEntries}
             />
             <button type="submit" className={styles.button}>
@@ -64,6 +47,26 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
               {categoryError}
             </div>
           )}
+        </div>
+        
+        <div className={styles.categoriesGrid}>
+          <p className={styles.categoryCount}>({availableCount} available)</p>
+          {myCategories.map(category => {
+            const isUsed = usedCategoryIds.includes(category.id);
+            return (
+              <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
+                <div className={styles.categoryName}>
+                  {category.name}
+                  {isUsed && <span className={styles.usedBadge}>USED</span>}
+                </div>
+                <div className={styles.categoryEntries}>
+                  {category.entries?.map((entry, index) => (
+                    <div key={index} className={styles.entry}>{entry}</div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
