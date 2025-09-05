@@ -2,10 +2,13 @@ import React from 'react';
 import styles from './CategoriesDisplay.module.scss';
 
 const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError, usedCategoryIds = [] }) {
-  const defaultEntries = React.useMemo(() => 
-    Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join(', '),
-    []
-  );
+  const defaultEntries = React.useMemo(() => {
+    // Only auto-populate entries in debug mode
+    if (process.env.REACT_APP_DEBUG_MODE === 'true') {
+      return Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join(', ');
+    }
+    return '';
+  }, []);
   
   const handleSubmit = (e) => {
     onAddCategory(e);
