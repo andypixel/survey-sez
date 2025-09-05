@@ -291,12 +291,12 @@ class GameHandler {
     if (roomId) {
       const room = getOrCreateRoom(roomId);
       console.log('Room found, current gameState:', room.gameState);
-      if (room.resetGame()) {
-        console.log('Game reset successful, emitting gameState');
+      if (room.emergencyReset()) {
+        console.log('Game restart successful, emitting gameState');
         io.to(roomId).emit('gameState', room.getState());
         debouncedSave();
       } else {
-        console.log('Game reset failed');
+        console.log('Game restart failed');
       }
     } else {
       console.log('No room ID found');

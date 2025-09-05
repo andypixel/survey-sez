@@ -13,8 +13,8 @@
         - Returns all players to ONBOARDING; maintains all unused categories
     - ✅ Prevent duplicate entries for custom categories
     - ✅ Add validation to prevent duplicate team names or player names in any one room
-    - Game restart
-        - Unused custom categories can be reused in this room
+    - ✅ Game restart
+        - ✅ Unused custom categories can be reused in this room
     - ✅ Add "dev mode" to only auto-populate entries in that env
     - bug: timeout fails when skipping announcer
 

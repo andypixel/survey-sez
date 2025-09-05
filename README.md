@@ -7,6 +7,7 @@ A real-time multiplayer word-guessing game where teams compete in turn-based rou
 - Turn-based team competition with rotating announcers (minimum 2 players per team)
 - Custom category creation with validation (1-10 entries, unique names per room)
 - Unique player and team names within each room
+- Category usage tracking - used categories persist across games within a room
 - Emergency reset functionality preserving used categories
 - Three-phase game lifecycle: Onboarding → Gameplay → Summary
 - Persistent user sessions across reconnections

@@ -45,6 +45,7 @@ async function initializeData() {
     room.teams = roomData.teams;
     room.gameState = roomData.gameState;
     room.gameSettings = roomData.gameSettings;
+    room.usedCategoryIds = new Set(roomData.usedCategoryIds || []);
     rooms[roomId] = room;
   });
 }
@@ -78,6 +79,7 @@ async function saveAllData() {
         teams: room.teams,
         gameState: room.gameState,
         gameSettings: room.gameSettings,
+        usedCategoryIds: Array.from(room.usedCategoryIds || []),
         lastActivity: Date.now()
       });
     });

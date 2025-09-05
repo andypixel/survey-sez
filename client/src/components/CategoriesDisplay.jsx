@@ -15,10 +15,11 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
   };
   const myUserKey = Object.keys(categories?.userCustom || {}).find(key => key.endsWith(`-${myUserId}`));
   const myCategories = myUserKey ? categories.userCustom[myUserKey] : [];
+  const availableCount = myCategories.filter(category => !usedCategoryIds.includes(category.id)).length;
   
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>My Categories</h3>
+      <h3 className={styles.title}>My Categories ({availableCount} available)</h3>
       
       <div>
         <div className={styles.categoriesGrid}>

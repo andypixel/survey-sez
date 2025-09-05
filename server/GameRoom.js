@@ -133,8 +133,19 @@ class GameRoom {
   }
 
   endGame() {
-    // Preserve final game data before clearing currentGame
+    // Preserve used categories from completed game
     if (this.currentGame) {
+      console.log('Game ending - merging used categories from game to room');
+      console.log('Game used categories:', Array.from(this.currentGame.usedCategoryIds));
+      console.log('Room used categories before merge:', Array.from(this.usedCategoryIds));
+      
+      // Merge game's used categories back to room level
+      this.currentGame.usedCategoryIds.forEach(id => {
+        this.usedCategoryIds.add(id);
+      });
+      
+      console.log('Room used categories after merge:', Array.from(this.usedCategoryIds));
+      
       this.finalGameData = {
         teamScores: this.currentGame.teamScores,
         playedCategories: [] // TODO: Implement game history if needed
@@ -292,7 +303,7 @@ class GameRoom {
       gameState: this.gameState,
       gameSettings: this.gameSettings,
       categories: this.categories,
-      usedCategoryIds: Array.from(this.usedCategoryIds),
+      usedCategoryIds: Array.from(this.usedCategoryIds || []),
       currentGame: this.currentGame ? this.currentGame.getState() : null,
       finalGameData: this.finalGameData
     };
@@ -325,6 +336,7 @@ class GameplayManager {
     this.selectedCategory = null;
     this.responses = [];
     this.timer = null;
+    console.log('GameplayManager starting with room used categories:', Array.from(room.usedCategoryIds || []));
     this.usedCategoryIds = new Set(room.usedCategoryIds || []);
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
     this.markedEntries = new Set();
@@ -382,7 +394,9 @@ class GameplayManager {
   beginTurn() {
     if (this.selectedCategory) {
       this.currentCategory = this.selectedCategory;
+      console.log('Adding category to used list:', this.selectedCategory.id);
       this.usedCategoryIds.add(this.selectedCategory.id);
+      console.log('Current used categories in game:', Array.from(this.usedCategoryIds));
       this.responses = [];
       this.turnPhase = GAME_RULES.TURN_PHASES.ACTIVE_GUESSING;
       
