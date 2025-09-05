@@ -58,6 +58,31 @@ class RoomHandler {
       
       const userId = data.userId || userSession.userId;
       
+      // Check for duplicate player name (case-insensitive, excluding current user)
+      const existingPlayerNames = Object.values(room.players)
+        .filter(p => p.userId !== userId)
+        .map(p => p.name.toLowerCase().trim());
+      
+      if (existingPlayerNames.includes(data.playerName.toLowerCase().trim())) {
+        const error = 'A player with this name already exists in the room';
+        console.error('[RoomHandler] User setup failed:', error);
+        socket.emit('setupError', { message: error });
+        return;
+      }
+      
+      // Check for duplicate team name (case-insensitive) when creating new team
+      if (data.newTeamName) {
+        const existingTeamNames = Object.keys(room.teams)
+          .map(name => name.toLowerCase().trim());
+        
+        if (existingTeamNames.includes(data.newTeamName.toLowerCase().trim())) {
+          const error = 'A team with this name already exists in the room';
+          console.error('[RoomHandler] User setup failed:', error);
+          socket.emit('setupError', { message: error });
+          return;
+        }
+      }
+      
       // Check if this is a rejoin to prevent duplicate broadcasts
       const existingUserData = userSession.getUserData(roomId);
       const isRejoin = existingUserData && existingUserData.name === data.playerName && existingUserData.team === teamId;

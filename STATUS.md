@@ -12,6 +12,7 @@
     - ✅ Emergency reset button
         - Returns all players to ONBOARDING; maintains all unused categories
     - ✅ Prevent duplicate entries for custom categories
+    - ✅ Add validation to prevent duplicate team names or player names in any one room
     - Game restart
         - Unused custom categories can be reused in this room
     - Add "dev mode" to only auto-populate entries in that env
@@ -32,9 +33,13 @@
         - Option to steal points? Half-points? Hmm
             - Would have to be exact matches, which might incentivize players to use non-standard spellings when creating their entries since they can award "close enough" points to their own team
             - Or there could be discussion during that phase, with the specatating team convincing the Announcer to award them points; "Next turn" button is only available to spectating team so Announcer is beholden to their petitions
+    - Edge cases
+        - If a user specifies a name in one room, then tries to join a different room where a different player also has the same name, joining the room will fail, but silently. Need a mechanism to allow the user to change their name or equivalent
 
 # Time spent
 - 8/10 2hrs
 - 8/18 3hrs
 - 8/23 3hrs
 - 8/25 2.5hrs
+- 9/1 2hrs
+- 9/4 
