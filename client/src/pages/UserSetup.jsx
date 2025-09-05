@@ -22,22 +22,25 @@ function UserSetup({ roomSetupData, existingUserData, onUserSetup, setupError })
           <label className={styles.label}>Team:</label>
           <div className={styles.teamOptions}>
             {roomSetupData.existingTeams.map(team => (
-              <div key={team} className={styles.teamOption}>
+              <label key={team} className={styles.teamOption} htmlFor={team}>
                 <input type="radio" name="teamChoice" value={team} id={team} />
-                <label htmlFor={team}>Join "{team}"</label>
-              </div>
+                <span>Join "{team}"</span>
+              </label>
             ))}
             {roomSetupData.canCreateTeam && (
-              <div className={styles.teamOption}>
+              <label className={`${styles.teamOption} ${styles.newTeamOption}`} htmlFor="newTeamName">
                 <input type="radio" name="teamChoice" value="new" id="new" />
-                <label htmlFor="new">Create new team:</label>
                 <input 
                   name="newTeamName"
                   type="text" 
-                  placeholder="Team name"
+                  placeholder="Create new team"
                   className={styles.newTeamInput}
+                  id="newTeamName"
+                  onFocus={(e) => {
+                    document.getElementById('new').checked = true;
+                  }}
                 />
-              </div>
+              </label>
             )}
           </div>
         </div>

@@ -39,14 +39,51 @@
 .teamOption {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 10px;
+  padding: 12px;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  
+  &:hover {
+    border-color: #e0e0e0;
+  }
+  
+  &:has(input[type="radio"]:checked) {
+    border-color: #007bff;
+    background-color: #f8f9ff;
+  }
+  
+  input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+  }
+}
+
+.newTeamOption {
+  &:has(input[type="text"]:focus) {
+    border-color: #007bff;
+    background-color: #f8f9ff;
+  }
 }
 
 .newTeamInput {
-  padding: 5px;
+  padding: 8px 12px;
   font-size: 14px;
-  width: 150px;
-  margin-left: 10px;
+  width: 200px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  
+  &:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
 }
 
 .button {

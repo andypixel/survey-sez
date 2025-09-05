@@ -1,22 +1,18 @@
 # To do
 
 - MVP
-    - ✅ Team summary component during gameplay: team names, player names, number of custom categories each
+    - Design refinements
+        - Onboarding
+            - Start page
+                - Global template
+                - Game name
+            - Join Room
+                - Replace radio button / "create new team" / input field with input field only
+        - Gameplay
+        - Game over
+    - Input sanitation sweep
     - Provision database for production build
     - Hosting
-    - ✅ What if someone drops while they are the announcer, or the announcer role moves to them but they are not online?
-        - ✅ "Skip this announcer" button
-    - ✅ Don't allow single Player Teams
-    - ✅ Timer Desync Issues
-    - Design refinements
-    - ✅ Emergency reset button
-        - Returns all players to ONBOARDING; maintains all unused categories
-    - ✅ Prevent duplicate entries for custom categories
-    - ✅ Add validation to prevent duplicate team names or player names in any one room
-    - ✅ Game restart
-        - ✅ Unused custom categories can be reused in this room
-    - ✅ Add "dev mode" to only auto-populate entries in that env
-    - bug: timeout fails when skipping announcer
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
@@ -27,6 +23,8 @@
     - Game restart
         - ALL custom categories can be reused if the user joins a different room
     - Design refinements
+    - Accessibility refinements
+        - Keyboard navigation to select a team during onboarding
     - Spectating team also gets to guess using their own text input
         - Guesses from all spectating players are shown to the spectating team only
         - Spectators' guesses are shown to all players during TURN_SUMMARY phase

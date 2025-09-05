@@ -22,7 +22,9 @@ class RoomJoinWorkflow {
     if (room) {
       this.callbacks.setRoomId(room);
       this.callbacks.setIsInRoom(false);
-      window.history.pushState({}, '', `/room/${room}`);
+      // URL encode for navigation but keep original for room ID
+      const encodedRoom = encodeURIComponent(room);
+      window.history.pushState({}, '', `/room/${encodedRoom}`);
       // TODO: Remove setTimeout hack, handle connection state properly
       setTimeout(() => this.socket.emit('joinRoom', room), 100);
     }
@@ -36,7 +38,8 @@ class RoomJoinWorkflow {
     const path = window.location.pathname;
     const roomMatch = path.match(/\/room\/(.+)/);
     if (roomMatch) {
-      return roomMatch[1];
+      // Decode URL-encoded room name
+      return decodeURIComponent(roomMatch[1]);
     }
     return '';
   }

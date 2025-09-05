@@ -23,8 +23,9 @@ class CategoryHandler {
     if (roomId && playerData && data.name) {
       const room = getOrCreateRoom(roomId);
       
-      const categoryId = data.name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-      const fullId = `${roomId}-${playerData.team}-${categoryId}`;
+      // Generate unique ID using timestamp to avoid collisions with special characters
+      const timestamp = Date.now();
+      const fullId = `${roomId}-${playerData.userId}-${timestamp}`;
       
       const newCategory = {
         id: fullId,

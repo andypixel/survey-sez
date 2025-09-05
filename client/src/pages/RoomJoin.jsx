@@ -4,14 +4,14 @@ import styles from './RoomJoin.module.scss';
 function RoomJoin({ roomId, onRoomJoin }) {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Real-time Game Prototype</h1>
+      <h1 className={styles.title}>Survey Sez</h1>
       <div>
         <h2 className={styles.subtitle}>Join a Room</h2>
         <form className={styles.form} onSubmit={onRoomJoin}>
           <input 
             name="roomInput"
             type="text" 
-            placeholder="Enter room name (e.g., abc-123)"
+            placeholder="Enter room name"
             className={styles.input}
             defaultValue={roomId}
           />
