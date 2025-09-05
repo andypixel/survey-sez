@@ -470,7 +470,7 @@ class GameplayManager {
     this.responses = [];
     this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
-    this.timeoutManager.clearAll();
+    this.timeoutManager.clearTimeout(GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE);
     
     // Clear timer state
     this.timerStartTime = null;
