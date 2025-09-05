@@ -30,27 +30,10 @@ class GameplayWorkflow {
     this.callbacks.setShowUserSetup(false);
     
     const myPlayer = state.players[this.callbacks.getMyId()];
-    const roomId = this.callbacks.getRoomId();
-    const myUserId = this.callbacks.getMyUserId();
     
-    // Sync localStorage with server state
-    if (myPlayer && roomId && myUserId) {
-      const serverUserData = {
-        userId: myUserId,
-        name: myPlayer.name,
-        team: myPlayer.team,
-        setupComplete: true
-      };
-      
-      // Check for conflicts with local storage
-      const localUserData = this.storage.getUserData(roomId);
-      if (localUserData && 
-          (localUserData.name !== myPlayer.name || localUserData.team !== myPlayer.team)) {
-        console.log('Conflict detected - deferring to server:', serverUserData);
-      }
-      
-      // Always save server state as source of truth
-      this.storage.saveUserData(roomId, serverUserData);
+    // Save user's name to localStorage for convenience in future sessions
+    if (myPlayer && myPlayer.name) {
+      this.storage.saveUserName(myPlayer.name);
     }
   }
 

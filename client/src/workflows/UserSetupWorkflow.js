@@ -26,6 +26,17 @@ class UserSetupWorkflow {
     
     if (!playerName) return;
     
+    // Save name for convenience in future sessions
+    this.storage.saveUserName(playerName);
+    
+    // Save room data for auto-rejoin (server will validate)
+    this.storage.saveUserData(this.callbacks.getRoomId(), {
+      userId: this.callbacks.getMyUserId(),
+      name: playerName,
+      team: teamChoice === 'new' ? newTeamName : teamChoice,
+      setupComplete: true
+    });
+    
     const setupData = { 
       playerName,
       userId: this.callbacks.getMyUserId()
@@ -48,6 +59,7 @@ class UserSetupWorkflow {
     const existingUserData = this.storage.getUserData(data.roomId);
     
     if (existingUserData && existingUserData.team && existingUserData.name && existingUserData.setupComplete) {
+      // Auto-rejoin with stored data (server validates and is source of truth)
       this.socket.emit('userSetup', {
         playerName: existingUserData.name,
         existingTeam: existingUserData.team,

@@ -18,20 +18,45 @@ export const getGlobalUserId = () => {
 };
 
 /**
- * Get user data for a specific room
+ * Get user's preferred name from localStorage (convenience only)
+ * @returns {string|null} User's preferred name or null
+ */
+export const getUserName = () => {
+  return localStorage.getItem('userName');
+};
+
+/**
+ * Save user's preferred name to localStorage (convenience only)
+ * @param {string} name - User's preferred name
+ */
+export const saveUserName = (name) => {
+  localStorage.setItem('userName', name);
+};
+
+/**
+ * Get user data for a specific room (convenience for auto-rejoin)
  * @param {string} roomId - Room identifier
  * @returns {Object|null} User data or null if not found
  */
 export const getUserData = (roomId) => {
-  const data = localStorage.getItem(`gameUser_${roomId}`);
-  return data ? JSON.parse(data) : null;
+  try {
+    const data = localStorage.getItem(`gameUser_${roomId}`);
+    return data ? JSON.parse(data) : null;
+  } catch (error) {
+    console.error('Error reading user data from localStorage:', error);
+    return null;
+  }
 };
 
 /**
- * Save user data for a specific room
+ * Save user data for a specific room (convenience for auto-rejoin)
  * @param {string} roomId - Room identifier
  * @param {Object} userData - User data to save
  */
 export const saveUserData = (roomId, userData) => {
-  localStorage.setItem(`gameUser_${roomId}`, JSON.stringify(userData));
+  try {
+    localStorage.setItem(`gameUser_${roomId}`, JSON.stringify(userData));
+  } catch (error) {
+    console.error('Error saving user data to localStorage:', error);
+  }
 };

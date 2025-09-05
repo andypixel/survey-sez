@@ -65,8 +65,17 @@ class CategoryHandler {
         return;
       }
       
-      // Add to room state
-      room.addCustomCategory(categoryWithCreator, playerData.userId);
+      // Update room state immediately to sync with persistent storage
+      const userKey = `${roomId}-${playerData.userId}`;
+      if (!room.categories.userCustom[userKey]) {
+        room.categories.userCustom[userKey] = [];
+      }
+      room.categories.userCustom[userKey].push(categoryWithCreator);
+      
+      // Also update global categoriesData to keep everything in sync
+      if (!categoriesData.custom[storageKey]) {
+        categoriesData.custom[storageKey] = [];
+      }
       
       // Send success confirmation to sender
       socket.emit('categoryAdded', {

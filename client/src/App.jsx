@@ -6,7 +6,7 @@ import GameRoom from './pages/GameRoom.jsx';
 import RoomJoinWorkflow from './workflows/RoomJoinWorkflow';
 import UserSetupWorkflow from './workflows/UserSetupWorkflow';
 import GameplayWorkflow from './workflows/GameplayWorkflow';
-import { getGlobalUserId, getUserData, saveUserData } from './utils/storage';
+import { getGlobalUserId, getUserName, saveUserName, getUserData, saveUserData } from './utils/storage';
 import ErrorHandler from './utils/ErrorHandler';
 import { WorkflowProvider } from './contexts/WorkflowContext';
 
@@ -24,7 +24,7 @@ function App() {
   const [setupError, setSetupError] = useState('');
 
   // Storage utilities for localStorage operations
-  const storage = { getUserData, saveUserData };
+  const storage = { getUserName, saveUserName, getUserData, saveUserData };
   
   // Initialize workflow classes once
   const [workflows] = useState(() => {
