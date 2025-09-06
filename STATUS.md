@@ -29,6 +29,7 @@
     - Design refinements
     - Accessibility refinements
         - Keyboard navigation to select a team during onboarding
+    - Game config settings should be synced across all sessions (or should they? what's the best UX?)
     - Spectating team also gets to guess using their own text input
         - Guesses from all spectating players are shown to the spectating team only
         - Spectators' guesses are shown to all players during TURN_SUMMARY phase

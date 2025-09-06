@@ -23,11 +23,15 @@ function RoomSummary({ gameState, myUserId }) {
   
   return (
     <div className={styles.container}>
-      <h3>Room Summary</h3>
       <div className={styles.teams}>
         {Object.values(teams).map(team => (
           <div key={team.name} className={styles.team}>
-            <h4 className={styles.teamName}>{team.name}</h4>
+            <div className={styles.teamHeader}>
+              <h4 className={styles.teamName}>{team.name}</h4>
+              {currentGame?.teamScores && (
+                <span className={styles.teamScore}>{currentGame.teamScores[team.name] || 0} pts</span>
+              )}
+            </div>
             <div className={styles.players}>
               {team.players.map(playerData => {
                 const userId = typeof playerData === 'string' ? playerData : playerData.userId;

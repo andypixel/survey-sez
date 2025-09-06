@@ -16,10 +16,23 @@
   min-width: 200px;
 }
 
+.teamHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
 .teamName {
-  margin: 0 0 0.5rem 0;
+  margin: 0;
   color: #333;
   font-size: 1.1rem;
+}
+
+.teamScore {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #007bff;
 }
 
 .players {

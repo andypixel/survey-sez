@@ -40,52 +40,9 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
   // Determine player role for display
   const isSpectator = !isAnnouncer && !isGuessingTeam;
   const canGuess = isGuessingTeam && !isAnnouncer;
-  
-  // Role-specific content
-  const getTitle = () => {
-    if (isAnnouncer) return 'You are the Announcer';
-    if (isGuessingTeam) return 'Your team is guessing!';
-    return 'Spectating';
-  };
-  
-  const getGameInfo = () => {
-    const baseInfo = (
-      <p>Round: {Math.floor(currentGame.currentTurn / 2) + 1} / {gameState.gameSettings.turnsPerTeam}</p>
-    );
-    
-    if (isAnnouncer) {
-      return (
-        <>
-          {baseInfo}
-          <p>Turn: {currentGame.currentTurn + 1}</p>
-        </>
-      );
-    }
-    
-    if (isGuessingTeam) {
-      return (
-        <>
-          {baseInfo}
-          <p>Announcer: {gameState.players[currentGame.currentAnnouncer]?.name}</p>
-        </>
-      );
-    }
-    
-    return (
-      <>
-        {baseInfo}
-        <p>Guessing Team: {currentGame.currentGuessingTeam}</p>
-        <p>Announcer: {gameState.players[currentGame.currentAnnouncer]?.name}</p>
-      </>
-    );
-  };
 
   return (
     <div className={styles.container}>
-      <h2>{getTitle()}</h2>
-      <div className={styles.gameInfo}>
-        {getGameInfo()}
-      </div>
       
       <ScoreDisplay gameState={gameState} showTurnScore={true} isAnnouncer={isAnnouncer} />
       

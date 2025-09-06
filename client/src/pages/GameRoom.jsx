@@ -4,6 +4,8 @@ import CategoriesDisplay from '../components/CategoriesDisplay.jsx';
 import GameplayView from '../components/GameplayView.jsx';
 import GameOverView from '../components/GameOverView.jsx';
 import RoomSummary from '../components/RoomSummary.jsx';
+import GameHeader from '../components/GameHeader.jsx';
+import GameInfo from '../components/GameInfo.jsx';
 import styles from './GameRoom.module.scss';
 
 function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame }) {
@@ -35,8 +37,17 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
     
     return (
       <div className={styles.container}>
-        <h1>Survey Sez - Game in Progress</h1>
-        <p className={styles.roomInfo}>Room: <strong>{roomId}</strong></p>
+        <GameHeader 
+          roomId={roomId}
+          playersCount={Object.keys(gameState.players).length}
+        />
+        
+        <GameInfo 
+          gameState={gameState}
+          myId={myId}
+          isAnnouncer={isAnnouncer}
+          isGuessingTeam={isGuessingTeam}
+        />
         
         <RoomSummary gameState={gameState} myUserId={myUserId} />
         
@@ -54,18 +65,10 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
   // Show onboarding view
   return (
     <div className={styles.container}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h1 className={styles.gameName}>Survey Sez</h1>
-          <p className={styles.roomName}>Room: {roomId}</p>
-        </div>
-        <div className={styles.headerRight}>
-          <span className={styles.playersOnline}>
-            👥 {Object.keys(gameState.players).length} Players Online
-          </span>
-        </div>
-      </div>
+      <GameHeader 
+        roomId={roomId}
+        playersCount={Object.keys(gameState.players).length}
+      />
       
       {/* Tagline */}
       <p className={styles.tagline}>
