@@ -5,8 +5,8 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
   return (
     <div className={styles.categoryDetails}>
       <h4>Category Items:</h4>
-      <ul>
-        {category.entries.map((entry, index) => {
+      <div className={styles.entriesGrid}>
+        {[...category.entries].sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).map((entry, index) => {
           const isAutoGuessed = responses.some(response => 
             response.text.toLowerCase() === entry.toLowerCase()
           );
@@ -14,7 +14,7 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
           const isGuessed = isAutoGuessed || isManuallyMarked;
           
           return (
-            <li key={index} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''}`}>
+            <div key={entry} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''}`}>
               {showCheckboxes && (
                 <label className={styles.entryLabel}>
                   <input 
@@ -39,10 +39,10 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
               >
                 {entry}
               </span>
-            </li>
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 }

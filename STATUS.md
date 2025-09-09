@@ -2,8 +2,6 @@
 
 - FIRST
     - Continue Gameplay view UI refinements:
-        - Try to get Sora to mock up a version of the Category panel that works for all roles
-        - Incorporate Announcer view
         - Validate side-by-side Category/Room Summary layout with all views
 
 - MVP
