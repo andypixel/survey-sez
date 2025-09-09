@@ -16,15 +16,29 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
           return (
             <li key={index} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''}`}>
               {showCheckboxes && (
-                <input 
-                  type="checkbox" 
-                  checked={isManuallyMarked}
-                  onChange={() => onEntryToggle(entry)}
-                  className={styles.entryCheckbox}
-                />
+                <label className={styles.entryLabel}>
+                  <input 
+                    type="checkbox" 
+                    checked={isManuallyMarked}
+                    onChange={() => !isAutoGuessed && onEntryToggle(entry)}
+                    disabled={isAutoGuessed}
+                    className={styles.entryCheckbox}
+                    aria-label={`Mark ${entry} as ${isManuallyMarked ? 'incorrect' : 'correct'}`}
+                  />
+                  <div className={`${styles.entryPill} ${
+                    isAutoGuessed ? styles.autoChecked : 
+                    isManuallyMarked ? styles.checked : ''
+                  }`}>
+                    {isAutoGuessed ? '🔒' : isManuallyMarked ? '✓' : ''}
+                  </div>
+                </label>
               )}
-              <span className={styles.entryText}>{entry}</span>
-              {isAutoGuessed && <span className={styles.autoGuessed}>(auto)</span>}
+              <span 
+                className={styles.entryText}
+                onClick={() => showCheckboxes && !isAutoGuessed && onEntryToggle(entry)}
+              >
+                {entry}
+              </span>
             </li>
           );
         })}

@@ -20,22 +20,70 @@
 .entryItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 5px 0;
+  gap: 12px;
+  margin: 8px 0;
 }
 
 .entryCheckbox {
-  margin: 0;
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.entryPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 12px;
+  border: 2px solid var(--color-border-secondary);
+  background: var(--color-bg-tertiary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.entryPill:hover {
+  border-color: var(--color-brand-primary);
+}
+
+.entryPill.checked {
+  background: var(--color-brand-primary);
+  border-color: var(--color-brand-primary);
+  color: var(--color-bg-primary);
+}
+
+.entryPill.autoChecked {
+  background: var(--color-accent-warning);
+  border-color: var(--color-accent-warning);
+  color: var(--color-bg-primary);
+  cursor: not-allowed;
+}
+
+.entryLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
 }
 
 .entryText {
   flex: 1;
   color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
 }
 
 .guessedEntry {
-  text-decoration: line-through;
   opacity: 0.6;
+  
+  span {
+    text-decoration: line-through;
+  }
 }
 
 .autoGuessed {
