@@ -1,5 +1,12 @@
 # To do
 
+- FIRST
+    - Continue Gameplay view UI refinements:
+        - Finish applying new color scheme to all screens
+        - Try to get Sora to mock up a version of the Category panel that works for all roles
+        - Incorporate Announcer view
+        - Validate side-by-side Category/Room Summary layout with all views
+
 - MVP
     - Design refinements
         - Onboarding
@@ -17,6 +24,7 @@
     - Input sanitation sweep
     - Provision database for production build
     - Hosting
+    - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
@@ -27,9 +35,14 @@
     - Game restart
         - ALL custom categories can be reused if the user joins a different room
     - Design refinements
+        - Make the color scheme less monochromatic
     - Accessibility refinements
         - Keyboard navigation to select a team during onboarding
-    - Game config settings should be synced across all sessions (or should they? what's the best UX?)
+    - UX improvements
+        - Onboarding
+            - Used categories should be collapsed by default and shown below unused categories
+            - Player/team order can be shuffled/reordered
+    - Game config settings should be synced across all sessions in real time when edited by anyone (or should they? what's the best UX?)
     - Spectating team also gets to guess using their own text input
         - Guesses from all spectating players are shown to the spectating team only
         - Spectators' guesses are shown to all players during TURN_SUMMARY phase

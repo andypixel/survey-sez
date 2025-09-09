@@ -1,26 +1,28 @@
+@import '../styles/colors.scss';
+
 .gameInfo {
   text-align: center;
   margin: 20px 0;
   padding: 20px;
-  border: 2px solid #ddd;
+  border: 2px solid var(--border-primary);
   border-radius: 12px;
-  background: #f9f9f9;
+  background: var(--bg-secondary);
 }
 
 .status {
   font-size: 2.5rem;
   font-weight: bold;
   margin-bottom: 15px;
-  color: #333;
+  color: var(--primary-green);
 }
 
 .round {
   font-size: 1.5rem;
   margin-bottom: 10px;
-  color: #666;
+  color: var(--text-secondary);
 }
 
 .announcer {
   font-size: 1.2rem;
-  color: #555;
+  color: var(--text-muted);
 }

@@ -1,0 +1,38 @@
+// Survey Sez Color Palette
+:root {
+  // Primary Colors
+  --primary-green: #1ce783;
+  --primary-green-hover: #16c26f;
+  --primary-green-dark: #12a85c;
+  
+  // Background Colors
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-tertiary: #333;
+  --bg-card: #333;
+  
+  // Text Colors
+  --text-primary: #ffffff;
+  --text-secondary: #cccccc;
+  --text-muted: #999999;
+  --text-disabled: #666666;
+  
+  // Border Colors
+  --border-primary: #444444;
+  --border-secondary: #555555;
+  
+  // Accent Colors
+  --accent-gold: #FFD700;
+  --accent-error: #ff6b6b;
+  --accent-winner: #FF6B35;
+  --accent-winner-bg: #2D1B1B;
+  
+  // State Colors
+  --offline-bg: #2a2a2a;
+  --offline-text: #666666;
+  
+  // Score Colors
+  --score-winner: var(--accent-winner);
+  --score-winner-bg: var(--accent-winner-bg);
+  --score-regular: var(--text-secondary);
+}

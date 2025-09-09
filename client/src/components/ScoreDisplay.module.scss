@@ -1,6 +1,8 @@
+@import '../styles/colors.scss';
+
 .scoreDisplay {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 15px;
   margin: 15px 0;
@@ -8,7 +10,7 @@
   h4 {
     margin-top: 0;
     margin-bottom: 10px;
-    color: #333;
+    color: var(--text-primary);
   }
 }
 
@@ -26,21 +28,21 @@
 
 .teamName {
   font-weight: bold;
-  color: #007bff;
+  color: var(--primary-green);
 }
 
 .score {
   font-size: 18px;
   font-weight: bold;
-  color: #28a745;
+  color: var(--primary-green);
 }
 
 .turnScore {
   text-align: center;
   padding: 10px;
-  background: #d4edda;
-  border: 1px solid #c3e6cb;
+  background: var(--bg-secondary);
+  border: 1px solid var(--primary-green);
   border-radius: 4px;
-  color: #155724;
+  color: var(--primary-green);
   margin-top: 10px;
 }

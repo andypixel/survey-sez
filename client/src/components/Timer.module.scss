@@ -1,3 +1,5 @@
+@import '../styles/colors.scss';
+
 .timer {
   font-size: 24px;
   font-weight: bold;
@@ -9,18 +11,18 @@
 }
 
 .normal {
-  background: #28a745;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
 }
 
 .warning {
-  background: #ffc107;
-  color: #212529;
+  background: var(--accent-gold);
+  color: var(--bg-primary);
 }
 
 .critical {
-  background: #dc3545;
-  color: white;
+  background: var(--accent-error);
+  color: var(--text-primary);
   animation: pulse 1s infinite;
 }
 
@@ -31,7 +33,7 @@
 }
 
 .paused {
-  background: #6c757d !important;
-  color: white !important;
+  background: var(--text-disabled) !important;
+  color: var(--text-primary) !important;
   animation: none !important;
 }

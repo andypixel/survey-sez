@@ -1,3 +1,5 @@
+@import '../styles/colors.scss';
+
 .container {
   padding: 20px;
   max-width: 800px;
@@ -5,7 +7,7 @@
 }
 
 .gameInfo {
-  background: #f5f5f5;
+  background: var(--bg-secondary);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -13,25 +15,27 @@
   p {
     margin: 5px 0;
     font-weight: bold;
+    color: var(--text-primary);
   }
 }
 
 .announcerView, .guesserView, .spectatorView, .gameView {
-  background: white;
-  border: 2px solid #007bff;
+  background: var(--bg-secondary);
+  border: 2px solid var(--primary-green);
   border-radius: 8px;
   padding: 20px;
+  color: var(--text-primary);
 }
 
 .categoryDetails {
-  background: #e9f4ff;
+  background: var(--bg-tertiary);
   padding: 15px;
   border-radius: 6px;
   margin: 15px 0;
   
   h4 {
     margin-top: 0;
-    color: #0056b3;
+    color: var(--primary-green);
   }
   
   ul {
@@ -41,6 +45,7 @@
   
   li {
     margin: 5px 0;
+    color: var(--text-primary);
   }
 }
 
@@ -66,7 +71,7 @@
 
 .autoGuessed {
   font-size: 12px;
-  color: #28a745;
+  color: var(--primary-green);
   font-style: italic;
 }
 
@@ -74,8 +79,8 @@
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  background: #28a745;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   padding: 10px;
   border-radius: 6px;
   margin: 15px 0;
@@ -86,13 +91,13 @@
   
   h4 {
     margin-bottom: 10px;
-    color: #333;
+    color: var(--text-primary);
   }
 }
 
 .guessesFeed {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   padding: 15px;
   max-height: 200px;
@@ -101,11 +106,12 @@
 }
 
 .guess {
-  background: white;
+  background: var(--bg-secondary);
   padding: 8px 12px;
   margin: 5px 0;
   border-radius: 4px;
-  border-left: 3px solid #007bff;
+  border-left: 3px solid var(--primary-green);
+  color: var(--text-primary);
 }
 
 .guessForm {
@@ -116,22 +122,29 @@
 .guessInput {
   flex: 1;
   padding: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
   font-size: 16px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.guessInput:focus {
+  border-color: var(--primary-green);
+  outline: none;
 }
 
 .guessButton {
   padding: 10px 20px;
-  background: #007bff;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   
   &:hover {
-    background: #0056b3;
+    background: var(--primary-green-hover);
   }
 }
 
@@ -140,12 +153,12 @@
   padding: 40px;
   
   h3 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 10px;
   }
   
   p {
-    color: #666;
+    color: var(--text-secondary);
     margin-bottom: 30px;
   }
 }
@@ -156,21 +169,21 @@
 }
 
 .categoryCard {
-  background: white;
-  border: 2px solid #007bff;
+  background: var(--bg-secondary);
+  border: 2px solid var(--primary-green);
   border-radius: 8px;
   padding: 20px;
   max-width: 400px;
   text-align: left;
   
   h4 {
-    color: #007bff;
+    color: var(--primary-green);
     margin-top: 0;
     margin-bottom: 10px;
   }
   
   p {
-    color: #666;
+    color: var(--text-secondary);
     font-size: 14px;
     margin-bottom: 20px;
   }
@@ -183,8 +196,8 @@
 }
 
 .beginButton {
-  background: #28a745;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -192,20 +205,20 @@
   font-weight: bold;
   
   &:hover {
-    background: #218838;
+    background: var(--primary-green-hover);
   }
 }
 
 .skipButton {
-  background: #6c757d;
-  color: white;
+  background: var(--text-disabled);
+  color: var(--text-primary);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   
   &:hover {
-    background: #5a6268;
+    background: var(--border-secondary);
   }
 }
 
@@ -218,8 +231,8 @@
 }
 
 .pauseButton {
-  background: #6c757d;
-  color: white;
+  background: var(--text-disabled);
+  color: var(--text-primary);
   border: none;
   padding: 10px 15px;
   border-radius: 4px;
@@ -227,7 +240,7 @@
   font-size: 14px;
   
   &:hover {
-    background: #5a6268;
+    background: var(--border-secondary);
   }
 }
 
@@ -237,8 +250,8 @@
 }
 
 .emergencyButton {
-  background: #dc3545;
-  color: white;
+  background: var(--accent-error);
+  color: var(--text-primary);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -246,6 +259,6 @@
   font-size: 0.9rem;
   
   &:hover {
-    background: #c82333;
+    background: var(--accent-error);
   }
 }

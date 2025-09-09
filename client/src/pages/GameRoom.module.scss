@@ -1,13 +1,18 @@
+@import '../styles/colors.scss';
+
 .container {
   font-family: Arial, sans-serif;
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
 }
 
 .tagline {
   font-size: 1.1rem;
-  color: #555;
+  color: var(--text-secondary);
   margin-bottom: 30px;
   text-align: center;
 }
@@ -18,8 +23,8 @@
 }
 
 .startGameButton {
-  background: #28a745;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   border: none;
   padding: 15px 40px;
   font-size: 1.2rem;
@@ -32,32 +37,34 @@
 }
 
 .startGameButton:hover {
-  background: #218838;
+  background: var(--primary-green-hover);
 }
 
 .startGameTooltip {
   margin-top: 8px;
   font-size: 0.9rem;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .gameConfig {
   margin: 20px 0;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
+  background: var(--bg-secondary);
 }
 
 .gameConfigSummary {
   padding: 15px;
   cursor: pointer;
   font-weight: bold;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   border-radius: 8px;
   user-select: none;
+  color: var(--primary-green);
 }
 
 .gameConfigSummary:hover {
-  background: #e9ecef;
+  background: var(--border-primary);
 }
 
 .gameConfigContent {
@@ -80,9 +87,16 @@
 
 .inputGroup input {
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--border-secondary);
   border-radius: 4px;
   width: 120px;
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.inputGroup input:focus {
+  border-color: var(--primary-green);
+  outline: none;
 }
 
 
@@ -119,24 +133,24 @@
 .startButton {
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: var(--primary-green);
+  color: var(--bg-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 
   &:hover {
-    background-color: #45a049;
+    background-color: var(--primary-green-hover);
   }
 }
 
 .playersOnline {
   font-size: 14px;
-  color: #666;
+  color: var(--text-muted);
 }
 
 .footer {
   margin-top: 20px;
   font-size: 14px;
-  color: #666;
+  color: var(--text-muted);
 }

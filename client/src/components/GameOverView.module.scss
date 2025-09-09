@@ -1,3 +1,5 @@
+@import '../styles/colors.scss';
+
 .container {
   padding: 20px;
   max-width: 1000px;
@@ -9,16 +11,16 @@
   margin-bottom: 40px;
   
   h2 {
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
   }
 }
 
 .scoreBoard {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-primary);
   margin-bottom: 20px;
 }
 
@@ -29,11 +31,11 @@
   padding: 15px 20px;
   margin: 10px 0;
   border-radius: 8px;
-  background: #f8f9fa;
+  background: var(--bg-tertiary);
   
   &.winner {
-    background: linear-gradient(135deg, #ffd700, #ffed4e);
-    border: 2px solid #f1c40f;
+    background: var(--score-winner-bg);
+    border: 2px solid var(--accent-winner);
     transform: scale(1.02);
   }
 }
@@ -41,25 +43,33 @@
 .teamName {
   font-size: 18px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-primary);
+}
+
+.winner .teamName {
+  color: var(--accent-winner);
 }
 
 .teamScore {
   font-size: 24px;
   font-weight: bold;
-  color: #007bff;
+  color: var(--score-regular);
+}
+
+.winner .teamScore {
+  color: var(--accent-winner);
 }
 
 .winnerBadge {
   font-size: 16px;
   font-weight: bold;
-  color: #d4a017;
+  color: var(--accent-winner);
 }
 
 .tieMessage {
   font-size: 20px;
   font-weight: bold;
-  color: #28a745;
+  color: var(--primary-green);
   margin-top: 15px;
 }
 
@@ -69,7 +79,7 @@
   
   h3 {
     text-align: center;
-    color: #333;
+    color: var(--text-primary);
     margin-bottom: 20px;
   }
 }
@@ -80,15 +90,15 @@
 }
 
 .categoryHistory {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 8px;
   margin-bottom: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .categoryHeader {
-  background: #007bff;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   padding: 15px 20px;
   border-radius: 8px 8px 0 0;
   display: flex;
@@ -111,6 +121,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  color: var(--text-primary);
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -127,7 +138,7 @@
     margin: 5px 0;
     
     &.correct {
-      color: #28a745;
+      color: var(--primary-green);
       font-weight: bold;
       text-decoration: line-through;
     }
@@ -141,17 +152,18 @@
   
   .guess {
     display: inline-block;
-    background: #e9ecef;
+    background: var(--bg-tertiary);
     padding: 4px 8px;
     margin: 2px;
     border-radius: 4px;
     font-size: 14px;
+    color: var(--text-secondary);
   }
 }
 
 .noHistory {
   text-align: center;
-  color: #666;
+  color: var(--text-muted);
   font-style: italic;
   padding: 40px;
 }
@@ -161,8 +173,8 @@
 }
 
 .restartButton {
-  background: #28a745;
-  color: white;
+  background: var(--primary-green);
+  color: var(--bg-primary);
   border: none;
   padding: 15px 30px;
   border-radius: 8px;
@@ -172,6 +184,6 @@
   transition: background 0.3s ease;
   
   &:hover {
-    background: #218838;
+    background: var(--primary-green-hover);
   }
 }

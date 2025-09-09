@@ -1,12 +1,14 @@
+@import '../styles/colors.scss';
+
 .categoryDetails {
-  background: #e9f4ff;
+  background: var(--bg-tertiary);
   padding: 15px;
   border-radius: 6px;
   margin: 15px 0;
   
   h4 {
     margin-top: 0;
-    color: #0056b3;
+    color: var(--primary-green);
   }
   
   ul {
@@ -28,6 +30,7 @@
 
 .entryText {
   flex: 1;
+  color: var(--text-primary);
 }
 
 .guessedEntry {
@@ -37,6 +40,6 @@
 
 .autoGuessed {
   font-size: 12px;
-  color: #28a745;
+  color: var(--primary-green);
   font-style: italic;
 }
