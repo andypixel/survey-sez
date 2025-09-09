@@ -21,12 +21,16 @@ function RoomSummary({ gameState, myUserId }) {
     return userId === myUserId;
   };
   
+  const isOnGuessingTeam = (teamName) => {
+    return currentGame?.currentGuessingTeam === teamName;
+  };
+  
   return (
     <div className={styles.container}>
       <div className={styles.teams}>
         {Object.values(teams).map(team => (
           <div key={team.name} className={styles.team}>
-            <div className={styles.teamHeader}>
+            <div className={`${styles.teamHeader} ${isOnGuessingTeam(team.name) ? styles.guessingTeam : ''}`}>
               <h4 className={styles.teamName}>{team.name}</h4>
               {currentGame?.teamScores && (
                 <span className={styles.teamScore}>{currentGame.teamScores[team.name] || 0} pts</span>
@@ -43,15 +47,27 @@ function RoomSummary({ gameState, myUserId }) {
                 
                 const displayName = connectedPlayer?.name || persistentName || 'Unknown Player';
                 
+                const playerClasses = [
+                  styles.player,
+                  isAnnouncer(userId) && styles.announcer,
+                  isCurrentUser(userId) && styles.currentUser,
+                  isOnGuessingTeam(team.name) && styles.guessingTeam,
+                  !isOnline && styles.offline
+                ].filter(Boolean).join(' ');
+                
                 return (
-                  <div key={userId} className={`${styles.player} ${isAnnouncer(userId) ? styles.announcer : ''} ${isCurrentUser(userId) ? styles.currentUser : ''} ${!isOnline ? styles.offline : ''}`}>
-                    <span className={styles.playerName}>
-                      {displayName}
-                      {isAnnouncer(userId) && <span className={styles.announcerBadge}>📢</span>}
-                    </span>
-                    <span className={styles.categoryCount}>
-                      {categoryCount} categories
-                    </span>
+                  <div key={userId} className={playerClasses}>
+                    <div className={styles.playerInfo}>
+                      <div className={styles.playerName}>{displayName}</div>
+                      <div className={styles.categoryCount}>
+                        {categoryCount} {categoryCount === 1 ? 'category' : 'categories'}
+                      </div>
+                    </div>
+                    <div className={styles.playerBadges}>
+                      {isAnnouncer(userId) && (
+                        <span className={styles.announcerIcon} title="Current Announcer">📢</span>
+                      )}
+                    </div>
                   </div>
                 );
               })}

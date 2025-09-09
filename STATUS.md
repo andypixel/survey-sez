@@ -2,7 +2,6 @@
 
 - FIRST
     - Continue Gameplay view UI refinements:
-        - Finish applying new color scheme to all screens
         - Try to get Sora to mock up a version of the Category panel that works for all roles
         - Incorporate Announcer view
         - Validate side-by-side Category/Room Summary layout with all views
@@ -22,6 +21,7 @@
         - Gameplay
         - Game over
     - Input sanitation sweep
+    - Logo + other graphical flourishes?
     - Provision database for production build
     - Hosting
     - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database
@@ -60,3 +60,5 @@
 - 9/1 2hrs
 - 9/4 2hrs
 - 9/5 3hrs
+- 9/7 1hr
+- 9/8 2hrs

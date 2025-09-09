@@ -28,14 +28,19 @@
 
 .teamName {
   margin: 0;
-  color: var(--primary-green);
+  color: var(--text-primary);
   font-size: 1.1rem;
 }
 
 .teamScore {
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--primary-green);
+  color: var(--text-primary);
+}
+
+.teamHeader.guessingTeam .teamName,
+.teamHeader.guessingTeam .teamScore {
+  color: var(--tile-guessing-team);
 }
 
 .players {
@@ -46,47 +51,90 @@
 
 .player {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0.25rem 0.5rem;
-  background: var(--bg-tertiary);
-  border-radius: 4px;
-  border-left: 3px solid var(--primary-green);
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--tile-default);
+  border-radius: 6px;
+  border: 2px solid var(--tile-border);
   color: var(--text-primary);
+  transition: all 0.2s ease;
+}
+
+.playerInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
 }
 
 .playerName {
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .categoryCount {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
+  font-weight: 500;
 }
+
+.playerBadges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.announcerIcon {
+  font-size: 1.1rem;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+
 
 .announcer {
-  border-left-color: var(--accent-gold);
-  background: var(--bg-secondary);
+  border-color: var(--tile-announcer);
+  background: rgba(255, 215, 0, 0.1);
 }
 
-.announcerBadge {
-  margin-left: 0.5rem;
-  font-size: 0.9rem;
+.guessingTeam {
+  border-color: var(--tile-guessing-team);
+  background: rgba(74, 158, 255, 0.1);
 }
+
+
 
 .currentUser {
-  font-weight: 600;
-  box-shadow: 0 0 0 2px var(--primary-green);
-  border-radius: 6px;
+  border-color: var(--tile-current-user);
+  background: rgba(28, 231, 131, 0.15);
+  box-shadow: 0 0 0 1px var(--tile-current-user);
 }
 
+.currentUser .playerName {
+  color: var(--tile-current-user);
+}
+
+
+
 .currentUser.announcer {
-  box-shadow: 0 0 0 2px var(--primary-green), inset 0 0 0 2px var(--accent-gold);
+  border-color: var(--tile-announcer);
+  background: linear-gradient(135deg, rgba(28, 231, 131, 0.15), rgba(255, 215, 0, 0.1));
+  box-shadow: 0 0 0 1px var(--tile-announcer);
+}
+
+.currentUser.guessingTeam {
+  background: linear-gradient(135deg, rgba(28, 231, 131, 0.15), rgba(74, 158, 255, 0.1));
 }
 
 .offline {
-  opacity: 0.5;
+  opacity: 0.6;
   background: var(--offline-bg);
+  border-color: var(--border-primary);
 }
 
 .offline .playerName {
@@ -97,3 +145,4 @@
 .offline .categoryCount {
   color: var(--border-secondary);
 }
+

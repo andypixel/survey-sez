@@ -1,38 +1,43 @@
 // Survey Sez Color Palette
 :root {
-  // Primary Colors
-  --primary-green: #1ce783;
-  --primary-green-hover: #16c26f;
-  --primary-green-dark: #12a85c;
+  // Brand Colors
+  --color-brand-primary: #1ce783;
+  --color-brand-primary-hover: #16c26f;
+  --color-brand-primary-dark: #12a85c;
   
   // Background Colors
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #2a2a2a;
-  --bg-tertiary: #333;
-  --bg-card: #333;
+  --color-bg-primary: #1a1a1a;
+  --color-bg-secondary: #2a2a2a;
+  --color-bg-tertiary: #333;
+  --color-bg-card: #333;
   
   // Text Colors
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --text-muted: #999999;
-  --text-disabled: #666666;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #cccccc;
+  --color-text-muted: #999999;
+  --color-text-disabled: #666666;
   
   // Border Colors
-  --border-primary: #444444;
-  --border-secondary: #555555;
+  --color-border-primary: #444444;
+  --color-border-secondary: #555555;
   
   // Accent Colors
-  --accent-gold: #FFD700;
-  --accent-error: #ff6b6b;
-  --accent-winner: #FF6B35;
-  --accent-winner-bg: #2D1B1B;
+  --color-accent-warning: #FFD700;
+  --color-accent-error: #ff6b6b;
+  --color-accent-success: #FF6B35;
+  --color-accent-info: #4A9EFF;
   
   // State Colors
-  --offline-bg: #2a2a2a;
-  --offline-text: #666666;
+  --color-state-offline-bg: #2a2a2a;
+  --color-state-offline-text: #666666;
+  --color-state-winner: var(--color-accent-success);
+  --color-state-winner-bg: #2D1B1B;
   
-  // Score Colors
-  --score-winner: var(--accent-winner);
-  --score-winner-bg: var(--accent-winner-bg);
-  --score-regular: var(--text-secondary);
+  // Component Colors
+  --color-tile-default: var(--color-bg-tertiary);
+  --color-tile-current-user: var(--color-brand-primary);
+  --color-tile-guessing-team: var(--color-accent-info);
+  --color-tile-announcer: var(--color-accent-warning);
+  --color-tile-border: var(--color-border-secondary);
+  --color-tile-border-active: var(--color-brand-primary);
 }
