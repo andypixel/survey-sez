@@ -102,6 +102,8 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
               markedEntries={markedEntries}
               onEntryToggle={handleEntryToggle}
               showCheckboxes={isAnnouncer}
+              turnPhase={currentGame.turnPhase}
+              isAnnouncer={isAnnouncer}
             />
           )}
           

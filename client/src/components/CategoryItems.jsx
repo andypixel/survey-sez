@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './CategoryItems.module.scss';
 
-function CategoryItems({ category, responses, markedEntries, onEntryToggle, showCheckboxes = false }) {
+function CategoryItems({ category, responses, markedEntries, onEntryToggle, showCheckboxes = false, turnPhase = null, isAnnouncer = false }) {
   return (
     <div className={styles.categoryDetails}>
       <h4>Category Items:</h4>
@@ -12,30 +12,38 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
           );
           const isManuallyMarked = markedEntries.has(entry);
           const isGuessed = isAutoGuessed || isManuallyMarked;
+          const isTurnSummary = turnPhase === 'TURN_SUMMARY';
+          const showIncorrect = isTurnSummary && !isGuessed;
+          const showPill = isAnnouncer || isTurnSummary;
           
           return (
-            <div key={entry} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''}`}>
-              {showCheckboxes && (
+            <div key={entry} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''} ${isTurnSummary || !isAnnouncer ? styles.readOnly : ''}`}>
+              {showPill && (
                 <label className={styles.entryLabel}>
-                  <input 
-                    type="checkbox" 
-                    checked={isManuallyMarked}
-                    onChange={() => !isAutoGuessed && onEntryToggle(entry)}
-                    disabled={isAutoGuessed}
-                    className={styles.entryCheckbox}
-                    aria-label={`Mark ${entry} as ${isManuallyMarked ? 'incorrect' : 'correct'}`}
-                  />
+                  {showCheckboxes && (
+                    <input 
+                      type="checkbox" 
+                      checked={isManuallyMarked}
+                      onChange={() => !isAutoGuessed && onEntryToggle(entry)}
+                      disabled={isAutoGuessed || isTurnSummary}
+                      className={styles.entryCheckbox}
+                      aria-label={`Mark ${entry} as ${isManuallyMarked ? 'incorrect' : 'correct'}`}
+                    />
+                  )}
                   <div className={`${styles.entryPill} ${
+                    showIncorrect ? styles.incorrect :
                     isAutoGuessed ? styles.autoChecked : 
                     isManuallyMarked ? styles.checked : ''
-                  }`}>
-                    {isAutoGuessed ? '🔒' : isManuallyMarked ? '✓' : ''}
+                  } ${isTurnSummary ? styles.readOnly : ''}`}>
+                    {showIncorrect ? '✗' :
+                     isAutoGuessed ? '🔒' : 
+                     isManuallyMarked ? '✓' : ''}
                   </div>
                 </label>
               )}
               <span 
                 className={styles.entryText}
-                onClick={() => showCheckboxes && !isAutoGuessed && onEntryToggle(entry)}
+                onClick={() => isAnnouncer && showCheckboxes && !isAutoGuessed && !isTurnSummary && onEntryToggle(entry)}
               >
                 {entry}
               </span>

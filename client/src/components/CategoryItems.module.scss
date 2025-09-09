@@ -31,7 +31,7 @@
   transition: all 0.2s ease;
 }
 
-.entryItem:hover {
+.entryItem:hover:not(.readOnly) {
   border-color: var(--color-brand-primary);
 }
 
@@ -59,7 +59,7 @@
   flex-shrink: 0;
 }
 
-.entryPill:hover {
+.entryPill:hover:not(.readOnly) {
   border-color: var(--color-brand-primary);
 }
 
@@ -76,6 +76,18 @@
   cursor: not-allowed;
 }
 
+.entryPill.incorrect {
+  background: var(--color-accent-error);
+  border-color: var(--color-accent-error);
+  color: var(--color-text-primary);
+  cursor: default;
+}
+
+.entryPill.readOnly {
+  cursor: default;
+  pointer-events: none;
+}
+
 .entryLabel {
   display: flex;
   align-items: center;
@@ -87,6 +99,14 @@
   color: var(--color-text-primary);
   cursor: pointer;
   user-select: none;
+}
+
+.readOnly .entryText {
+  cursor: default;
+}
+
+.readOnly .entryLabel {
+  cursor: default;
 }
 
 .guessedEntry {
