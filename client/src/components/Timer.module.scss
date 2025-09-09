@@ -11,18 +11,18 @@
 }
 
 .normal {
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
 }
 
 .warning {
-  background: var(--accent-gold);
-  color: var(--bg-primary);
+  background: var(--color-accent-warning);
+  color: var(--color-bg-primary);
 }
 
 .critical {
-  background: var(--accent-error);
-  color: var(--text-primary);
+  background: var(--color-accent-error);
+  color: var(--color-text-primary);
   animation: pulse 1s infinite;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .paused {
-  background: var(--text-disabled) !important;
-  color: var(--text-primary) !important;
+  background: var(--color-text-disabled) !important;
+  color: var(--color-text-primary) !important;
   animation: none !important;
 }

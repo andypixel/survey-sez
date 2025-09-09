@@ -11,16 +11,16 @@
   margin-bottom: 40px;
   
   h2 {
-    color: var(--text-primary);
+    color: var(--color-text-primary);
     margin-bottom: 20px;
   }
 }
 
 .scoreBoard {
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   border-radius: 12px;
   padding: 30px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--color-border-primary);
   margin-bottom: 20px;
 }
 
@@ -31,11 +31,11 @@
   padding: 15px 20px;
   margin: 10px 0;
   border-radius: 8px;
-  background: var(--bg-tertiary);
+  background: var(--color-bg-tertiary);
   
   &.winner {
     background: var(--score-winner-bg);
-    border: 2px solid var(--accent-winner);
+    border: 2px solid var(--color-accent-success);
     transform: scale(1.02);
   }
 }
@@ -43,11 +43,11 @@
 .teamName {
   font-size: 18px;
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .winner .teamName {
-  color: var(--accent-winner);
+  color: var(--color-accent-success);
 }
 
 .teamScore {
@@ -57,19 +57,19 @@
 }
 
 .winner .teamScore {
-  color: var(--accent-winner);
+  color: var(--color-accent-success);
 }
 
 .winnerBadge {
   font-size: 16px;
   font-weight: bold;
-  color: var(--accent-winner);
+  color: var(--color-accent-success);
 }
 
 .tieMessage {
   font-size: 20px;
   font-weight: bold;
-  color: var(--primary-green);
+  color: var(--color-brand-primary);
   margin-top: 15px;
 }
 
@@ -79,7 +79,7 @@
   
   h3 {
     text-align: center;
-    color: var(--text-primary);
+    color: var(--color-text-primary);
     margin-bottom: 20px;
   }
 }
@@ -90,15 +90,15 @@
 }
 
 .categoryHistory {
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   border-radius: 8px;
   margin-bottom: 20px;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--color-border-primary);
 }
 
 .categoryHeader {
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   padding: 15px 20px;
   border-radius: 8px 8px 0 0;
   display: flex;
@@ -121,7 +121,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -138,7 +138,7 @@
     margin: 5px 0;
     
     &.correct {
-      color: var(--primary-green);
+      color: var(--color-brand-primary);
       font-weight: bold;
       text-decoration: line-through;
     }
@@ -152,18 +152,18 @@
   
   .guess {
     display: inline-block;
-    background: var(--bg-tertiary);
+    background: var(--color-bg-tertiary);
     padding: 4px 8px;
     margin: 2px;
     border-radius: 4px;
     font-size: 14px;
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
   }
 }
 
 .noHistory {
   text-align: center;
-  color: var(--text-muted);
+  color: var(--color-text-muted);
   font-style: italic;
   padding: 40px;
 }
@@ -173,8 +173,8 @@
 }
 
 .restartButton {
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   border: none;
   padding: 15px 30px;
   border-radius: 8px;
@@ -184,6 +184,6 @@
   transition: background 0.3s ease;
   
   &:hover {
-    background: var(--primary-green-hover);
+    background: var(--color-brand-primary-hover);
   }
 }

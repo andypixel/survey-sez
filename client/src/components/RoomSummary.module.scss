@@ -1,11 +1,11 @@
 @import '../styles/colors.scss';
 
 .container {
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   border-radius: 8px;
   padding: 1rem;
   margin-bottom: 1rem;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--color-border-primary);
 }
 
 .teams {
@@ -28,19 +28,19 @@
 
 .teamName {
   margin: 0;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   font-size: 1.1rem;
 }
 
 .teamScore {
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .teamHeader.guessingTeam .teamName,
 .teamHeader.guessingTeam .teamScore {
-  color: var(--tile-guessing-team);
+  color: var(--color-tile-guessing-team);
 }
 
 .players {
@@ -54,10 +54,10 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem 0.75rem;
-  background: var(--tile-default);
+  background: var(--color-tile-default);
   border-radius: 6px;
-  border: 2px solid var(--tile-border);
-  color: var(--text-primary);
+  border: 2px solid var(--color-tile-border);
+  color: var(--color-text-primary);
   transition: all 0.2s ease;
 }
 
@@ -79,7 +79,7 @@
 
 .categoryCount {
   font-size: 0.8rem;
-  color: var(--text-muted);
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
@@ -98,33 +98,33 @@
 
 
 .announcer {
-  border-color: var(--tile-announcer);
+  border-color: var(--color-tile-announcer);
   background: rgba(255, 215, 0, 0.1);
 }
 
 .guessingTeam {
-  border-color: var(--tile-guessing-team);
+  border-color: var(--color-tile-guessing-team);
   background: rgba(74, 158, 255, 0.1);
 }
 
 
 
 .currentUser {
-  border-color: var(--tile-current-user);
+  border-color: var(--color-tile-current-user);
   background: rgba(28, 231, 131, 0.15);
-  box-shadow: 0 0 0 1px var(--tile-current-user);
+  box-shadow: 0 0 0 1px var(--color-tile-current-user);
 }
 
 .currentUser .playerName {
-  color: var(--tile-current-user);
+  color: var(--color-tile-current-user);
 }
 
 
 
 .currentUser.announcer {
-  border-color: var(--tile-announcer);
+  border-color: var(--color-tile-announcer);
   background: linear-gradient(135deg, rgba(28, 231, 131, 0.15), rgba(255, 215, 0, 0.1));
-  box-shadow: 0 0 0 1px var(--tile-announcer);
+  box-shadow: 0 0 0 1px var(--color-tile-announcer);
 }
 
 .currentUser.guessingTeam {
@@ -133,16 +133,16 @@
 
 .offline {
   opacity: 0.6;
-  background: var(--offline-bg);
-  border-color: var(--border-primary);
+  background: var(--color-state-offline-bg);
+  border-color: var(--color-border-primary);
 }
 
 .offline .playerName {
-  color: var(--offline-text);
+  color: var(--color-state-offline-text);
   font-style: italic;
 }
 
 .offline .categoryCount {
-  color: var(--border-secondary);
+  color: var(--color-border-secondary);
 }
 

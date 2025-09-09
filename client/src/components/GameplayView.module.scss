@@ -7,7 +7,7 @@
 }
 
 .gameInfo {
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
@@ -15,27 +15,27 @@
   p {
     margin: 5px 0;
     font-weight: bold;
-    color: var(--text-primary);
+    color: var(--color-text-primary);
   }
 }
 
 .announcerView, .guesserView, .spectatorView, .gameView {
-  background: var(--bg-secondary);
-  border: 2px solid var(--primary-green);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-brand-primary);
   border-radius: 8px;
   padding: 20px;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .categoryDetails {
-  background: var(--bg-tertiary);
+  background: var(--color-bg-tertiary);
   padding: 15px;
   border-radius: 6px;
   margin: 15px 0;
   
   h4 {
     margin-top: 0;
-    color: var(--primary-green);
+    color: var(--color-brand-primary);
   }
   
   ul {
@@ -45,7 +45,7 @@
   
   li {
     margin: 5px 0;
-    color: var(--text-primary);
+    color: var(--color-text-primary);
   }
 }
 
@@ -71,7 +71,7 @@
 
 .autoGuessed {
   font-size: 12px;
-  color: var(--primary-green);
+  color: var(--color-brand-primary);
   font-style: italic;
 }
 
@@ -79,8 +79,8 @@
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   padding: 10px;
   border-radius: 6px;
   margin: 15px 0;
@@ -91,13 +91,13 @@
   
   h4 {
     margin-bottom: 10px;
-    color: var(--text-primary);
+    color: var(--color-text-primary);
   }
 }
 
 .guessesFeed {
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
+  background: var(--color-bg-tertiary);
+  border: 1px solid var(--color-border-primary);
   border-radius: 6px;
   padding: 15px;
   max-height: 200px;
@@ -106,12 +106,12 @@
 }
 
 .guess {
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   padding: 8px 12px;
   margin: 5px 0;
   border-radius: 4px;
-  border-left: 3px solid var(--primary-green);
-  color: var(--text-primary);
+  border-left: 3px solid var(--color-brand-primary);
+  color: var(--color-text-primary);
 }
 
 .guessForm {
@@ -122,29 +122,29 @@
 .guessInput {
   flex: 1;
   padding: 10px;
-  border: 1px solid var(--border-secondary);
+  border: 1px solid var(--color-border-secondary);
   border-radius: 4px;
   font-size: 16px;
-  background: var(--bg-tertiary);
-  color: var(--text-primary);
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
 }
 
 .guessInput:focus {
-  border-color: var(--primary-green);
+  border-color: var(--color-brand-primary);
   outline: none;
 }
 
 .guessButton {
   padding: 10px 20px;
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   
   &:hover {
-    background: var(--primary-green-hover);
+    background: var(--color-brand-primary-hover);
   }
 }
 
@@ -153,12 +153,12 @@
   padding: 40px;
   
   h3 {
-    color: var(--text-primary);
+    color: var(--color-text-primary);
     margin-bottom: 10px;
   }
   
   p {
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
     margin-bottom: 30px;
   }
 }
@@ -169,21 +169,21 @@
 }
 
 .categoryCard {
-  background: var(--bg-secondary);
-  border: 2px solid var(--primary-green);
+  background: var(--color-bg-secondary);
+  border: 2px solid var(--color-brand-primary);
   border-radius: 8px;
   padding: 20px;
   max-width: 400px;
   text-align: left;
   
   h4 {
-    color: var(--primary-green);
+    color: var(--color-brand-primary);
     margin-top: 0;
     margin-bottom: 10px;
   }
   
   p {
-    color: var(--text-secondary);
+    color: var(--color-text-secondary);
     font-size: 14px;
     margin-bottom: 20px;
   }
@@ -196,8 +196,8 @@
 }
 
 .beginButton {
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -205,20 +205,20 @@
   font-weight: bold;
   
   &:hover {
-    background: var(--primary-green-hover);
+    background: var(--color-brand-primary-hover);
   }
 }
 
 .skipButton {
-  background: var(--text-disabled);
-  color: var(--text-primary);
+  background: var(--color-text-disabled);
+  color: var(--color-text-primary);
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   
   &:hover {
-    background: var(--border-secondary);
+    background: var(--color-border-secondary);
   }
 }
 
@@ -231,8 +231,8 @@
 }
 
 .pauseButton {
-  background: var(--text-disabled);
-  color: var(--text-primary);
+  background: var(--color-text-disabled);
+  color: var(--color-text-primary);
   border: none;
   padding: 10px 15px;
   border-radius: 4px;
@@ -240,7 +240,7 @@
   font-size: 14px;
   
   &:hover {
-    background: var(--border-secondary);
+    background: var(--color-border-secondary);
   }
 }
 
@@ -250,8 +250,8 @@
 }
 
 .emergencyButton {
-  background: var(--accent-error);
-  color: var(--text-primary);
+  background: var(--color-accent-error);
+  color: var(--color-text-primary);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
@@ -259,6 +259,6 @@
   font-size: 0.9rem;
   
   &:hover {
-    background: var(--accent-error);
+    background: var(--color-accent-error);
   }
 }

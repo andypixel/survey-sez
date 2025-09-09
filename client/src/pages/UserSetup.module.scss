@@ -3,8 +3,8 @@
 .container {
   font-family: Arial, sans-serif;
   padding: 20px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   min-height: 100vh;
 }
 
@@ -33,14 +33,14 @@
   padding: 10px;
   font-size: 16px;
   width: 200px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-secondary);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border-secondary);
   border-radius: 4px;
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .input:focus {
-  border-color: var(--primary-green);
+  border-color: var(--color-brand-primary);
   outline: none;
 }
 
@@ -59,15 +59,15 @@
   border-radius: 6px;
   cursor: pointer;
   transition: border-color 0.2s ease;
-  background: var(--bg-secondary);
+  background: var(--color-bg-secondary);
   
   &:hover {
-    border-color: var(--border-primary);
+    border-color: var(--color-border-primary);
   }
   
   &:has(input[type="radio"]:checked) {
-    border-color: var(--primary-green);
-    background-color: var(--bg-tertiary);
+    border-color: var(--color-brand-primary);
+    background-color: var(--color-bg-tertiary);
   }
   
   input[type="radio"] {
@@ -82,8 +82,8 @@
 
 .newTeamOption {
   &:has(input[type="text"]:focus) {
-    border-color: var(--primary-green);
-    background-color: var(--bg-tertiary);
+    border-color: var(--color-brand-primary);
+    background-color: var(--color-bg-tertiary);
   }
 }
 
@@ -91,14 +91,14 @@
   padding: 8px 12px;
   font-size: 14px;
   width: 200px;
-  border: 1px solid var(--border-secondary);
+  border: 1px solid var(--color-border-secondary);
   border-radius: 4px;
   outline: none;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
   
   &:focus {
-    border-color: var(--primary-green);
+    border-color: var(--color-brand-primary);
     box-shadow: 0 0 0 2px rgba(28, 231, 131, 0.25);
   }
 }
@@ -107,19 +107,19 @@
   padding: 10px 20px;
   font-size: 16px;
   align-self: flex-start;
-  background: var(--primary-green);
-  color: var(--bg-primary);
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 .button:hover {
-  background: var(--primary-green-hover);
+  background: var(--color-brand-primary-hover);
 }
 
 .error {
-  color: var(--accent-error);
+  color: var(--color-accent-error);
   font-size: 14px;
   margin-top: 10px;
 }
