@@ -5,6 +5,8 @@
         - Validate side-by-side Category/Room Summary layout with all views
 
 - MVP
+    - Team view should only use unused categories for count under players' names
+    - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database (do this again just before "launch")
     - Design refinements
         - Onboarding
             - Start page
@@ -18,10 +20,11 @@
                 - Entry list text entry
         - Gameplay
         - Game over
-    - Input sanitation sweep
     - Logo + other graphical flourishes?
     - Provision database for production build
     - Hosting
+    - Smoke test on mobile device
+    - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database
 
 - Bugs

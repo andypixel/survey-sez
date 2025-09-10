@@ -19,23 +19,28 @@
 client/src/
 ├── components/          # Reusable UI components
 │   ├── CategoriesDisplay.jsx    # Shows user's custom categories + add form
-│   ├── CategoryItems.jsx        # Displays category entries with marking functionality
+│   ├── CategoryItems.jsx        # Displays category entries with toggle pills for announcer
+│   ├── GameHeader.jsx           # Reusable header with game name, room, and player count
+│   ├── GameInfo.jsx             # Shows current game status and round information
 │   ├── GameplayView.jsx         # Main gameplay interface (announcer/guesser/spectator views)
-│   ├── ScoreDisplay.jsx         # Shows team scores and turn scores
 │   ├── TeamGuesses.jsx          # Displays team guesses with player attribution
-│   ├── TeamsDisplay.jsx         # Shows teams and players
-│   └── RoomSummary.jsx          # Shows room overview with teams, players, and category counts
+│   ├── TeamsDisplay.jsx         # Shows teams and players with visual states
+│   ├── Timer.jsx                # Game timer with color-coded states
+│   └── RoomSummary.jsx          # Shows room overview with teams, scores, and player tiles
 ├── contexts/            # React Context providers
 │   └── WorkflowContext.jsx      # Provides workflow instances to components
 ├── pages/               # Full-page components
-│   ├── GameRoom.jsx             # Main game room (onboarding + gameplay)
+│   ├── GameRoom.jsx             # Main game room (onboarding + gameplay + game over)
 │   ├── RoomJoin.jsx             # Room entry form
 │   └── UserSetup.jsx            # Name + team selection
+├── styles/              # Global styling
+│   └── colors.scss              # Centralized color system with semantic variables
 ├── workflows/           # Business logic classes
 │   ├── GameplayWorkflow.js      # Handles game actions (categories, turns)
 │   ├── RoomJoinWorkflow.js      # Handles room joining
 │   └── UserSetupWorkflow.js     # Handles user setup
 ├── utils/
+│   ├── ErrorHandler.js          # Error handling utilities
 │   └── storage.js               # localStorage utilities
 └── App.jsx              # Main app component, socket setup
 ```

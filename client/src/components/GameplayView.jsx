@@ -3,7 +3,7 @@ import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
 import TeamGuesses from './TeamGuesses';
 import CategoryItems from './CategoryItems';
-import ScoreDisplay from './ScoreDisplay';
+
 import Timer from './Timer';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
@@ -44,7 +44,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
   return (
     <div className={styles.container}>
       
-      <ScoreDisplay gameState={gameState} showTurnScore={true} isAnnouncer={isAnnouncer} />
+
       
       {/* Category Selection (Announcer only, before turn starts) */}
       {isAnnouncer && !currentGame.currentCategory && (
