@@ -3,6 +3,7 @@
 - FIRST
 
 - MVP
+    - Default turn length 60 seconds instead of 30
     - No spoilers endpoint should also hide custom categories
     - Error logging for playtest post-mortem.
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?

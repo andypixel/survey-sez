@@ -252,6 +252,30 @@ app.get('/debug/redis-safe', async (req, res) => {
   }
 });
 
+// One-time sync endpoint
+app.post('/admin/sync-categories', async (req, res) => {
+  if (process.env.NODE_ENV !== 'production') {
+    return res.json({ error: 'Sync only available in production' });
+  }
+  
+  try {
+    const initProdData = require('./scripts/init-prod-data');
+    await initProdData();
+    
+    // Reload categories data
+    categoriesData = await storage.getCategories();
+    
+    res.json({ 
+      success: true, 
+      message: 'Categories synced successfully',
+      universalCount: categoriesData.universal.length,
+      usedCount: categoriesData.usedUniversalCategoryIds.length
+    });
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
 // Simple admin panel for debugging
 app.get('/admin', (req, res) => {
   res.setHeader('Content-Type', 'text/html');
@@ -263,6 +287,22 @@ app.get('/admin', (req, res) => {
       <li><a href="/debug/redis-safe">Redis Data - Safe (No Spoilers)</a></li>
       <li><a href="/debug/redis">Redis Data - Full (Spoilers!)</a></li>
     </ul>
+    <h2>Actions</h2>
+    <button onclick="syncCategories()">Sync Categories to Redis</button>
+    <div id="result"></div>
+    <script>
+      async function syncCategories() {
+        const result = document.getElementById('result');
+        result.innerHTML = 'Syncing...';
+        try {
+          const response = await fetch('/admin/sync-categories', { method: 'POST' });
+          const data = await response.json();
+          result.innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        } catch (error) {
+          result.innerHTML = 'Error: ' + error.message;
+        }
+      }
+    </script>
   `);
 });
 
