@@ -6,7 +6,9 @@ function RoomSummary({ gameState, myUserId }) {
   
   const getPlayerCategoryCount = (userId) => {
     const userKey = `${roomId}-${userId}`;
-    return categories.userCustom[userKey]?.length || 0;
+    const userCategories = categories.userCustom[userKey] || [];
+    const usedCategoryIds = new Set(gameState.usedCategoryIds || []);
+    return userCategories.filter(category => !usedCategoryIds.has(category.id)).length;
   };
   
   const getPlayerByUserId = (userId) => {

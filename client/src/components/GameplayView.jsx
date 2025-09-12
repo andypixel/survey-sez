@@ -75,20 +75,6 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
         </div>
       )}
       
-      {/* Emergency Reset button - available to all players during gameplay */}
-      <div className={styles.emergencySection}>
-        <button 
-          className={styles.emergencyButton}
-          onClick={() => {
-            if (window.confirm('Emergency reset will end this game but keep used categories. Continue?')) {
-              gameplay.handleEmergencyReset();
-            }
-          }}
-        >
-          Emergency Reset
-        </button>
-      </div>
-      
       {/* Active Game Content */}
       {currentGame.currentCategory && (
         <div className={styles.gameView}>
@@ -123,9 +109,6 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </div>
           )}
           
-          {/* Team Guesses - always visible during active game */}
-          <TeamGuesses responses={currentGame.responses} />
-          
           {/* Guess Form - only for non-announcer guessing team members during ACTIVE_GUESSING */}
           {canGuess && currentGame.turnPhase === 'ACTIVE_GUESSING' && (
             <form className={styles.guessForm} onSubmit={handleGuessSubmit}>
@@ -142,6 +125,9 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
               </button>
             </form>
           )}
+          
+          {/* Team Guesses - always visible during active game */}
+          <TeamGuesses responses={currentGame.responses} />
           
           {/* Announcer Controls */}
           {isAnnouncer && currentGame.turnPhase === 'ACTIVE_GUESSING' && (

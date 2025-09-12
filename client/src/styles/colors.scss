@@ -1,5 +1,6 @@
 // Survey Sez Color Palette
 :root {
+  background: var(--color-bg-primary);
   // Brand Colors
   --color-brand-primary: #1ce783;
   --color-brand-primary-hover: #16c26f;
@@ -40,4 +41,11 @@
   --color-tile-announcer: var(--color-accent-warning);
   --color-tile-border: var(--color-border-secondary);
   --color-tile-border-active: var(--color-brand-primary);
+}
+
+// Apply background to html and body to prevent white backgrounds
+html, body {
+  background: var(--color-bg-primary);
+  margin: 0;
+  padding: 0;
 }

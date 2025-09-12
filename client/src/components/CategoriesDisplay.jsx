@@ -34,7 +34,7 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
             />
             <textarea 
               name="categoryEntries"
-              placeholder="Optional: one entry per line"
+              placeholder="One entry per line"
               className={styles.entriesInput}
               rows={5}
               defaultValue={defaultEntries}

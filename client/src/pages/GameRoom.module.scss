@@ -154,3 +154,48 @@
   font-size: 14px;
   color: var(--color-text-muted);
 }
+
+.emergencySection {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.emergencyButton {
+  background: var(--color-accent-error);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  
+  &:hover {
+    background: #e55a5a;
+  }
+}
+
+.gameplayLayout {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.mainGameSection {
+  flex: 2;
+  min-width: 0;
+}
+
+.sidebarSection {
+  flex: 1;
+  min-width: 300px;
+}
+
+@media (max-width: 1024px) {
+  .gameplayLayout {
+    flex-direction: column;
+  }
+  
+  .sidebarSection {
+    min-width: 0;
+  }
+}

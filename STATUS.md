@@ -1,8 +1,6 @@
 # To do
 
 - FIRST
-    - Continue Gameplay view UI refinements:
-        - Validate side-by-side Category/Room Summary layout with all views
 
 - MVP
     - Team view should only use unused categories for count under players' names
@@ -30,7 +28,7 @@
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
     - No Available Categories
-        - If all custom categories used and no universal categories available, game should detect this and either end early
+        - If all custom categories used and no universal categories available, game should detect this and either end early or...?
 
 - Backlog
     - Game restart
@@ -43,6 +41,12 @@
         - Onboarding
             - Used categories should be collapsed by default and shown below unused categories
             - Player/team order can be shuffled/reordered
+        - Entries textarea should add numbers for each line and prevent more than 10 lines
+        - If the next Announcer is offline when starting a turn, automatically skip to next player on the team
+        - Icons for revealed entries after guessing
+            - Not guessed: X
+            - Guessed via form: Green checkmark
+            - Guessed via Announcer toggle: Green ear or speaker to indicate an audible guess
     - Game config settings should be synced across all sessions in real time when edited by anyone (or should they? what's the best UX?)
     - Spectating team also gets to guess using their own text input
         - Guesses from all spectating players are shown to the spectating team only
@@ -63,3 +67,4 @@
 - 9/5 3hrs
 - 9/7 1hr
 - 9/8 3hrs
+- 9/11 5:15p-

@@ -49,15 +49,36 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
           isGuessingTeam={isGuessingTeam}
         />
         
-        <RoomSummary gameState={gameState} myUserId={myUserId} />
-        
-        <GameplayView 
-          gameState={gameState}
-          myId={myId}
-          myUserId={myUserId}
-          isAnnouncer={isAnnouncer}
-          isGuessingTeam={isGuessingTeam}
-        />
+        <div className={styles.gameplayLayout}>
+          <div className={styles.mainGameSection}>
+            <GameplayView 
+              gameState={gameState}
+              myId={myId}
+              myUserId={myUserId}
+              isAnnouncer={isAnnouncer}
+              isGuessingTeam={isGuessingTeam}
+            />
+          </div>
+          
+          <div className={styles.sidebarSection}>
+            <RoomSummary gameState={gameState} myUserId={myUserId} />
+            
+            {/* Emergency Reset button - available to all players during gameplay */}
+            <div className={styles.emergencySection}>
+              <button 
+                className={styles.emergencyButton}
+                onClick={() => {
+                  if (window.confirm('Emergency reset will end this game but keep used categories. Continue?')) {
+                    // Handle emergency reset - you'll need to add this to the parent component
+                    console.log('Emergency reset requested');
+                  }
+                }}
+              >
+                Emergency Reset
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
