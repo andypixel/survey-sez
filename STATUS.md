@@ -4,17 +4,6 @@
 
 - MVP
     - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database (do this again just before "launch")
-    - Design refinements
-        - Onboarding
-            - Join Room
-                - Replace radio button / "create new team" / input field with input field only
-            - Game configuration
-                - Global template
-                - Game name
-                - Entry list text entry
-        - Gameplay
-        - Game over
-    - Logo + other graphical flourishes?
     - Provision database for production build
     - Hosting
     - Smoke test on mobile device
