@@ -58,6 +58,10 @@ class GameHandler {
       this.handleSkipAnnouncer(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
 
+    socket.on('skipCategory', () => {
+      this.handleSkipCategory(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
+
     socket.on('emergencyReset', () => {
       this.handleEmergencyReset(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
@@ -314,6 +318,26 @@ class GameHandler {
         if (room.currentGame.skipAnnouncer()) {
           io.to(roomId).emit('gameState', room.getState());
           debouncedSave();
+        }
+      }
+    }
+  }
+
+  /**
+   * Handle skip category request
+   * Only announcer can skip, only universal categories, max 2 per turn
+   */
+  static handleSkipCategory(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      if (room.gameState === GAME_RULES.PHASES.GAMEPLAY && room.currentGame) {
+        const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
+        if (announcerSocketId === socket.id) {
+          if (room.currentGame.skipCategory()) {
+            io.to(roomId).emit('gameState', room.getState());
+            debouncedSave();
+          }
         }
       }
     }

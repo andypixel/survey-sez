@@ -126,6 +126,13 @@ class GameplayWorkflow {
     this.socket.emit('skipAnnouncer');
   }
 
+  /**
+   * Skip current universal category (announcer only, max 2 per turn)
+   */
+  handleSkipCategory() {
+    this.socket.emit('skipCategory');
+  }
+
   handleEmergencyReset() {
     this.socket.emit('emergencyReset');
   }

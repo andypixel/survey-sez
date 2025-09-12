@@ -327,15 +327,17 @@ class GameRoom {
  * 
  * Turn Flow:
  * 1. initializeFirstTurn() - Select first announcer + category preview
- * 2. Announcer sees selectedCategory + "Begin Turn" button
- * 3. beginTurn() - Move selectedCategory to currentCategory, start timer
- * 4. Turn completion triggers nextTurn()
+ * 2. Announcer sees selectedCategory + "Begin Turn" button (+ "Skip" for universal categories)
+ * 3. Optional: skipCategory() - Select different universal category (max 2 per turn)
+ * 4. beginTurn() - Move selectedCategory to currentCategory, start timer
+ * 5. Turn completion triggers nextTurn()
  * 
  * Key Properties:
  * - currentTurn: Alternates between teams (0,1,2,3...)
  * - selectedCategory: Category chosen for announcer preview
  * - currentCategory: Active category during turn
  * - usedCategoryIds: Prevents category reuse
+ * - skipsUsed: Tracks category skips per turn (max 2 for universal categories)
  */
 class GameplayManager {
   constructor(room) {
@@ -358,6 +360,7 @@ class GameplayManager {
     this.timerStartTime = null;
     this.timerDuration = null;
     this.pausedTimeRemaining = null;
+    this.skipsUsed = 0;
     
     // Initialize team scores
     this.teamOrder.forEach(team => {
@@ -481,6 +484,37 @@ class GameplayManager {
     return true;
   }
 
+  /**
+   * Skip current universal category and select a different one
+   * Only works for universal categories, max 2 skips per turn
+   * @returns {boolean} True if skip was successful
+   */
+  skipCategory() {
+    // Only allow skip for universal categories and max 2 times per turn
+    if (this.skipsUsed >= 2) return false;
+    
+    const isUniversal = this.selectedCategory && 
+      this.room.categories.universal.some(cat => cat.id === this.selectedCategory.id);
+    if (!isUniversal) return false;
+    
+    this.skipsUsed++;
+    
+    // Select a different universal category
+    const unusedUniversal = this.room.categories.universal.filter(cat => 
+      !this.usedCategoryIds.has(cat.id) && 
+      !this.room.globalUsedUniversalIds.has(cat.id) &&
+      cat.id !== this.selectedCategory.id // Exclude current category
+    );
+    
+    if (unusedUniversal.length > 0) {
+      const randomIndex = Math.floor(Math.random() * unusedUniversal.length);
+      this.selectedCategory = unusedUniversal[randomIndex];
+      return true;
+    }
+    
+    return false;
+  }
+
   skipAnnouncer() {
     // Advance to next announcer on current team without changing turn
     const currentTeam = this.getCurrentGuessingTeam();
@@ -492,6 +526,7 @@ class GameplayManager {
     this.responses = [];
     this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
+    this.skipsUsed = 0;
     this.timeoutManager.clearTimeout(GAME_RULES.TIMEOUT_KEYS.RESULTS_PHASE);
     
     // Clear timer state
@@ -627,6 +662,7 @@ class GameplayManager {
     this.responses = [];
     this.markedEntries = new Set();
     this.turnPhase = GAME_RULES.TURN_PHASES.CATEGORY_SELECTION;
+    this.skipsUsed = 0;
     
     // Clear timer state
     this.timerStartTime = null;
@@ -644,6 +680,9 @@ class GameplayManager {
   }
 
   getState() {
+    const isSelectedCategoryUniversal = this.selectedCategory && 
+      this.room.categories.universal.some(cat => cat.id === this.selectedCategory.id);
+    
     return {
       currentTurn: this.currentTurn,
       turnsCompleted: this.turnsCompleted,
@@ -660,7 +699,9 @@ class GameplayManager {
       isComplete: this.isGameComplete(),
       isPaused: this.isPaused,
       canAllPlayersReveal: this.canAllPlayersReveal(),
-      timerState: this.getTimerState()
+      timerState: this.getTimerState(),
+      skipsUsed: this.skipsUsed,
+      canSkipCategory: isSelectedCategoryUniversal && this.skipsUsed < 2
     };
   }
 }

@@ -195,6 +195,12 @@
   justify-content: center;
 }
 
+.announcerButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
 .beginButton {
   background: var(--color-brand-primary);
   color: var(--color-bg-primary);
@@ -206,6 +212,20 @@
   
   &:hover {
     background: var(--color-brand-primary-hover);
+  }
+}
+
+.skipCategoryButton {
+  background: var(--color-text-disabled);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  
+  &:hover {
+    background: var(--color-border-secondary);
   }
 }
 
