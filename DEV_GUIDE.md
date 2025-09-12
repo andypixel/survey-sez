@@ -89,10 +89,30 @@ onClick={() => gameplay.handleMyAction()}
 
 ### Data Storage
 
-- **Development**: JSON files in `data/` (git-ignored)
-- **Categories**: Global universal + user-scoped custom
-- **Rooms**: Full room state including teams and game progress
-- **Users**: Session data for reconnection handling
+#### Development Environment
+- **Storage**: JSON files in `data/` directory (git-ignored)
+- **Categories**: 3 basic universal categories for testing
+- **Initialization**: `npm run init-data` creates default files
+- **Reset**: `npm run reset-data` clears and reinitializes
+
+#### Production Environment  
+- **Storage**: Redis key-value database (Railway-managed)
+- **Categories**: 70 universal categories pre-loaded
+- **Persistence**: All data persists across deployments
+- **Keys Structure**:
+  - `categories` - All category data (JSON string)
+  - `room:{roomId}` - Individual room state (JSON string)
+  - `user:{userId}` - User session data (JSON string)
+
+#### Data Scoping
+- **Global**: Universal categories, used category tracking
+- **Room-scoped**: Game state, teams, players, room settings
+- **User-scoped**: Custom categories, session data
+
+#### Storage Classes
+- `JsonFileStorage` - Development file-based storage
+- `RedisStorage` - Production Redis-based storage
+- Auto-selected based on `NODE_ENV` environment variable
 
 ### Game Configuration
 
@@ -110,8 +130,20 @@ const GAME_RULES = {
 
 ### Performance Notes
 
-- Room iteration doesn't scale (see TODOs in server.js)
-- In-memory storage - replace with Redis for production
-- Debounced saves prevent excessive file writes
+#### Current Limitations
+- Room iteration doesn't scale beyond ~100 concurrent rooms
+- In-memory room objects (consider Redis for room state too)
+- Debounced saves prevent excessive database writes (5 second delay)
+- Periodic saves every 30 seconds as backup
+
+#### Optimizations
 - Socket rooms used for efficient broadcasting
 - User data persists across reconnections (stored by user ID, not socket ID)
+- Redis connection pooling and error handling
+- Automatic cleanup of disconnected sessions
+
+#### Production Scaling Considerations
+- **Current**: Single Railway instance with Redis
+- **Next**: Multiple app instances sharing Redis state
+- **Future**: Separate Redis instances for different data types
+- **Monitoring**: Use Railway metrics and Redis monitoring

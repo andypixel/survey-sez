@@ -52,16 +52,97 @@ See [GAME_LIFECYCLE.md](GAME_LIFECYCLE.md) for detailed game rules.
 - **[GAME_LIFECYCLE.md](GAME_LIFECYCLE.md)** - Complete game rules and phases
 
 ## Tech Stack
-- **Backend**: Node.js, Express, Socket.IO, JSON file storage
-- **Frontend**: React, Socket.IO client, SCSS modules
+- **Backend**: Node.js 20.x, Express, Socket.IO
+- **Frontend**: React, Socket.IO client, SCSS modules  
+- **Database**: Redis (production), JSON files (development)
 - **Real-time**: WebSocket connections for instant multiplayer updates
-- **Deployment**: Heroku-ready with automatic frontend build
+- **Hosting**: Railway with automatic GitHub CI/CD
+- **Build**: Automatic React build and Node.js deployment
 
-## Deployment
+## Production Deployment
 
-```bash
-heroku create your-app-name
-git push heroku main
+### Current Production Setup
+- **Hosting**: Railway (railway.app)
+- **Database**: Redis (Railway-managed)
+- **CI/CD**: Automatic deployment from GitHub main branch
+- **Environment**: Node.js 20.x with npm 9.x
+
+### Initial Deployment Steps
+
+1. **Create Railway Project**:
+   - Go to [railway.app](https://railway.app) and sign up with GitHub
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select your survey-sez repository
+   - Wait for initial deployment
+
+2. **Add Redis Database**:
+   - In Railway project → "New" → "Database" → "Redis"
+   - Railway automatically provides `REDIS_URL` environment variable
+
+3. **Set Environment Variables**:
+   - Go to app service → Variables tab
+   - Add: `NODE_ENV=production`
+   - Verify `REDIS_URL` is automatically set
+
+4. **Generate Domain**:
+   - App service → Settings → Networking → "Generate Domain"
+   - Your app will be available at `your-app-name.railway.app`
+
+### Automatic CI/CD
+- **Trigger**: Any push to `main` branch
+- **Build Process**: 
+  1. Railway detects Node.js project
+  2. Runs `npm ci` to install dependencies
+  3. Runs `npm run build` (builds React frontend)
+  4. Starts with `npm start`
+- **Build Time**: ~2-3 minutes
+- **Zero Configuration**: Uses `railway.json` for deployment settings
+
+### Production Architecture
+```
+GitHub (main branch)
+    ↓ (automatic)
+Railway Build System
+    ↓
+Node.js App Server ←→ Redis Database
+    ↓
+Public Domain (railway.app)
 ```
 
-The app automatically builds the React frontend and serves it from the Node.js backend.
+### Data Storage
+- **Development**: JSON files in `data/` directory (git-ignored)
+- **Production**: Redis key-value store
+- **Categories**: 70 universal categories pre-loaded
+- **Persistence**: All game state, rooms, and user sessions stored in Redis
+
+### Monitoring & Debugging
+- **Logs**: Railway dashboard → Deployments → View Logs
+- **Admin Panel**: `your-app.railway.app/admin`
+- **Debug Endpoints**:
+  - `/debug/state` - Raw application state (JSON)
+  - `/debug/pretty` - Human-readable state (HTML)
+  - `/debug/redis-safe` - Database overview (no spoilers)
+  - `/debug/redis` - Full database contents (spoilers!)
+
+### Environment Differences
+| Feature | Development | Production |
+|---------|-------------|------------|
+| Storage | JSON files | Redis |
+| Categories | 3 basic | 70 universal |
+| CORS | localhost:3000 | Disabled |
+| Debug | All endpoints | Production only |
+| Build | Dev server | Static files |
+
+### Deployment Troubleshooting
+- **Build Fails**: Check Railway logs for npm/build errors
+- **App Won't Start**: Verify `NODE_ENV=production` is set
+- **Redis Errors**: Ensure Redis service is running and `REDIS_URL` is set
+- **404 Errors**: Check that React build completed successfully
+
+### Alternative Deployment (Heroku)
+For Heroku deployment (legacy support):
+```bash
+heroku create your-app-name
+heroku addons:create heroku-redis:mini
+git push heroku main
+```

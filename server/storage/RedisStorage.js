@@ -1,7 +1,20 @@
 const redis = require('redis');
 
+/**
+ * Production Redis storage adapter for Railway deployment
+ * 
+ * CONFIGURATION:
+ * - Connects via REDIS_URL environment variable (auto-provided by Railway)
+ * - Stores all data as JSON strings for simplicity
+ * - Handles connection management and error recovery
+ * 
+ * USAGE:
+ * - Automatically selected when NODE_ENV=production
+ * - Compatible with JsonFileStorage interface for seamless switching
+ */
 class RedisStorage {
   constructor() {
+    // Railway provides REDIS_URL automatically when Redis service is added
     this.client = redis.createClient({
       url: process.env.REDIS_URL || 'redis://localhost:6379'
     });

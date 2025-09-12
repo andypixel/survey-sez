@@ -3,6 +3,7 @@
 - FIRST
 
 - MVP
+    - Universal categories aren't working in prod after category sync
     - Default turn length 60 seconds instead of 30
     - No spoilers endpoint should also hide custom categories
     - Error logging for playtest post-mortem.

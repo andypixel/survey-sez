@@ -1,6 +1,16 @@
 /**
  * Real-time multiplayer game server using Socket.IO
  * Handles room management, user sessions, and game state persistence
+ * 
+ * PRODUCTION DEPLOYMENT:
+ * - Hosted on Railway (railway.app) with automatic CI/CD from GitHub
+ * - Uses Redis for data persistence (auto-configured via REDIS_URL)
+ * - Serves built React frontend in production (NODE_ENV=production)
+ * - Admin panel available at /admin for debugging and management
+ * 
+ * ENVIRONMENT DETECTION:
+ * - Development: Uses JSON file storage, minimal categories
+ * - Production: Uses Redis storage, 70 universal categories pre-loaded
  */
 
 const express = require('express');
@@ -24,7 +34,9 @@ const io = socketIo(server, {
   }
 });
 
-// Use Redis in production, JSON files in development
+// STORAGE LAYER: Auto-select based on environment
+// Production: Redis (Railway-managed) - persistent, scalable
+// Development: JSON files (git-ignored) - simple, local
 const storage = process.env.NODE_ENV === 'production' 
   ? new RedisStorage() 
   : new JsonFileStorage();
@@ -35,9 +47,12 @@ let categoriesData; // Global categories cache
 /**
  * Initialize application data from persistent storage
  * Restores rooms and categories from previous sessions
+ * 
+ * PRODUCTION: Loads 70 universal categories into Redis on first run
+ * DEVELOPMENT: Uses minimal test categories from JSON files
  */
 async function initializeData() {
-  // Initialize production data if needed
+  // Initialize production data if needed (70 universal categories)
   if (process.env.NODE_ENV === 'production') {
     const initProdData = require('./scripts/init-prod-data');
     await initProdData();
