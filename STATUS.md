@@ -3,12 +3,11 @@
 - FIRST
 
 - MVP
-    - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database (do this again just before "launch")
     - Provision database for production build
     - Hosting
     - Smoke test on mobile device
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
-    - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database
+    - Have Q copy universal categories to the database
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
@@ -52,4 +51,4 @@
 - 9/5 3hrs
 - 9/7 1hr
 - 9/8 3hrs
-- 9/11 5:15p-
+- 9/11 6:15p-

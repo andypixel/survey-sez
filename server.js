@@ -10,6 +10,7 @@ const path = require('path');
 const { GameRoom } = require('./server/GameRoom');
 const UserSession = require('./server/UserSession');
 const JsonFileStorage = require('./server/storage/JsonFileStorage');
+const RedisStorage = require('./server/storage/RedisStorage');
 const GameHandler = require('./server/handlers/GameHandler');
 const CategoryHandler = require('./server/handlers/CategoryHandler');
 const RoomHandler = require('./server/handlers/RoomHandler');
@@ -23,8 +24,10 @@ const io = socketIo(server, {
   }
 });
 
-// TODO: Replace in-memory storage with Redis for production scalability
-const storage = new JsonFileStorage();
+// Use Redis in production, JSON files in development
+const storage = process.env.NODE_ENV === 'production' 
+  ? new RedisStorage() 
+  : new JsonFileStorage();
 const rooms = {}; // In-memory room storage
 const userSessions = {}; // In-memory user session storage
 let categoriesData; // Global categories cache
@@ -34,6 +37,12 @@ let categoriesData; // Global categories cache
  * Restores rooms and categories from previous sessions
  */
 async function initializeData() {
+  // Initialize production data if needed
+  if (process.env.NODE_ENV === 'production') {
+    const initProdData = require('./scripts/init-prod-data');
+    await initProdData();
+  }
+  
   categoriesData = await storage.getCategories();
   
   // Restore rooms from persistent storage
