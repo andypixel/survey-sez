@@ -14,7 +14,7 @@
     "heroku-postbuild": "npm run build",
     "init-data": "node scripts/init-dev-data.js",
     "reset-data": "rm -rf data/*.json && npm run init-data",
-    "sync-to-redis": "NODE_ENV=production node scripts/sync-categories-to-redis.js"
+
   },
   "dependencies": {
     "express": "^4.18.2",

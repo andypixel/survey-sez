@@ -252,33 +252,22 @@ app.get('/debug/redis-safe', async (req, res) => {
   }
 });
 
-// One-time sync endpoint
+// Category sync endpoint (for future use)
 app.post('/admin/sync-categories', async (req, res) => {
   if (process.env.NODE_ENV !== 'production') {
     return res.json({ error: 'Sync only available in production' });
   }
   
   try {
-    // Load categories from the committed backup file
-    const fs = require('fs');
-    const path = require('path');
-    const backupPath = path.join(__dirname, 'scripts/categories-backup.json');
-    
-    if (fs.existsSync(backupPath)) {
-      const backupCategories = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
-      await storage.saveCategories(backupCategories);
-      console.log('Loaded categories from backup file');
-    } else {
-      const initProdData = require('./scripts/init-prod-data');
-      await initProdData();
-    }
+    const initProdData = require('./scripts/init-prod-data');
+    await initProdData();
     
     // Reload categories data
     categoriesData = await storage.getCategories();
     
     res.json({ 
       success: true, 
-      message: 'Categories synced successfully',
+      message: 'Categories reinitialized',
       universalCount: categoriesData.universal.length,
       usedCount: categoriesData.usedUniversalCategoryIds.length,
       availableCount: categoriesData.universal.length - categoriesData.usedUniversalCategoryIds.length
@@ -300,7 +289,7 @@ app.get('/admin', (req, res) => {
       <li><a href="/debug/redis">Redis Data - Full (Spoilers!)</a></li>
     </ul>
     <h2>Actions</h2>
-    <button onclick="syncCategories()">Sync Categories to Redis</button>
+    <button onclick="syncCategories()">Reinitialize Categories</button>
     <div id="result"></div>
     <script>
       async function syncCategories() {
