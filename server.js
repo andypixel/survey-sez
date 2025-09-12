@@ -196,7 +196,7 @@ app.get('/debug/pretty', (req, res) => {
   res.send(`<pre>${JSON.stringify(state, null, 2)}</pre>`);
 });
 
-// Redis data inspection endpoint
+// Redis data inspection endpoint (full data)
 app.get('/debug/redis', async (req, res) => {
   try {
     if (process.env.NODE_ENV !== 'production') {
@@ -208,9 +208,42 @@ app.get('/debug/redis', async (req, res) => {
     
     res.setHeader('Content-Type', 'text/html');
     res.send(`
-      <h2>Redis Data</h2>
+      <h2>Redis Data (Full)</h2>
       <h3>Categories</h3>
       <pre>${JSON.stringify(categories, null, 2)}</pre>
+      <h3>Rooms</h3>
+      <pre>${JSON.stringify(allRooms, null, 2)}</pre>
+    `);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Redis data inspection endpoint (no spoilers)
+app.get('/debug/redis-safe', async (req, res) => {
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      return res.json({ error: 'Redis debug only available in production' });
+    }
+    
+    const categories = await storage.getCategories();
+    const allRooms = await storage.getAllRooms();
+    
+    // Remove entries from categories to avoid spoilers
+    const safeCategoriesData = {
+      ...categories,
+      universal: categories.universal.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        entryCount: cat.entries.length
+      }))
+    };
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.send(`
+      <h2>Redis Data (Safe - No Spoilers)</h2>
+      <h3>Categories (entries hidden)</h3>
+      <pre>${JSON.stringify(safeCategoriesData, null, 2)}</pre>
       <h3>Rooms</h3>
       <pre>${JSON.stringify(allRooms, null, 2)}</pre>
     `);
@@ -227,10 +260,10 @@ app.get('/admin', (req, res) => {
     <ul>
       <li><a href="/debug/state">Raw State (JSON)</a></li>
       <li><a href="/debug/pretty">Pretty State (HTML)</a></li>
-      <li><a href="/debug/redis">Redis Data (Production only)</a></li>
+      <li><a href="/debug/redis-safe">Redis Data - Safe (No Spoilers)</a></li>
+      <li><a href="/debug/redis">Redis Data - Full (Spoilers!)</a></li>
     </ul>
   `);
-});
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
