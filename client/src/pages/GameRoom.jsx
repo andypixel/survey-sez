@@ -69,8 +69,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
                 className={styles.emergencyButton}
                 onClick={() => {
                   if (window.confirm('Emergency reset will end this game but keep used categories. Continue?')) {
-                    // Handle emergency reset - you'll need to add this to the parent component
-                    console.log('Emergency reset requested');
+                    onRestartGame();
                   }
                 }}
               >
