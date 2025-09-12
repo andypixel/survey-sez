@@ -3,11 +3,9 @@
 - FIRST
 
 - MVP
-    - Provision database for production build
-    - Hosting
-    - Smoke test on mobile device
+    - No spoilers endpoint should also hide custom categories
+    - Error logging for playtest post-mortem.
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
-    - Have Q copy universal categories to the database
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
