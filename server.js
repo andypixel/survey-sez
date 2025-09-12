@@ -133,7 +133,7 @@ function getOrCreateUserSession(socketId) {
   return userSessions[socketId];
 }
 
-// Debug endpoint - available in all environments
+// Debug endpoints - available in all environments
 app.get('/debug/state', (req, res) => {
   const state = {
     rooms: Object.keys(rooms).reduce((acc, roomId) => {
@@ -162,6 +162,74 @@ app.get('/debug/state', (req, res) => {
     totalConnections: Object.keys(userSessions).length
   };
   res.json(state);
+});
+
+// Pretty-printed debug endpoint
+app.get('/debug/pretty', (req, res) => {
+  const state = {
+    rooms: Object.keys(rooms).reduce((acc, roomId) => {
+      const room = rooms[roomId];
+      acc[roomId] = {
+        roomId: room.roomId,
+        gameState: room.gameState,
+        gameSettings: room.gameSettings,
+        teams: room.teams,
+        players: room.players,
+        playerCount: Object.keys(room.players).length,
+        teamCount: Object.keys(room.teams).length,
+        currentGame: room.currentGame ? room.currentGame.getState() : null
+      };
+      return acc;
+    }, {}),
+    userSessions: Object.keys(userSessions).reduce((acc, socketId) => {
+      const session = userSessions[socketId];
+      acc[socketId] = {
+        userId: session.userId,
+        currentRoom: session.currentRoom,
+        userData: session.userData
+      };
+      return acc;
+    }, {}),
+    totalConnections: Object.keys(userSessions).length
+  };
+  res.setHeader('Content-Type', 'text/html');
+  res.send(`<pre>${JSON.stringify(state, null, 2)}</pre>`);
+});
+
+// Redis data inspection endpoint
+app.get('/debug/redis', async (req, res) => {
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      return res.json({ error: 'Redis debug only available in production' });
+    }
+    
+    const categories = await storage.getCategories();
+    const allRooms = await storage.getAllRooms();
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.send(`
+      <h2>Redis Data</h2>
+      <h3>Categories</h3>
+      <pre>${JSON.stringify(categories, null, 2)}</pre>
+      <h3>Rooms</h3>
+      <pre>${JSON.stringify(allRooms, null, 2)}</pre>
+    `);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
+// Simple admin panel for debugging
+app.get('/admin', (req, res) => {
+  res.setHeader('Content-Type', 'text/html');
+  res.send(`
+    <h1>Survey-Sez Admin</h1>
+    <ul>
+      <li><a href="/debug/state">Raw State (JSON)</a></li>
+      <li><a href="/debug/pretty">Pretty State (HTML)</a></li>
+      <li><a href="/debug/redis">Redis Data (Production only)</a></li>
+    </ul>
+  `);
 });
 
 // Serve static files in production
