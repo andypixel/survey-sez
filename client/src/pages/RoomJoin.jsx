@@ -1,10 +1,11 @@
 import React from 'react';
 import styles from './RoomJoin.module.scss';
+import logo from '../assets/images/survey-sez.png';
 
 function RoomJoin({ roomId, onRoomJoin }) {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Survey Sez</h1>
+      <img src={logo} alt="Survey Sez" className={styles.logo} />
       <div>
         <h2 className={styles.subtitle}>Join a Room</h2>
         <form className={styles.form} onSubmit={onRoomJoin}>

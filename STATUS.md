@@ -3,13 +3,9 @@
 - FIRST
 
 - MVP
-    - Team view should only use unused categories for count under players' names
     - Do a few trial runs seeing what kind of categories/entries Q can come up with; after giving it a few rounds of feedback, have it generate ~50 categories and save to the database (do this again just before "launch")
     - Design refinements
         - Onboarding
-            - Start page
-                - Global template
-                - Game name
             - Join Room
                 - Replace radio button / "create new team" / input field with input field only
             - Game configuration

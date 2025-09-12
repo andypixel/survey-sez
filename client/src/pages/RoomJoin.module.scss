@@ -2,14 +2,20 @@
 
 .container {
   font-family: Arial, sans-serif;
-  padding: 20px;
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
-.title {
-  margin-bottom: 20px;
+.logo {
+  width: 300px;
+  height: auto;
+  margin-bottom: 40px;
 }
 
 .subtitle {
