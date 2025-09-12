@@ -40,7 +40,7 @@ async function initializeData() {
   const savedRooms = await storage.getAllRooms();
   Object.keys(savedRooms).forEach(roomId => {
     const roomData = savedRooms[roomId];
-    const room = new GameRoom(roomId, categoriesData);
+    const room = new GameRoom(roomId, categoriesData, storage);
     // TODO: Use proper room restoration method instead of direct property assignment
     room.teams = roomData.teams;
     room.gameState = roomData.gameState;
@@ -107,7 +107,7 @@ async function saveAllData() {
  */
 function getOrCreateRoom(roomId) {
   if (!rooms[roomId]) {
-    rooms[roomId] = new GameRoom(roomId, categoriesData);
+    rooms[roomId] = new GameRoom(roomId, categoriesData, storage);
   }
   return rooms[roomId];
 }

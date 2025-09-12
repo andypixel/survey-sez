@@ -17,8 +17,9 @@ class GameRoom {
    * @param {string} roomId - Unique room identifier
    * @param {Object} categoriesData - Global categories data
    */
-  constructor(roomId, categoriesData) {
+  constructor(roomId, categoriesData, storage) {
     this.roomId = roomId;
+    this.storage = storage;
     this.connectedSockets = {}; // socketId -> userId mapping
     this.players = {}; // userId -> player data (persistent)
     this.teams = {}; // teamName -> team data
@@ -31,6 +32,7 @@ class GameRoom {
       universal: categoriesData.universal,
       userCustom: {} // user-specific categories
     };
+    this.globalUsedUniversalIds = new Set(categoriesData.usedUniversalCategoryIds || []);
     
     // Load existing user custom categories for this room
     Object.keys(categoriesData.custom).forEach(key => {
@@ -280,6 +282,16 @@ class GameRoom {
     return this.connectedSockets[socketId] || null;
   }
 
+  async saveGlobalUsedUniversalCategories() {
+    try {
+      const categoriesData = await this.storage.getCategories();
+      categoriesData.usedUniversalCategoryIds = Array.from(this.globalUsedUniversalIds);
+      await this.storage.saveCategories(categoriesData);
+    } catch (error) {
+      console.error('Failed to save global used universal categories:', error);
+    }
+  }
+
   getState() {
     // Convert players to socket-based format for client compatibility
     const playersForClient = {};
@@ -380,8 +392,10 @@ class GameplayManager {
       const randomIndex = Math.floor(Math.random() * unusedUserCategories.length);
       selectedCategory = unusedUserCategories[randomIndex];
     } else {
-      // Fall back to unused universal categories
-      const unusedUniversal = this.room.categories.universal.filter(cat => !this.usedCategoryIds.has(cat.id));
+      // Fall back to unused universal categories (check both local and global usage)
+      const unusedUniversal = this.room.categories.universal.filter(cat => 
+        !this.usedCategoryIds.has(cat.id) && !this.room.globalUsedUniversalIds.has(cat.id)
+      );
       if (unusedUniversal.length > 0) {
         const randomIndex = Math.floor(Math.random() * unusedUniversal.length);
         selectedCategory = unusedUniversal[randomIndex];
@@ -396,6 +410,14 @@ class GameplayManager {
       this.currentCategory = this.selectedCategory;
       console.log('Adding category to used list:', this.selectedCategory.id);
       this.usedCategoryIds.add(this.selectedCategory.id);
+      
+      // Mark universal category as globally used when announcer sees entries
+      const isUniversal = this.room.categories.universal.some(cat => cat.id === this.selectedCategory.id);
+      if (isUniversal) {
+        this.room.globalUsedUniversalIds.add(this.selectedCategory.id);
+        this.room.saveGlobalUsedUniversalCategories();
+      }
+      
       console.log('Current used categories in game:', Array.from(this.usedCategoryIds));
       this.responses = [];
       this.turnPhase = GAME_RULES.TURN_PHASES.ACTIVE_GUESSING;
