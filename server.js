@@ -264,6 +264,7 @@ app.get('/admin', (req, res) => {
       <li><a href="/debug/redis">Redis Data - Full (Spoilers!)</a></li>
     </ul>
   `);
+});
 
 // Serve static files in production
 if (process.env.NODE_ENV === 'production') {
