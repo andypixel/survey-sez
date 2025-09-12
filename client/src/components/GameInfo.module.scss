@@ -26,3 +26,59 @@
   font-size: 1.2rem;
   color: var(--color-text-muted);
 }
+
+.categorySelection {
+  margin-top: 20px;
+  padding: 15px;
+  border-top: 1px solid var(--color-border-primary);
+}
+
+.categoryPreview {
+  margin-bottom: 15px;
+}
+
+.categoryLabel {
+  font-weight: bold;
+  margin-right: 10px;
+  color: var(--color-text-secondary);
+}
+
+.categoryName {
+  font-size: 1.1rem;
+  color: var(--color-brand-primary);
+  font-weight: bold;
+}
+
+.announcerButtons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.beginButton {
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  
+  &:hover {
+    background: var(--color-brand-primary-hover);
+  }
+}
+
+.skipCategoryButton {
+  background: var(--color-text-disabled);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  
+  &:hover {
+    background: var(--color-border-secondary);
+  }
+}

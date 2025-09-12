@@ -141,6 +141,7 @@ function App() {
           onAddCategory={(e) => workflows.gameplay.handleAddCategory(e)}
           onStartGame={(e) => workflows.gameplay.handleStartGame(e)}
           onRestartGame={() => workflows.gameplay.handleRestartGame()}
+          onSkipAnnouncer={() => workflows.gameplay.handleSkipAnnouncer()}
           categoryError={categoryError}
         />
       )}

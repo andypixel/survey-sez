@@ -8,7 +8,7 @@ import GameHeader from '../components/GameHeader.jsx';
 import GameInfo from '../components/GameInfo.jsx';
 import styles from './GameRoom.module.scss';
 
-function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame }) {
+function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame, onSkipAnnouncer }) {
   // Show game over view if game is complete
   if (gameState.gameState === 'GAME_OVER') {
     return (
@@ -63,8 +63,16 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
           <div className={styles.sidebarSection}>
             <RoomSummary gameState={gameState} myUserId={myUserId} />
             
-            {/* Emergency Reset button - available to all players during gameplay */}
+            {/* Skip Announcer and Emergency Reset buttons */}
             <div className={styles.emergencySection}>
+              {!gameState.currentGame.currentCategory && (
+                <button 
+                  className={styles.skipButton}
+                  onClick={onSkipAnnouncer}
+                >
+                  Skip This Announcer
+                </button>
+              )}
               <button 
                 className={styles.emergencyButton}
                 onClick={() => {

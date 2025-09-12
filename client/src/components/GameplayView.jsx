@@ -46,46 +46,9 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
       
 
       
-      {/* Category Selection (Announcer only, before turn starts) */}
-      {isAnnouncer && !currentGame.currentCategory && (
-        <div className={styles.categorySelection}>
-          <div className={styles.categoryPreview}>
-            <span className={styles.categoryLabel}>Category:</span>
-            <span className={styles.categoryName}>{currentGame.selectedCategory?.name || 'Loading...'}</span>
-          </div>
-          <div className={styles.announcerButtons}>
-            <button 
-              className={styles.beginButton}
-              onClick={() => gameplay.handleBeginTurn()}
-              disabled={!currentGame.selectedCategory}
-            >
-              Start Guessing
-            </button>
-            {/* Skip button - only for universal categories, max 2 per turn */}
-            {currentGame.canSkipCategory && (
-              <button 
-                className={styles.skipCategoryButton}
-                onClick={() => gameplay.handleSkipCategory()}
-                disabled={!currentGame.selectedCategory}
-              >
-                Skip ({2 - currentGame.skipsUsed} left)
-              </button>
-            )}
-          </div>
-        </div>
-      )}
+
       
-      {/* Skip Announcer button - available to all players during category selection */}
-      {!currentGame.currentCategory && (
-        <div className={styles.skipSection}>
-          <button 
-            className={styles.skipButton}
-            onClick={() => gameplay.handleSkipAnnouncer()}
-          >
-            Skip This Announcer
-          </button>
-        </div>
-      )}
+
       
       {/* Active Game Content */}
       {currentGame.currentCategory && (
