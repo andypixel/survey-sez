@@ -259,8 +259,19 @@ app.post('/admin/sync-categories', async (req, res) => {
   }
   
   try {
-    const initProdData = require('./scripts/init-prod-data');
-    await initProdData();
+    // Load categories from the committed backup file
+    const fs = require('fs');
+    const path = require('path');
+    const backupPath = path.join(__dirname, 'scripts/categories-backup.json');
+    
+    if (fs.existsSync(backupPath)) {
+      const backupCategories = JSON.parse(fs.readFileSync(backupPath, 'utf8'));
+      await storage.saveCategories(backupCategories);
+      console.log('Loaded categories from backup file');
+    } else {
+      const initProdData = require('./scripts/init-prod-data');
+      await initProdData();
+    }
     
     // Reload categories data
     categoriesData = await storage.getCategories();
@@ -269,7 +280,8 @@ app.post('/admin/sync-categories', async (req, res) => {
       success: true, 
       message: 'Categories synced successfully',
       universalCount: categoriesData.universal.length,
-      usedCount: categoriesData.usedUniversalCategoryIds.length
+      usedCount: categoriesData.usedUniversalCategoryIds.length,
+      availableCount: categoriesData.universal.length - categoriesData.usedUniversalCategoryIds.length
     });
   } catch (error) {
     res.json({ error: error.message });
