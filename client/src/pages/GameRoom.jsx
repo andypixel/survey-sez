@@ -124,14 +124,14 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
       
       {/* Game Configuration (Collapsible) */}
       <details className={styles.gameConfig}>
-        <summary className={styles.gameConfigSummary}>⚙️ Game Settings</summary>
+        <summary className={styles.gameConfigSummary}>Game Settings</summary>
         <div className={styles.gameConfigContent}>
           <div className={styles.inputGroup}>
             <label>Turn Timer (seconds):</label>
             <input 
               name="timeLimit"
               type="number" 
-              defaultValue={30}
+              defaultValue={60}
               min={10}
               max={120}
               form="startGameForm"

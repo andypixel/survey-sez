@@ -1,4 +1,5 @@
 @import '../styles/colors.scss';
+@import '../styles/mixins.scss';
 
 .container {
   padding: 0;
@@ -216,31 +217,12 @@
 }
 
 .skipCategoryButton {
-  background: var(--color-text-disabled);
-  color: var(--color-text-primary);
-  border: none;
+  @include cta;
   padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
-  
-  &:hover {
-    background: var(--color-border-secondary);
-  }
 }
 
-.skipButton {
-  background: var(--color-text-disabled);
-  color: var(--color-text-primary);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-  
-  &:hover {
-    background: var(--color-border-secondary);
-  }
-}
+
 
 .timerSection {
   display: flex;
@@ -251,16 +233,23 @@
 }
 
 .pauseButton {
-  background: var(--color-text-disabled);
-  color: var(--color-text-primary);
-  border: none;
+  @include cta;
   padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
-  
-  &:hover {
-    background: var(--color-border-secondary);
-  }
+}
+
+.endButton {
+  @include cta;
+  padding: 10px 20px;
+}
+
+.revealButton {
+  @include ctaPrimary;
+  padding: 10px 20px;
+}
+
+.continueButton {
+  @include ctaPrimary;
+  padding: 10px 20px;
 }
 

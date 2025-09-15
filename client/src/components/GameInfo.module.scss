@@ -1,4 +1,5 @@
 @import '../styles/colors.scss';
+@import '../styles/mixins.scss';
 
 .gameInfo {
   text-align: center;
@@ -70,15 +71,7 @@
 }
 
 .skipCategoryButton {
-  background: var(--color-text-disabled);
-  color: var(--color-text-primary);
-  border: none;
+  @include cta;
   padding: 10px 15px;
-  border-radius: 4px;
-  cursor: pointer;
   font-size: 14px;
-  
-  &:hover {
-    background: var(--color-border-secondary);
-  }
 }

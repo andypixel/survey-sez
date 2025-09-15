@@ -1,0 +1,25 @@
+@import './colors.scss';
+
+@mixin cta {
+  background: var(--color-text-disabled);
+  color: var(--color-text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  
+  &:hover {
+    background: var(--color-border-secondary);
+  }
+}
+
+@mixin ctaPrimary {
+  @include cta;
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
+  
+  &:hover {
+    background: var(--color-brand-primary-hover);
+  }
+}
