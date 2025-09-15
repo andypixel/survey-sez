@@ -4,10 +4,7 @@
 
 - MVP
     - Universal categories aren't working in prod after category sync
-    - Default turn length 60 seconds instead of 30
-    - No spoilers endpoint should also hide custom categories
     - Error logging for playtest post-mortem.
-    - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
 
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
@@ -15,8 +12,12 @@
         - If all custom categories used and no universal categories available, game should detect this and either end early or...?
 
 - Backlog
+    - Default turn length 60 seconds instead of 30
+    - No spoilers endpoint should also hide custom categories
+    - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Game restart
         - ALL custom categories can be reused if the user joins a different room
+        - Allow users to delete unused custom categories
     - Design refinements
         - Make the color scheme less monochromatic
     - Accessibility refinements
@@ -51,4 +52,5 @@
 - 9/5 3hrs
 - 9/7 1hr
 - 9/8 3hrs
-- 9/11 6:15p-
+- 9/11 6hrs
+- 9/14 6:45-
