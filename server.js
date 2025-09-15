@@ -24,6 +24,7 @@ const RedisStorage = require('./server/storage/RedisStorage');
 const GameHandler = require('./server/handlers/GameHandler');
 const CategoryHandler = require('./server/handlers/CategoryHandler');
 const RoomHandler = require('./server/handlers/RoomHandler');
+const Logger = require('./server/utils/Logger');
 
 const app = express();
 const server = http.createServer(app);
@@ -120,6 +121,10 @@ async function saveAllData() {
     
     await Promise.all([...roomPromises, ...userPromises]);
   } catch (error) {
+    Logger.error('DATA_SAVE_FAILED', error, { 
+      roomCount: Object.keys(rooms).length,
+      userCount: Object.keys(userSessions).length 
+    });
     console.error('Error saving data:', error);
   }
 }
@@ -313,6 +318,13 @@ app.get('/admin', (req, res) => {
     </ul>
     <h2>Actions</h2>
     <button onclick="syncCategories()">Reinitialize Categories</button>
+    <h2>Playtest Info</h2>
+    <ul>
+      <li>Active Rooms: ${Object.keys(rooms).length}</li>
+      <li>Connected Users: ${Object.keys(userSessions).length}</li>
+      <li>Server Uptime: ${Math.floor(process.uptime())} seconds</li>
+      <li>Logs: <a href="https://railway.app" target="_blank">Railway Dashboard</a></li>
+    </ul>
     <div id="result"></div>
     <script>
       async function syncCategories() {
@@ -358,6 +370,7 @@ if (process.env.NODE_ENV === 'production') {
  */
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
+  Logger.userEvent('CONNECTED', socket.id, null, { socketId: socket.id });
   const userSession = getOrCreateUserSession(socket.id);
   
   // Register all event handlers
@@ -369,6 +382,7 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
     const roomId = userSession.currentRoom;
+    Logger.userEvent('DISCONNECTED', socket.id, roomId, { socketId: socket.id });
     if (roomId) {
       const room = getOrCreateRoom(roomId);
       room.removePlayer(socket.id);
@@ -396,6 +410,7 @@ initializeData().then(() => {
     console.log(`Server running on port ${PORT}`);
   });
 }).catch(error => {
+  Logger.error('SERVER_INIT_FAILED', error);
   console.error('Failed to initialize data:', error);
   process.exit(1);
 });

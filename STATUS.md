@@ -2,10 +2,6 @@
 
 - FIRST
 
-- MVP
-    - Universal categories aren't working in prod after category sync
-    - Error logging for playtest post-mortem.
-
 - Bugs
     - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
     - No Available Categories
@@ -13,7 +9,6 @@
 
 - Backlog
     - Default turn length 60 seconds instead of 30
-
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Game restart
         - ALL custom categories can be reused if the user joins a different room

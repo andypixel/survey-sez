@@ -1,4 +1,5 @@
 const GAME_RULES = require('../config/GameRules');
+const Logger = require('../utils/Logger');
 
 /**
  * Handles all game-related socket events
@@ -112,9 +113,16 @@ class GameHandler {
         io.to(roomId).emit('gameState', room.getState());
         debouncedSave();
         console.log(`Game started in room ${roomId}`);
+        Logger.gameEvent('STARTED', roomId, {
+          timeLimit: room.gameSettings.timeLimit,
+          rounds: room.gameSettings.turnsPerTeam,
+          teamCount: Object.keys(room.teams).length,
+          playerCount: Object.keys(room.players).length
+        });
       } else {
         const error = 'Failed to start game';
         console.error('[GameHandler] Start game failed:', error);
+        Logger.warn('GAME_START_FAILED', { roomId, reason: 'startGame returned false' });
         socket.emit('gameError', { message: error });
       }
     } else {
@@ -135,6 +143,11 @@ class GameHandler {
         const announcerSocketId = room.currentGame.getCurrentAnnouncerSocket();
         if (announcerSocketId === socket.id) {
           if (room.currentGame.beginTurn()) {
+            Logger.gameEvent('TURN_STARTED', roomId, {
+              turn: room.currentGame.currentTurn,
+              announcer: room.currentGame.getCurrentAnnouncer(),
+              category: room.currentGame.currentCategory?.name
+            });
             io.to(roomId).emit('gameState', room.getState());
             debouncedSave();
           }
