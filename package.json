@@ -13,8 +13,7 @@
     "build": "cd client && npm install && npm run build",
     "heroku-postbuild": "npm run build",
     "init-data": "node scripts/init-dev-data.js",
-    "reset-data": "rm -rf data/*.json && npm run init-data",
-
+    "reset-data": "rm -rf data/*.json && npm run init-data"
   },
   "dependencies": {
     "express": "^4.18.2",
