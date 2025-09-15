@@ -13,7 +13,7 @@
 
 - Backlog
     - Default turn length 60 seconds instead of 30
-    - No spoilers endpoint should also hide custom categories
+
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Game restart
         - ALL custom categories can be reused if the user joins a different room

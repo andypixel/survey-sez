@@ -251,7 +251,15 @@ app.get('/debug/redis-safe', async (req, res) => {
         id: cat.id,
         name: cat.name,
         entryCount: cat.entries.length
-      }))
+      })),
+      custom: Object.keys(categories.custom).reduce((acc, userKey) => {
+        acc[userKey] = categories.custom[userKey].map(cat => ({
+          id: cat.id,
+          name: cat.name,
+          entryCount: cat.entries.length
+        }));
+        return acc;
+      }, {})
     };
     
     res.setHeader('Content-Type', 'text/html');
