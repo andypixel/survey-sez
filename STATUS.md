@@ -8,11 +8,12 @@
         - If all custom categories used and no universal categories available, game should detect this and either end early or...?
 
 - Playtest notes
-    - auto-scroll to top of page when switching game state
+    - mobile view should show everything without scrolling (or, auto-scroll to top of page when switching game state)
     - Sound/haptics when timer is running down
     - Remove "guess" form from Spectator view
     - Option to have AI make up the entries in your category for you
     - "Start Guessing" as a CTA doesn't make sense from the point of view of the Announcer
+
 - Backlog
     - Default turn length 60 seconds instead of 30
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
@@ -54,4 +55,4 @@
 - 9/7 1hr
 - 9/8 3hrs
 - 9/11 6hrs
-- 9/14 6:45-
+- 9/14 2hrs
