@@ -13,7 +13,6 @@
 - Playtest notes
     - mobile view should show everything without scrolling (or, auto-scroll to top of page when switching game state)
     - Sound/haptics when timer is running down
-    - Remove "guess" form from Spectator view
     - Option to have AI make up the entries in your category for you
 
 - Backlog
@@ -57,4 +56,4 @@
 - 9/8 3hrs
 - 9/11 6hrs
 - 9/14 2hrs
-- 9/20 10:30-
+- 9/20 2hrs

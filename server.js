@@ -25,6 +25,7 @@ const GameHandler = require('./server/handlers/GameHandler');
 const CategoryHandler = require('./server/handlers/CategoryHandler');
 const RoomHandler = require('./server/handlers/RoomHandler');
 const Logger = require('./server/utils/Logger');
+const GAME_RULES = require('./server/config/GameRules');
 
 const app = express();
 const server = http.createServer(app);
@@ -152,6 +153,11 @@ function getOrCreateUserSession(socketId) {
   }
   return userSessions[socketId];
 }
+
+// API endpoint to serve game rules configuration
+app.get('/api/game-rules', (req, res) => {
+  res.json(GAME_RULES);
+});
 
 // Debug endpoints - available in all environments
 app.get('/debug/state', (req, res) => {

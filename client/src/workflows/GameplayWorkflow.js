@@ -1,4 +1,5 @@
 import ErrorHandler from '../utils/ErrorHandler';
+import { getCachedGameRules } from '../utils/gameRules';
 
 /**
  * Handles all gameplay-related actions and state management
@@ -92,8 +93,9 @@ class GameplayWorkflow {
   handleStartGame(e) {
     console.log('handleStartGame called');
     e.preventDefault();
-    const timeLimit = parseInt(e.target.timeLimit?.value) || 30;
-    const rounds = parseInt(e.target.rounds?.value) || 10;
+    const gameRules = getCachedGameRules();
+    const timeLimit = parseInt(e.target.timeLimit?.value) || gameRules?.DEFAULT_TIME_LIMIT || 60;
+    const rounds = parseInt(e.target.rounds?.value) || gameRules?.DEFAULT_ROUNDS || 10;
     
     console.log('Emitting startGame with:', { timeLimit, rounds });
     this.socket.emit('startGame', {

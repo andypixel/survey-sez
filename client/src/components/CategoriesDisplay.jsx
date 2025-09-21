@@ -1,18 +1,25 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './CategoriesDisplay.module.scss';
 import NumberedTextarea from './NumberedTextarea';
+import { getGameRules } from '../utils/gameRules';
 
 const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError, usedCategoryIds = [] }) {
-  const defaultEntries = React.useMemo(() => {
-    // Only auto-populate entries in debug mode
-    if (process.env.REACT_APP_DEBUG_MODE === 'true') {
-      return Array.from({length: 10}, () => Math.floor(1000 + Math.random() * 9000)).join('\n');
-    }
-    return '';
-  }, []);
-  
+  const [gameRules, setGameRules] = useState(null);
   const [categoryName, setCategoryName] = useState('');
   const textareaRef = useRef(null);
+  
+  useEffect(() => {
+    getGameRules().then(setGameRules);
+  }, []);
+  
+  const defaultEntries = React.useMemo(() => {
+    if (!gameRules) return '';
+    // Only auto-populate entries in debug mode
+    if (process.env.REACT_APP_DEBUG_MODE === 'true') {
+      return Array.from({length: gameRules.VALIDATION.MAX_CATEGORY_ENTRIES}, () => Math.floor(1000 + Math.random() * 9000)).join('\n');
+    }
+    return '';
+  }, [gameRules]);
   
   const handleSubmit = (e) => {
     onAddCategory(e);
@@ -45,7 +52,7 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
             <NumberedTextarea
               ref={textareaRef}
               name="categoryEntries"
-              placeholder="One entry per line (max 10)"
+              placeholder={`One entry per line (max ${gameRules?.VALIDATION.MAX_CATEGORY_ENTRIES || 10})`}
               rows={10}
               defaultValue={defaultEntries}
             />

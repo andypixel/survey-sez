@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from './CategoryItems.module.scss';
+import { getCachedGameRules } from '../utils/gameRules';
 
 function CategoryItems({ category, responses, markedEntries, onEntryToggle, showCheckboxes = false, turnPhase = null, isAnnouncer = false }) {
+  const gameRules = getCachedGameRules();
+  
   return (
     <div className={styles.categoryDetails}>
       <div className={styles.entriesGrid}>
@@ -11,12 +14,18 @@ function CategoryItems({ category, responses, markedEntries, onEntryToggle, show
           );
           const isManuallyMarked = markedEntries.has(entry);
           const isGuessed = isAutoGuessed || isManuallyMarked;
-          const isTurnSummary = turnPhase === 'TURN_SUMMARY';
+          const isTurnSummary = turnPhase === gameRules?.TURN_PHASES?.TURN_SUMMARY;
           const showIncorrect = isTurnSummary && !isGuessed;
           const showPill = isAnnouncer || isTurnSummary;
           
+          const entryClasses = [
+            styles.entryItem,
+            isGuessed && styles.guessedEntry,
+            (isTurnSummary || !isAnnouncer) && styles.readOnly
+          ].filter(Boolean).join(' ');
+          
           return (
-            <div key={entry} className={`${styles.entryItem} ${isGuessed ? styles.guessedEntry : ''} ${isTurnSummary || !isAnnouncer ? styles.readOnly : ''}`}>
+            <div key={entry} className={entryClasses}>
               {showPill && (
                 <label className={styles.entryLabel}>
                   {showCheckboxes && (

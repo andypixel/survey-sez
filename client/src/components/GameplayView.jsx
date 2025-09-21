@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './GameplayView.module.scss';
 import { useWorkflows } from '../contexts/WorkflowContext';
 import TeamGuesses from './TeamGuesses';
 import CategoryItems from './CategoryItems';
-
+import { getCachedGameRules } from '../utils/gameRules';
 import Timer from './Timer';
 
 function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }) {
   const { gameplay } = useWorkflows();
   const currentGame = gameState.currentGame;
   const [guessInput, setGuessInput] = useState('');
+  const gameRules = getCachedGameRules();
 
 
   const handleGuessSubmit = (e) => {
@@ -56,7 +57,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           <h3>Category: {currentGame.currentCategory.name}</h3>
           
           {/* Category Items - Announcer always sees, others only in TURN_SUMMARY */}
-          {(isAnnouncer || currentGame.turnPhase === 'TURN_SUMMARY') && (
+          {(isAnnouncer || currentGame.turnPhase === gameRules?.TURN_PHASES?.TURN_SUMMARY) && (
             <CategoryItems 
               category={currentGame.currentCategory}
               responses={currentGame.responses}
@@ -69,7 +70,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           )}
           
           {/* Timer - only during ACTIVE_GUESSING */}
-          {currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+          {currentGame.turnPhase === gameRules?.TURN_PHASES?.ACTIVE_GUESSING && (
             <div className={styles.timerSection}>
               <Timer 
                 timerState={currentGame.timerState}
@@ -85,7 +86,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           )}
           
           {/* Guess Form - only for non-announcer guessing team members during ACTIVE_GUESSING */}
-          {canGuess && currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+          {canGuess && currentGame.turnPhase === gameRules?.TURN_PHASES?.ACTIVE_GUESSING && (
             <form className={styles.guessForm} onSubmit={handleGuessSubmit}>
               <input 
                 type="text" 
@@ -109,7 +110,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           />
           
           {/* Announcer Controls */}
-          {isAnnouncer && currentGame.turnPhase === 'ACTIVE_GUESSING' && (
+          {isAnnouncer && currentGame.turnPhase === gameRules?.TURN_PHASES?.ACTIVE_GUESSING && (
             <button 
               className={styles.endButton}
               onClick={() => gameplay.handleEndGuessing()}
@@ -119,7 +120,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </button>
           )}
           
-          {currentGame.turnPhase === 'RESULTS' && (isAnnouncer || currentGame.canAllPlayersReveal) && (
+          {currentGame.turnPhase === gameRules?.TURN_PHASES?.RESULTS && (isAnnouncer || currentGame.canAllPlayersReveal) && (
             <>
               {isAnnouncer && (
                 <p className={styles.announcerInstructions}>
@@ -136,7 +137,7 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
             </>
           )}
           
-          {currentGame.turnPhase === 'TURN_SUMMARY' && (
+          {currentGame.turnPhase === gameRules?.TURN_PHASES?.TURN_SUMMARY && (
             <button 
               className={styles.continueButton}
               onClick={() => gameplay.handleContinueTurn()}

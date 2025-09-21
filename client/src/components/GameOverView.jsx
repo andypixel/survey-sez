@@ -7,8 +7,8 @@ function GameOverView({ gameState, onRestart }) {
   // Determine winner
   const teamScores = Object.entries(finalGameData?.teamScores || {});
   const sortedTeams = teamScores.sort(([,a], [,b]) => b - a);
-  const [winnerTeam, winnerScore] = sortedTeams[0];
-  const [runnerUpTeam, runnerUpScore] = sortedTeams[1] || ['', 0];
+  const [, winnerScore] = sortedTeams[0];
+  const [, runnerUpScore] = sortedTeams[1] || ['', 0];
   const isTie = winnerScore === runnerUpScore;
 
   return (

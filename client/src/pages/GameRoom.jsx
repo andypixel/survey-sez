@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TeamsDisplay from '../components/TeamsDisplay.jsx';
 import CategoriesDisplay from '../components/CategoriesDisplay.jsx';
 import GameplayView from '../components/GameplayView.jsx';
@@ -6,9 +6,15 @@ import GameOverView from '../components/GameOverView.jsx';
 import RoomSummary from '../components/RoomSummary.jsx';
 import GameHeader from '../components/GameHeader.jsx';
 import GameInfo from '../components/GameInfo.jsx';
+import { getGameRules } from '../utils/gameRules';
 import styles from './GameRoom.module.scss';
 
 function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame, onSkipAnnouncer, onToggleReady }) {
+  const [gameRules, setGameRules] = useState(null);
+  
+  useEffect(() => {
+    getGameRules().then(setGameRules);
+  }, []);
   const renderStartGameSection = () => {
     const myPlayer = gameState.players[myId];
     const isReady = myPlayer?.isReady;
@@ -52,7 +58,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
     );
   };
   // Show game over view if game is complete
-  if (gameState.gameState === 'GAME_OVER') {
+  if (gameState.gameState === gameRules?.PHASES.GAME_OVER) {
     return (
       <div className={styles.container}>
         <GameOverView 
@@ -64,7 +70,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
   }
   
   // Show gameplay view if game is in progress
-  if (gameState.gameState === 'GAMEPLAY' && gameState.currentGame) {
+  if (gameState.gameState === gameRules?.PHASES.GAMEPLAY && gameState.currentGame) {
     console.log('GameRoom - Game in progress:', gameState.gameState, gameState.currentGame);
     const myPlayer = gameState.players[myId];
     const myTeam = myPlayer?.team;
@@ -142,7 +148,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
       
       {/* Tagline */}
       <p className={styles.tagline}>
-        Create categories with 10 answers each. Other players will try to guess them!
+        Create categories with {gameRules?.VALIDATION.MAX_CATEGORY_ENTRIES || 10} answers each. Other players will try to guess them!
       </p>
       
       {/* Teams Section */}
@@ -166,7 +172,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
             <input 
               name="timeLimit"
               type="number" 
-              defaultValue={60}
+              defaultValue={gameRules?.DEFAULT_TIME_LIMIT || 60}
               min={10}
               max={120}
               form="startGameForm"
@@ -177,7 +183,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
             <input 
               name="rounds"
               type="number" 
-              defaultValue={10}
+              defaultValue={gameRules?.DEFAULT_ROUNDS || 10}
               min={1}
               max={50}
               form="startGameForm"
