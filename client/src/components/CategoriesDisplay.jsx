@@ -54,31 +54,33 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
         </div>
         
         {/* Your Category List (Right Side) */}
-        <div className={styles.categoryList}>
-          <p className={styles.availabilityCount}>
-            {availableCount} of {myCategories.length} available
-          </p>
-          <div className={styles.categoriesGrid}>
-            {myCategories.map(category => {
-              const isUsed = usedCategoryIds.includes(category.id);
-              return (
-                <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
-                  <div className={styles.categoryHeader}>
-                    <span className={styles.categoryName}>{category.name}</span>
-                    <span className={`${styles.statusBadge} ${isUsed ? styles.usedBadge : styles.availableBadge}`}>
-                      {isUsed ? '✓ Used' : 'Available'}
-                    </span>
+        {myCategories.length > 0 && (
+          <div className={styles.categoryList}>
+            <p className={styles.availabilityCount}>
+              {availableCount} of {myCategories.length} available
+            </p>
+            <div className={styles.categoriesGrid}>
+              {myCategories.map(category => {
+                const isUsed = usedCategoryIds.includes(category.id);
+                return (
+                  <div key={category.id} className={`${styles.categoryCard} ${isUsed ? styles.used : ''}`}>
+                    <div className={styles.categoryHeader}>
+                      <span className={styles.categoryName}>{category.name}</span>
+                      <span className={`${styles.statusBadge} ${isUsed ? styles.usedBadge : styles.availableBadge}`}>
+                        {isUsed ? '✓ Used' : 'Available'}
+                      </span>
+                    </div>
+                    <div className={styles.categoryEntries}>
+                      {category.entries?.map((entry, index) => (
+                        <div key={index} className={styles.entry}>{entry}</div>
+                      ))}
+                    </div>
                   </div>
-                  <div className={styles.categoryEntries}>
-                    {category.entries?.map((entry, index) => (
-                      <div key={index} className={styles.entry}>{entry}</div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
