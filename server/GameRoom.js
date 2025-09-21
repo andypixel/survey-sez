@@ -61,7 +61,8 @@ class GameRoom {
       userId: userId,
       name: playerData.name,
       team: playerData.team,
-      lastSocketId: socketId // Track current connection
+      lastSocketId: socketId, // Track current connection
+      isReady: false // Initialize ready state
     };
     
     // Create team if it doesn't exist
@@ -303,7 +304,8 @@ class GameRoom {
           id: socketId,
           userId: userId,
           name: player.name,
-          team: player.team
+          team: player.team,
+          isReady: player.isReady
         };
       }
     });

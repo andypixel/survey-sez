@@ -1,7 +1,6 @@
 # To do
 
 - FIRST
-    - Line numbers for entries textarea
     - Join Room
         - Enter your name before other fields are visible
         - If two teams are already created, CTAs are "Join [team 1]" and "Join [team 2]"
@@ -31,7 +30,7 @@
         - Onboarding
             - Used categories should be collapsed by default and shown below unused categories
             - Player/team order can be shuffled/reordered
-        - Entries textarea should add numbers for each line and prevent more than 10 lines
+
         - If the next Announcer is offline when starting a turn, automatically skip to next player on the team
         - Icons for revealed entries after guessing
             - Not guessed: X
@@ -59,3 +58,4 @@
 - 9/8 3hrs
 - 9/11 6hrs
 - 9/14 2hrs
+- 9/20 10:30-

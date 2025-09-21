@@ -41,6 +41,42 @@
   background: var(--color-brand-primary-hover);
 }
 
+.readyButton {
+  background: var(--color-brand-primary);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.readyButton:hover {
+  background: var(--color-brand-primary-hover);
+}
+
+.startGameButtonWarning {
+  background: var(--color-accent-error);
+  color: var(--color-bg-primary);
+  border: none;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 400px;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.startGameButtonWarning:hover {
+  background: var(--color-accent-error-hover);
+}
+
 .startGameTooltip {
   margin-top: 8px;
   font-size: 0.9rem;
@@ -178,7 +214,7 @@
   font-size: 0.9rem;
   
   &:hover {
-    background: #e55a5a;
+    background: var(--color-accent-error-hover);
   }
 }
 

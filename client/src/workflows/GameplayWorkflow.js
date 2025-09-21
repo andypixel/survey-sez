@@ -173,6 +173,13 @@ class GameplayWorkflow {
   handleToggleEntry(entry) {
     this.socket.emit('toggleEntry', { entry });
   }
+
+  /**
+   * Toggle player ready state for category creation phase
+   */
+  handleToggleReady() {
+    this.socket.emit('toggleReady');
+  }
 }
 
 export default GameplayWorkflow;

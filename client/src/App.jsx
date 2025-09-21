@@ -142,6 +142,7 @@ function App() {
           onStartGame={(e) => workflows.gameplay.handleStartGame(e)}
           onRestartGame={() => workflows.gameplay.handleRestartGame()}
           onSkipAnnouncer={() => workflows.gameplay.handleSkipAnnouncer()}
+          onToggleReady={() => workflows.gameplay.handleToggleReady()}
           categoryError={categoryError}
         />
       )}

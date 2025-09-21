@@ -63,6 +63,10 @@ class GameHandler {
       this.handleSkipCategory(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
 
+    socket.on('toggleReady', () => {
+      this.handleToggleReady(socket, io, userSession, getOrCreateRoom, debouncedSave);
+    });
+
     socket.on('emergencyReset', () => {
       this.handleEmergencyReset(socket, io, userSession, getOrCreateRoom, debouncedSave);
     });
@@ -352,6 +356,24 @@ class GameHandler {
             debouncedSave();
           }
         }
+      }
+    }
+  }
+
+  /**
+   * Handle toggle ready state request
+   */
+  static handleToggleReady(socket, io, userSession, getOrCreateRoom, debouncedSave) {
+    const roomId = userSession.currentRoom;
+    if (roomId) {
+      const room = getOrCreateRoom(roomId);
+      const userId = room.getUserForSocket(socket.id);
+      const player = room.players[userId];
+      
+      if (player) {
+        player.isReady = !player.isReady;
+        io.to(roomId).emit('gameState', room.getState());
+        debouncedSave();
       }
     }
   }

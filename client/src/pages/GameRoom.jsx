@@ -8,7 +8,49 @@ import GameHeader from '../components/GameHeader.jsx';
 import GameInfo from '../components/GameInfo.jsx';
 import styles from './GameRoom.module.scss';
 
-function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame, onSkipAnnouncer }) {
+function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryError, onStartGame, onRestartGame, onSkipAnnouncer, onToggleReady }) {
+  const renderStartGameSection = () => {
+    const myPlayer = gameState.players[myId];
+    const isReady = myPlayer?.isReady;
+    const allPlayers = Object.values(gameState.players);
+    const readyPlayers = allPlayers.filter(p => p.isReady);
+    const allReady = allPlayers.length > 0 && readyPlayers.length === allPlayers.length;
+    
+    if (!isReady) {
+      return (
+        <>
+          <button 
+            className={styles.readyButton}
+            onClick={onToggleReady}
+          >
+            I'm done entering categories
+          </button>
+          <p className={styles.startGameTooltip}>
+            Let other players know you're ready to start
+          </p>
+        </>
+      );
+    }
+    
+    return (
+      <>
+        <form id="startGameForm" onSubmit={onStartGame}>
+          <button 
+            type="submit" 
+            className={allReady ? styles.startGameButton : styles.startGameButtonWarning}
+          >
+            Start Game
+          </button>
+        </form>
+        <p className={styles.startGameTooltip}>
+          {allReady 
+            ? "Anyone can start the game now that all categories are ready!"
+            : "WARNING: not all players are done entering categories!"
+          }
+        </p>
+      </>
+    );
+  };
   // Show game over view if game is complete
   if (gameState.gameState === 'GAME_OVER') {
     return (
@@ -112,14 +154,7 @@ function GameRoom({ gameState, roomId, myId, myUserId, onAddCategory, categoryEr
       
       {/* Start Game Button */}
       <div className={styles.startGameSection}>
-        <form id="startGameForm" onSubmit={onStartGame}>
-          <button type="submit" className={styles.startGameButton}>
-            Start Game
-          </button>
-        </form>
-        <p className={styles.startGameTooltip}>
-          Anyone can start once categories are ready!
-        </p>
+        {renderStartGameSection()}
       </div>
       
       {/* Game Configuration (Collapsible) */}
