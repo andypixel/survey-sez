@@ -120,12 +120,20 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           )}
           
           {currentGame.turnPhase === 'RESULTS' && (isAnnouncer || currentGame.canAllPlayersReveal) && (
-            <button 
-              className={styles.revealButton}
-              onClick={() => gameplay.handleRevealResults()}
-            >
-              {currentGame.canAllPlayersReveal ? 'Reveal (Timeout/Offline)' : 'Reveal'}
-            </button>
+            <>
+              {isAnnouncer && (
+                <p className={styles.announcerInstructions}>
+                  Review the category entries and confirm all correct guesses are marked. 
+                  Read all entries aloud to assure that all guesses have been recorded.
+                </p>
+              )}
+              <button 
+                className={styles.revealButton}
+                onClick={() => gameplay.handleRevealResults()}
+              >
+                {currentGame.canAllPlayersReveal ? 'Finalize Score (Timeout/Offline)' : 'Finalize Score'}
+              </button>
+            </>
           )}
           
           {currentGame.turnPhase === 'TURN_SUMMARY' && (

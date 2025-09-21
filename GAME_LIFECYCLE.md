@@ -75,9 +75,9 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
   - Guesses text entry field removed
   - Category details remain hidden from all players
   - Announcer reads category entries aloud and can mark additional guesses
-  - Announcer sees "Reveal" button
-  - **Timeout Protection**: After 30 seconds or if announcer is offline, "Reveal" button becomes available to all players
-- **Summary Phase**: When Announcer clicks Reveal:
+  - Announcer sees "Finalize Score" button
+  - **Timeout Protection**: After 30 seconds or if announcer is offline, "Finalize Score" button becomes available to all players
+- **Summary Phase**: When Announcer clicks Finalize Score:
   - Category details with marked entries shown to all players
   - **Turn Score Displayed**: Number of correctly guessed entries shown to all players
   - "Next Turn" button available to all players
