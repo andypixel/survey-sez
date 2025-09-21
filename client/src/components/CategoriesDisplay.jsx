@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import styles from './CategoriesDisplay.module.scss';
 import NumberedTextarea from './NumberedTextarea';
 
@@ -11,8 +11,15 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
     return '';
   }, []);
   
+  const [categoryName, setCategoryName] = useState('');
+  const textareaRef = useRef(null);
+  
   const handleSubmit = (e) => {
     onAddCategory(e);
+    setCategoryName('');
+    if (textareaRef.current) {
+      textareaRef.current.clearValue();
+    }
   };
   const myUserKey = Object.keys(categories?.userCustom || {}).find(key => key.endsWith(`-${myUserId}`));
   const myCategories = myUserKey ? categories.userCustom[myUserKey] : [];
@@ -31,9 +38,12 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
               type="text" 
               placeholder="Category name"
               className={styles.nameInput}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
               required
             />
             <NumberedTextarea
+              ref={textareaRef}
               name="categoryEntries"
               placeholder="One entry per line (max 10)"
               rows={10}

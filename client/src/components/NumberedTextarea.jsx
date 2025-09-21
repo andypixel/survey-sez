@@ -1,9 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
 import styles from './NumberedTextarea.module.scss';
 
-function NumberedTextarea({ name, placeholder, defaultValue = '', rows = 5 }) {
+const NumberedTextarea = forwardRef(function NumberedTextarea({ name, placeholder, defaultValue = '', rows = 5 }, ref) {
   const [value, setValue] = useState(defaultValue);
   const textareaRef = useRef(null);
+  
+  useImperativeHandle(ref, () => ({
+    clearValue: () => setValue('')
+  }));
   
   const handleChange = (e) => {
     const lines = e.target.value.split('\n');
@@ -42,6 +46,6 @@ function NumberedTextarea({ name, placeholder, defaultValue = '', rows = 5 }) {
       />
     </div>
   );
-}
+});
 
 export default NumberedTextarea;
