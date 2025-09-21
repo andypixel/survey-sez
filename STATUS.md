@@ -15,7 +15,6 @@
     - Sound/haptics when timer is running down
     - Remove "guess" form from Spectator view
     - Option to have AI make up the entries in your category for you
-    - "Start Guessing" as a CTA doesn't make sense from the point of view of the Announcer
 
 - Backlog
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?

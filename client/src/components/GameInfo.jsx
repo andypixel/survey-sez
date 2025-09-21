@@ -39,7 +39,7 @@ function GameInfo({ gameState, myId, isAnnouncer, isGuessingTeam }) {
               onClick={() => gameplay.handleBeginTurn()}
               disabled={!gameState.currentGame.selectedCategory}
             >
-              Start Guessing
+              Start Turn
             </button>
             {gameState.currentGame.canSkipCategory && (
               <button 

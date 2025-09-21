@@ -42,11 +42,11 @@ Any category, Custom or Universal, is eligible for use in gameplay as long as it
 ### Announcer Role
 - First player on Guessing team becomes Announcer
 - Announcer is shown a random category from one of the categories they created, or, if no unused categories created by them remain, one of the unused Universal categories
-- Announcer sees a "Start Guessing" button
+- Announcer sees a "Start Turn" button
   - If this category is a Universal category, they also see a "Skip" button
   - Announcer can select Skip a maximum of two times per turn
 - If Skip: a different Universal category is selected at random.
-- If Start Guessing: category details shown to the Announcer and the timer starts
+- If Start Turn: category details shown to the Announcer and the timer starts
 
 ### Turn Begins
 - **Announcer**: Sees category title, category details with checkboxes, countdown timer, "End Guessing" button, "Pause/Resume" button, and Guesses chat feed
