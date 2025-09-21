@@ -102,7 +102,11 @@ function GameplayView({ gameState, myId, myUserId, isAnnouncer, isGuessingTeam }
           )}
           
           {/* Team Guesses - always visible during active game */}
-          <TeamGuesses responses={currentGame.responses} />
+          <TeamGuesses 
+            responses={currentGame.responses} 
+            myUserId={myUserId}
+            gameState={gameState}
+          />
           
           {/* Announcer Controls */}
           {isAnnouncer && currentGame.turnPhase === 'ACTIVE_GUESSING' && (

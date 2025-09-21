@@ -51,7 +51,6 @@ function GameOverView({ gameState, onRestart }) {
               </div>
               <div className={styles.categoryDetails}>
                 <div className={styles.entries}>
-                  <strong>Category Items:</strong>
                   <ul>
                     {categoryData.category.entries.map((entry, i) => (
                       <li 

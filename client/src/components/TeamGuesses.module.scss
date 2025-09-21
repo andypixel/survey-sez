@@ -22,16 +22,18 @@
   padding: 8px 12px;
   margin: 5px 0;
   border-radius: 4px;
-  border-left: 3px solid var(--color-brand-primary);
   color: var(--color-text-primary);
 }
 
-.guessText {
-  margin-right: 8px;
+.playerName {
+  font-weight: bold;
+  color: var(--color-text-muted);
 }
 
-.playerName {
-  font-size: 12px;
-  color: var(--color-text-muted);
-  font-style: italic;
+.myPlayerName {
+  color: var(--color-brand-primary);
+}
+
+.guessText {
+  color: var(--color-text-primary);
 }
