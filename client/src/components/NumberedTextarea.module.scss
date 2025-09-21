@@ -1,0 +1,43 @@
+@import '../styles/colors.scss';
+
+.container {
+  display: flex;
+  border: 1px solid var(--color-border-secondary);
+  border-radius: 4px;
+  background: var(--color-bg-tertiary);
+  overflow: hidden;
+}
+
+.lineNumbers {
+  background: var(--color-bg-secondary);
+  border-right: 1px solid var(--color-border-secondary);
+  padding: 8px 4px;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+  user-select: none;
+  min-width: 30px;
+  text-align: right;
+}
+
+.lineNumber {
+  height: 1.4em;
+}
+
+.textarea {
+  flex: 1;
+  border: none;
+  padding: 8px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.4;
+  resize: vertical;
+  outline: none;
+}
+
+.container:focus-within {
+  border-color: var(--color-brand-primary);
+}

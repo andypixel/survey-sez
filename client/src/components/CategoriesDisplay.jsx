@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './CategoriesDisplay.module.scss';
+import NumberedTextarea from './NumberedTextarea';
 
 const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, myUserId, onAddCategory, categoryError, usedCategoryIds = [] }) {
   const defaultEntries = React.useMemo(() => {
@@ -32,11 +33,10 @@ const CategoriesDisplay = React.memo(function CategoriesDisplay({ categories, my
               className={styles.nameInput}
               required
             />
-            <textarea 
+            <NumberedTextarea
               name="categoryEntries"
-              placeholder="One entry per line"
-              className={styles.entriesInput}
-              rows={5}
+              placeholder="One entry per line (max 10)"
+              rows={10}
               defaultValue={defaultEntries}
             />
             <button type="submit" className={styles.button}>

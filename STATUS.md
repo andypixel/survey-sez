@@ -1,9 +1,13 @@
 # To do
 
 - FIRST
+    - Line numbers for entries textarea
+    - Join Room
+        - Enter your name before other fields are visible
+        - If two teams are already created, CTAs are "Join [team 1]" and "Join [team 2]"
+        - Otherwise, CTA next to text field updated in real time: "Join [team name]"
 
 - Bugs
-    - If user closes browser window during guessing, then returns, timer starts over (should stay in sync with other sessions). How should the source of truth for the timer be defined?
     - No Available Categories
         - If all custom categories used and no universal categories available, game should detect this and either end early or...?
 
@@ -15,7 +19,6 @@
     - "Start Guessing" as a CTA doesn't make sense from the point of view of the Announcer
 
 - Backlog
-    - Default turn length 60 seconds instead of 30
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Game restart
         - ALL custom categories can be reused if the user joins a different room
