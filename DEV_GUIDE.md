@@ -8,14 +8,24 @@
 
 1. **Add to appropriate handler** (e.g., `server/handlers/GameHandler.js`):
 ```javascript
-// In register() method:
-socket.on('myNewEvent', (data) => {
-  this.handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
+// In register() method with error handling:
+socket.on('myNewEvent', async (data) => {
+  try {
+    await this.handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data);
+  } catch (error) {
+    ErrorHandler.handleSocketError(socket, 'myNewEvent', error, { userId: userSession.userId });
+  }
 });
 
 // Add handler method:
-static handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data) {
-  // Handle event
+static async handleMyNewEvent(socket, io, userSession, getOrCreateRoom, debouncedSave, data) {
+  // Validate input
+  if (!data.requiredField) {
+    throw new ValidationError('Missing required field', 'requiredField', data);
+  }
+  
+  // Handle event with logging
+  Logger.userEvent('MY_NEW_ACTION', socket.id, userSession.currentRoom, { data });
   io.to(roomId).emit('responseEvent', result);
 }
 ```
@@ -39,6 +49,13 @@ const { gameplay } = useWorkflows();
 onClick={() => gameplay.handleMyAction()}
 ```
 
+4. **Add client error listener** (in App.jsx):
+```javascript
+socket.on('myNewEventError', (error) => {
+  ErrorHandler.handleSocketError(error, 'MyNewEvent', setErrorState);
+});
+```
+
 ### Adding New Game State
 
 1. **Update GameRoom/GameplayManager** state structure
@@ -49,10 +66,12 @@ onClick={() => gameplay.handleMyAction()}
 ### Debugging Checklist
 
 - [ ] Check `/debug/state` for server state
+- [ ] Check `/debug/errors` for error logs
 - [ ] Check browser console for client logs
 - [ ] Verify socket events in Network tab
 - [ ] Test with multiple browser tabs
 - [ ] Check `data/` files for persistence issues
+- [ ] Review `logs/` directory in production
 
 ### State Flow Patterns
 

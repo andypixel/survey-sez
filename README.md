@@ -13,6 +13,8 @@ A real-time multiplayer word-guessing game where teams compete in turn-based rou
 - Three-phase game lifecycle: Onboarding → Gameplay → Summary
 - Persistent user sessions across reconnections
 - Synchronized timer system preventing desync issues
+- **Comprehensive error handling** with structured logging and graceful recovery
+- **Production-ready monitoring** with Winston logging and error boundaries
 
 ## Quick Start
 
@@ -51,6 +53,8 @@ See [GAME_LIFECYCLE.md](GAME_LIFECYCLE.md) for detailed game rules.
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System design, data flow, file structure
 - **[DEV_GUIDE.md](DEV_GUIDE.md)** - Common development tasks and patterns
 - **[GAME_LIFECYCLE.md](GAME_LIFECYCLE.md)** - Complete game rules and phases
+- **[ERROR_HANDLING.md](ERROR_HANDLING.md)** - Error handling system usage and extension guide
+- **[TESTING_CLEANUP.md](TESTING_CLEANUP.md)** - ⚠️ Remove testing tools before production
 
 ## Tech Stack
 - **Backend**: Node.js 20.x, Express, Socket.IO
