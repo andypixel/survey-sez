@@ -1,11 +1,6 @@
 # To do
 
 - FIRST
-    - Error handling wrap-up
-      - Code review of Error handling changeset
-      - Apply patterns to the rest of the codebase
-      - Replace buttons/links in ErrorTestPanel.jsx with new handled errors and test
-      - Remove test files when ready: server/test-errors.js, ErrorTestPanel.jsx
     - Join Room
         - Enter your name before other fields are visible
         - If two teams are already created, CTAs are "Join [team 1]" and "Join [team 2]"
