@@ -1,4 +1,7 @@
 const GAME_RULES = require('../config/GameRules');
+const Logger = require('../utils/Logger');
+const ErrorHandler = require('../utils/ErrorHandler');
+const { ValidationError, StorageError, RoomError, ERROR_CODES } = require('../utils/CustomErrors');
 
 /**
  * Handles category-related socket events
@@ -9,7 +12,11 @@ class CategoryHandler {
    */
   static register(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions) {
     socket.on('addCategory', async (data) => {
-      await this.handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data);
+      try {
+        await this.handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data);
+      } catch (error) {
+        ErrorHandler.handleSocketError(socket, 'addCategory', error, { userId: userSession.userId, roomId: userSession.currentRoom });
+      }
     });
   }
 
@@ -17,6 +24,17 @@ class CategoryHandler {
    * Handle adding custom category
    */
   static async handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data) {
+    // TEST: Force different error types based on category name
+    if (data.name === 'FORCE_STORAGE_ERROR') {
+      throw new StorageError('Forced storage error for testing', 'testOperation', { test: true });
+    }
+    if (data.name === 'FORCE_ROOM_ERROR') {
+      throw new RoomError('Forced room error for testing', 'test-room', { test: true });
+    }
+    if (data.name === 'FORCE_GENERIC_ERROR') {
+      throw new Error('Forced generic error for testing');
+    }
+    
     const roomId = userSession.currentRoom;
     const playerData = userSession.getUserData(roomId);
     
@@ -37,9 +55,20 @@ class CategoryHandler {
       const validationResult = room.validateCustomCategory(newCategory, playerData.userId);
       
       if (!validationResult.success) {
-        socket.emit('categoryError', { message: validationResult.error });
-        return;
+        const error = new ValidationError(
+          validationResult.error,
+          'category',
+          data.name,
+          { roomId, userId: playerData.userId }
+        );
+        throw error;
       }
+      
+      Logger.debug('Category validation passed', {
+        categoryName: data.name,
+        userId: playerData.userId,
+        roomId
+      });
       
       // Create category with creator info
       const categoryWithCreator = {
@@ -59,11 +88,17 @@ class CategoryHandler {
       categoriesData.custom[storageKey].push(categoryWithCreator);
       try {
         await storage.saveCategories(categoriesData);
+        Logger.info('Category saved successfully', {
+          categoryName: categoryWithCreator.name,
+          userId: playerData.userId,
+          roomId
+        });
       } catch (error) {
-        const errorMsg = 'Failed to save category';
-        console.error('[CategoryHandler] Save category failed:', error);
-        socket.emit('categoryError', { message: errorMsg });
-        return;
+        throw new StorageError(
+          'Failed to save category to persistent storage',
+          'saveCategories',
+          { categoryName: categoryWithCreator.name, userId: playerData.userId, roomId }
+        );
       }
       
       // Update room state immediately to sync with persistent storage
@@ -85,7 +120,7 @@ class CategoryHandler {
       });
       
       // Tell sender to reset form
-      console.log('Sending categorySuccess to socket:', socket.id);
+      Logger.debug('Sending categorySuccess to socket', { socketId: socket.id });
       socket.emit('categorySuccess');
       
       // Send targeted category update to other users who have completed setup
@@ -104,9 +139,17 @@ class CategoryHandler {
         });
       }
     } else {
-      const error = 'Category must have a name';
-      console.error('[CategoryHandler] Add category failed:', error);
-      socket.emit('categoryError', { message: error });
+      let errorMessage = 'Invalid category data';
+      if (!roomId) errorMessage = 'User not in a room';
+      else if (!playerData) errorMessage = 'User not properly set up';
+      else if (!data.name) errorMessage = 'Category must have a name';
+      
+      throw new ValidationError(
+        errorMessage,
+        'category',
+        data,
+        { roomId, userId: playerData?.userId }
+      );
     }
   }
 }

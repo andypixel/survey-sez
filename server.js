@@ -25,7 +25,13 @@ const GameHandler = require('./server/handlers/GameHandler');
 const CategoryHandler = require('./server/handlers/CategoryHandler');
 const RoomHandler = require('./server/handlers/RoomHandler');
 const Logger = require('./server/utils/Logger');
+const ErrorHandler = require('./server/utils/ErrorHandler');
+const { ValidationError, StorageError } = require('./server/utils/CustomErrors');
 const GAME_RULES = require('./server/config/GameRules');
+const { addTestErrorEndpoints, addTestSocketEvents } = require('./server/test-errors');
+
+// Setup global error handlers
+ErrorHandler.setupGlobalErrorHandlers();
 
 const app = express();
 const server = http.createServer(app);
@@ -95,7 +101,7 @@ setInterval(async () => {
  * Save all application data to persistent storage
  * Saves both room state and user sessions
  */
-async function saveAllData() {
+const saveAllData = ErrorHandler.withPerformanceLogging('saveAllData', async () => {
   try {
     // Save rooms
     const roomPromises = Object.keys(rooms).map(roomId => {
@@ -121,14 +127,17 @@ async function saveAllData() {
     });
     
     await Promise.all([...roomPromises, ...userPromises]);
-  } catch (error) {
-    Logger.error('DATA_SAVE_FAILED', error, { 
+    Logger.debug('Data saved successfully', {
       roomCount: Object.keys(rooms).length,
-      userCount: Object.keys(userSessions).length 
+      userCount: Object.keys(userSessions).length
     });
-    console.error('Error saving data:', error);
+  } catch (error) {
+    ErrorHandler.handleStorageError('saveAllData', error, {
+      roomCount: Object.keys(rooms).length,
+      userCount: Object.keys(userSessions).length
+    });
   }
-}
+});
 
 /**
  * Get existing room or create new one
@@ -311,6 +320,56 @@ app.post('/admin/sync-categories', async (req, res) => {
   }
 });
 
+// Add test error endpoints (REMOVE IN PRODUCTION)
+if (process.env.NODE_ENV !== 'production') {
+  addTestErrorEndpoints(app);
+}
+
+// Add error handling middleware
+app.use(ErrorHandler.expressErrorHandler);
+
+// Error logs endpoint
+app.get('/debug/errors', (req, res) => {
+  const fs = require('fs');
+  const path = require('path');
+  
+  try {
+    const logsDir = path.join(process.cwd(), 'logs');
+    if (!fs.existsSync(logsDir)) {
+      return res.json({ message: 'No logs directory found' });
+    }
+    
+    const files = fs.readdirSync(logsDir)
+      .filter(file => file.includes('error'))
+      .sort()
+      .reverse()
+      .slice(0, 5); // Last 5 error log files
+    
+    const logs = {};
+    files.forEach(file => {
+      const content = fs.readFileSync(path.join(logsDir, file), 'utf8');
+      logs[file] = content.split('\n')
+        .filter(line => line.trim())
+        .slice(-50) // Last 50 lines
+        .map(line => {
+          try {
+            return JSON.parse(line);
+          } catch {
+            return line;
+          }
+        });
+    });
+    
+    res.setHeader('Content-Type', 'text/html');
+    res.send(`
+      <h2>Recent Error Logs</h2>
+      <pre>${JSON.stringify(logs, null, 2)}</pre>
+    `);
+  } catch (error) {
+    res.json({ error: error.message });
+  }
+});
+
 // Simple admin panel for debugging
 app.get('/admin', (req, res) => {
   res.setHeader('Content-Type', 'text/html');
@@ -319,6 +378,7 @@ app.get('/admin', (req, res) => {
     <ul>
       <li><a href="/debug/state">Raw State (JSON)</a></li>
       <li><a href="/debug/pretty">Pretty State (HTML)</a></li>
+      <li><a href="/debug/errors">Error Logs</a></li>
       <li><a href="/debug/redis-safe">Redis Data - Safe (No Spoilers)</a></li>
       <li><a href="/debug/redis">Redis Data - Full (Spoilers!)</a></li>
     </ul>
@@ -383,6 +443,11 @@ io.on('connection', (socket) => {
   RoomHandler.register(socket, io, userSession, getOrCreateRoom, debouncedSave, userSessions);
   GameHandler.register(socket, io, userSession, rooms, getOrCreateRoom, debouncedSave);
   CategoryHandler.register(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions);
+  
+  // Add test socket events (REMOVE IN PRODUCTION)
+  if (process.env.NODE_ENV !== 'production') {
+    addTestSocketEvents(io);
+  }
   
   // Handle disconnect
   socket.on('disconnect', () => {

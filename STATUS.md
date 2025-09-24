@@ -1,6 +1,11 @@
 # To do
 
 - FIRST
+    - Error handling wrap-up
+      - Code review of Error handling changeset
+      - Apply patterns to the rest of the codebase
+      - Replace buttons/links in ErrorTestPanel.jsx with new handled errors and test
+      - Remove test files when ready: server/test-errors.js, ErrorTestPanel.jsx
     - Join Room
         - Enter your name before other fields are visible
         - If two teams are already created, CTAs are "Join [team 1]" and "Join [team 2]"
@@ -16,6 +21,9 @@
     - Option to have AI make up the entries in your category for you
 
 - Backlog
+    - When clicking "I'm done entering categories," Categories form should be disabled
+      - Allow players to untoggle "I'm done" if other players are still not done so they can enter more
+    - Enable testing WIP branches in production via CI/CD
     - Data store cleanup in prod when a room has been created: can it be reset/renamed/deleted?
     - Game restart
         - ALL custom categories can be reused if the user joins a different room
@@ -44,6 +52,100 @@
     - Edge cases
         - If a user specifies a name in one room, then tries to join a different room where a different player also has the same name, joining the room will fail, but silently. Need a mechanism to allow the user to change their name or equivalent
 
+# Architecture & Modernization Recommendations
+
+## Architecture & Code Quality Improvements
+
+### 1. **Implement Proper Error Handling & Logging**
+- **Current Issue**: Basic console.log statements and minimal error handling
+- **Recommendation**: Add structured logging with different levels (debug, info, warn, error) and proper error boundaries
+- **Benefits**: Better debugging, monitoring, and production troubleshooting
+
+#### Current status
+- Need to fully code review current diff, make edits as necessary, then push those changes (WIP commit already pushed for production testing)
+- Implement error handling in the rest of the app
+
+### 2. **Add Input Validation & Sanitization**
+- **Current Issue**: Limited validation on user inputs (category names, player names)
+- **Recommendation**: Implement comprehensive validation using libraries like Joi or Yup on both client and server
+- **Benefits**: Prevent XSS attacks, data corruption, and improve user experience
+
+### 3. **Implement Rate Limiting & Security Measures**
+- **Current Issue**: No protection against spam or abuse
+- **Recommendation**: Add rate limiting for socket events, input sanitization, and CORS configuration
+- **Benefits**: Prevent abuse, improve stability, and enhance security
+
+## State Management & Performance
+
+### 4. **Optimize State Management**
+- **Current Issue**: Large state objects passed around, potential memory leaks
+- **Recommendation**: 
+  - Implement React Context more granularly (separate contexts for game state, user state, etc.)
+  - Use React.memo and useMemo for expensive computations
+  - Consider state normalization for complex nested data
+- **Benefits**: Better performance, reduced re-renders, cleaner code
+
+### 5. **Add Proper Data Persistence Strategy**
+- **Current Issue**: Mixed persistence patterns, potential data loss
+- **Recommendation**: 
+  - Implement proper database migrations
+  - Add data backup/restore functionality
+  - Use transactions for critical operations
+- **Benefits**: Data integrity, easier maintenance, better scalability
+
+## Modern Development Practices
+
+### 6. **Add TypeScript**
+- **Current Issue**: No type safety, potential runtime errors
+- **Recommendation**: Gradually migrate to TypeScript starting with interfaces and types
+- **Benefits**: Better IDE support, fewer bugs, improved maintainability
+
+### 7. **Implement Testing Strategy**
+- **Current Issue**: No automated tests
+- **Recommendation**: Add unit tests (Jest), integration tests, and E2E tests (Playwright/Cypress)
+- **Benefits**: Prevent regressions, improve code quality, enable confident refactoring
+
+### 8. **Add Environment Configuration Management**
+- **Current Issue**: Hardcoded values, limited environment handling
+- **Recommendation**: Use proper environment configuration with validation (dotenv + schema validation)
+- **Benefits**: Easier deployment, better security, environment-specific settings
+
+## Scalability & Reliability
+
+### 9. **Implement Proper Session Management**
+- **Current Issue**: In-memory session storage, potential memory leaks
+- **Recommendation**: 
+  - Use Redis for session storage in all environments
+  - Implement session cleanup and expiration
+  - Add reconnection handling improvements
+- **Benefits**: Better scalability, reduced memory usage, improved reliability
+
+### 10. **Add Monitoring & Health Checks**
+- **Current Issue**: Limited visibility into application health
+- **Recommendation**: 
+  - Add health check endpoints
+  - Implement metrics collection (Prometheus/StatsD)
+  - Add application performance monitoring
+- **Benefits**: Better observability, proactive issue detection, performance insights
+
+## Code Organization
+
+### 11. **Implement Clean Architecture Patterns**
+- **Current Issue**: Business logic mixed with infrastructure concerns
+- **Recommendation**: 
+  - Separate domain logic from infrastructure
+  - Implement repository pattern for data access
+  - Use dependency injection for better testability
+- **Benefits**: Better maintainability, easier testing, cleaner separation of concerns
+
+### 12. **Add API Documentation & Standards**
+- **Current Issue**: Socket events not well documented
+- **Recommendation**: 
+  - Document all socket events and their payloads
+  - Implement API versioning strategy
+  - Add request/response validation schemas
+- **Benefits**: Better developer experience, easier integration, reduced bugs
+
 # Time spent
 - 8/10 2hrs
 - 8/18 3hrs
@@ -57,3 +159,5 @@
 - 9/11 6hrs
 - 9/14 2hrs
 - 9/20 2hrs
+- 9/22 2.5hrs
+- 9/23 1hr + 

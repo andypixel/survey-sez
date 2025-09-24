@@ -1,5 +1,5 @@
 {
-  "name": "realtime-game-prototype",
+  "name": "survey-sez",
   "version": "1.0.0",
   "description": "Real-time multiplayer game prototype",
   "main": "server.js",
@@ -19,7 +19,9 @@
     "express": "^4.18.2",
     "socket.io": "^4.7.2",
     "cors": "^2.8.5",
-    "redis": "^4.6.0"
+    "redis": "^4.6.0",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
@@ -27,6 +29,6 @@
   },
   "engines": {
     "node": "20.x",
-    "npm": "9.x"
+    "npm": "10.x"
   }
 }

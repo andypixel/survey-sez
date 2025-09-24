@@ -3,6 +3,8 @@ import io from 'socket.io-client';
 import RoomJoin from './pages/RoomJoin.jsx';
 import UserSetup from './pages/UserSetup.jsx';
 import GameRoom from './pages/GameRoom.jsx';
+import ErrorBoundary from './components/ErrorBoundary.jsx';
+import ErrorTestPanel from './components/ErrorTestPanel.jsx';
 import RoomJoinWorkflow from './workflows/RoomJoinWorkflow';
 import UserSetupWorkflow from './workflows/UserSetupWorkflow';
 import GameplayWorkflow from './workflows/GameplayWorkflow';
@@ -119,34 +121,37 @@ function App() {
   }, [roomId, myId]);
   
   return (
-    <WorkflowProvider workflows={workflows}>
-      {showUserSetup && roomSetupData ? (
-        <UserSetup 
-          roomSetupData={roomSetupData}
-          existingUserData={getUserData(roomSetupData.roomId)}
-          onUserSetup={(e) => workflows.userSetup.handleUserSetup(e)}
-          setupError={setupError}
-        />
-      ) : !isInRoom ? (
-        <RoomJoin 
-          roomId={roomId}
-          onRoomJoin={(e) => workflows.roomJoin.handleRoomJoin(e)}
-        />
-      ) : (
-        <GameRoom 
-          gameState={gameState}
-          roomId={roomId}
-          myId={myId}
-          myUserId={myUserId}
-          onAddCategory={(e) => workflows.gameplay.handleAddCategory(e)}
-          onStartGame={(e) => workflows.gameplay.handleStartGame(e)}
-          onRestartGame={() => workflows.gameplay.handleRestartGame()}
-          onSkipAnnouncer={() => workflows.gameplay.handleSkipAnnouncer()}
-          onToggleReady={() => workflows.gameplay.handleToggleReady()}
-          categoryError={categoryError}
-        />
-      )}
-    </WorkflowProvider>
+    <ErrorBoundary>
+      {process.env.NODE_ENV === 'development' && <ErrorTestPanel socket={socket} />}
+      <WorkflowProvider workflows={workflows}>
+        {showUserSetup && roomSetupData ? (
+          <UserSetup 
+            roomSetupData={roomSetupData}
+            existingUserData={getUserData(roomSetupData.roomId)}
+            onUserSetup={(e) => workflows.userSetup.handleUserSetup(e)}
+            setupError={setupError}
+          />
+        ) : !isInRoom ? (
+          <RoomJoin 
+            roomId={roomId}
+            onRoomJoin={(e) => workflows.roomJoin.handleRoomJoin(e)}
+          />
+        ) : (
+          <GameRoom 
+            gameState={gameState}
+            roomId={roomId}
+            myId={myId}
+            myUserId={myUserId}
+            onAddCategory={(e) => workflows.gameplay.handleAddCategory(e)}
+            onStartGame={(e) => workflows.gameplay.handleStartGame(e)}
+            onRestartGame={() => workflows.gameplay.handleRestartGame()}
+            onSkipAnnouncer={() => workflows.gameplay.handleSkipAnnouncer()}
+            onToggleReady={() => workflows.gameplay.handleToggleReady()}
+            categoryError={categoryError}
+          />
+        )}
+      </WorkflowProvider>
+    </ErrorBoundary>
   );
 }
 

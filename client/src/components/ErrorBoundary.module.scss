@@ -1,0 +1,69 @@
+.errorContainer {
+  padding: 20px;
+  margin: 20px;
+  border: 1px solid #ff6b6b;
+  border-radius: 8px;
+  background-color: #fff5f5;
+  text-align: center;
+}
+
+.errorTitle {
+  color: #d63031;
+  margin-bottom: 16px;
+}
+
+.errorMessage {
+  color: #636e72;
+  margin-bottom: 20px;
+}
+
+.buttonContainer {
+  margin-bottom: 20px;
+}
+
+.retryButton {
+  padding: 10px 20px;
+  margin-right: 10px;
+  background-color: #00b894;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #00a085;
+  }
+}
+
+.homeButton {
+  padding: 10px 20px;
+  background-color: #74b9ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0984e3;
+  }
+}
+
+.errorDetails {
+  text-align: left;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 20px;
+}
+
+.errorDetailsSummary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.errorDetailsContent {
+  font-size: 12px;
+  overflow: auto;
+  margin-top: 10px;
+  color: #2d3436;
+}
