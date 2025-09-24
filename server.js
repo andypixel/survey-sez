@@ -168,6 +168,13 @@ app.get('/api/game-rules', (req, res) => {
   res.json(GAME_RULES);
 });
 
+// Schema API - serve validation schemas as single source of truth
+app.get('/api/schemas', (req, res) => {
+  res.json({
+    teamName: { min: 1, max: 30, message: "Team name must be 1-30 characters" }
+  });
+});
+
 // Debug endpoints - available in all environments
 app.get('/debug/state', (req, res) => {
   const state = {

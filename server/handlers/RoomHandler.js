@@ -1,3 +1,5 @@
+const { z } = require('zod');
+
 /**
  * Handles room and user setup related socket events
  */
@@ -42,17 +44,21 @@ class RoomHandler {
     if (roomId && data.playerName) {
       const room = getOrCreateRoom(roomId);
       
+      // Determine team assignment - store raw text
       let teamId;
-      
-      // Determine team assignment
       if (data.newTeamName && room.canCreateTeam()) {
-        teamId = data.newTeamName;
+        // Validate new team name with server-side schema
+        const teamNameSchema = z.string().min(1, "Team name is required").max(30, "Team name must be 30 characters or less").trim();
+        try {
+          teamId = teamNameSchema.parse(data.newTeamName);
+        } catch (error) {
+          socket.emit('setupError', { message: error.errors[0].message });
+          return;
+        }
       } else if (data.existingTeam) {
-        teamId = data.existingTeam;
+        teamId = data.existingTeam; // Raw text, no validation needed
       } else {
-        const error = 'Invalid team selection';
-        console.error('[RoomHandler] User setup failed:', error);
-        socket.emit('setupError', { message: error });
+        socket.emit('setupError', { message: 'Invalid team selection' });
         return;
       }
       

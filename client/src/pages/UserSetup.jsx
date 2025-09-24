@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './UserSetup.module.scss';
+import { getSchemas } from '../utils/schemas';
 
 function UserSetup({ roomSetupData, existingUserData, onUserSetup, setupError }) {
+  const [validationError, setValidationError] = useState('');
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const teamChoice = formData.get('teamChoice');
+    const newTeamName = formData.get('newTeamName');
+    
+    // Only validate new team names with runtime schema
+    if (teamChoice === 'new') {
+      try {
+        const schemas = await getSchemas();
+        schemas.teamName.parse(newTeamName);
+        setValidationError('');
+      } catch (error) {
+        setValidationError(error.errors[0].message);
+        return;
+      }
+    }
+    
+    // Pass raw data to parent - no encoding
+    onUserSetup(e);
+  };
+  
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Join Room: {roomSetupData.roomId}</h1>
-      <form className={styles.form} onSubmit={onUserSetup}>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.field}>
           <label className={styles.label}>Your Name:</label>
           <input 
@@ -49,9 +74,9 @@ function UserSetup({ roomSetupData, existingUserData, onUserSetup, setupError })
           Join Game
         </button>
         
-        {setupError && (
+        {(setupError || validationError) && (
           <div className={styles.error}>
-            {setupError}
+            {setupError || validationError}
           </div>
         )}
       </form>

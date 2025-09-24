@@ -16,12 +16,13 @@
     "reset-data": "rm -rf data/*.json && npm run init-data"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
     "cors": "^2.8.5",
+    "express": "^4.18.2",
     "redis": "^4.6.0",
+    "socket.io": "^4.7.2",
     "winston": "^3.11.0",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^4.7.1",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "concurrently": "^9.2.0",
