@@ -9,6 +9,7 @@
 - Bugs
     - No Available Categories
         - If all custom categories used and no universal categories available, game should detect this and either end early or...?
+    - Upon finishing a game and returning to the Onboarding screen, the "I'm done entering categories" status should be reset, and the Game Settings (turn timer & number of rounds) should carry over
 
 - Playtest notes
     - mobile view should show everything without scrolling (or, auto-scroll to top of page when switching game state)
