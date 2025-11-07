@@ -15,6 +15,9 @@
     - mobile view should show everything without scrolling (or, auto-scroll to top of page when switching game state)
     - Sound/haptics when timer is running down
     - Option to have AI make up the entries in your category for you
+    - Announcer should be able to skip their own categories if they have multiple
+    - In onboarding phase, when players are joining a team, show which players have already joined each team
+    - Random onboarding mode: players just specify their name, and they are assigned to teams randomly. Once teams have been created, any player on the team can edit the team name (until Gameplay begins)
 
 - Backlog
     - When clicking "I'm done entering categories," Categories form should be disabled
