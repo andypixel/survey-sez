@@ -10,7 +10,7 @@
     "debug": "npm run init-data && npm run kill-port && sleep 1 && REACT_APP_DEBUG_MODE=true concurrently \"nodemon --ignore data/ server.js\" \"cd client && npm start\"",
     "prod": "npm run init-data && npm run kill-port && sleep 1 && concurrently \"nodemon --ignore data/ server.js\" \"cd client && REACT_APP_DEBUG_MODE=false npm start\"",
     "kill-port": "./kill-server.sh",
-    "build": "cd client && npm install && npm run build",
+    "build": "npm test && cd client && npm install && npm run build",
     "heroku-postbuild": "npm run build",
     "init-data": "node scripts/init-dev-data.js",
     "reset-data": "rm -rf data/*.json && npm run init-data",
