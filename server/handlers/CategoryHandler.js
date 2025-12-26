@@ -102,11 +102,7 @@ class CategoryHandler {
       }
       
       // Update room state immediately to sync with persistent storage
-      const userKey = `${roomId}-${playerData.userId}`;
-      if (!room.categories.userCustom[userKey]) {
-        room.categories.userCustom[userKey] = [];
-      }
-      room.categories.userCustom[userKey].push(categoryWithCreator);
+      room.addCustomCategory(categoryWithCreator, playerData.userId);
       
       // Also update global categoriesData to keep everything in sync
       if (!categoriesData.custom[storageKey]) {
