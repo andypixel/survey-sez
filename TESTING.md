@@ -1,13 +1,14 @@
 # Testing Infrastructure
 
 ## Overview
-This project now includes a comprehensive unit testing setup using Jest, focusing on server-side logic testing.
+Comprehensive unit testing setup using Jest, focusing on server-side core game logic with extensive coverage of GameRoom, GameplayManager, and socket handlers.
 
 ## Setup Complete
 - ✅ Jest 29 installed and configured
 - ✅ Server test environment configured
 - ✅ Mock storage system for consistent testing
-- ✅ Proof-of-concept tests for GameRoom class (14 tests passing)
+- ✅ CI/CD integration with GitHub Actions and Railway
+- ✅ Comprehensive core game logic coverage
 
 ## Running Tests
 
@@ -24,11 +25,16 @@ npm run test:watch
 ```
 tests/
 └── server/
-    ├── setup.js          # Test configuration and mocks
-    └── GameRoom.test.js   # Core game logic tests
+    ├── setup.js                                    # Test configuration and mocks
+    ├── GameRoom.test.js                           # Core game logic tests (14 tests)
+    ├── GameplayManager.test.js                    # Turn progression tests (12 tests)
+    ├── GameplayManager-CategorySelection.test.js  # Category selection tests (12 tests)
+    ├── GameplayManager-ScoringLogic.test.js      # Scoring system tests (14 tests)
+    ├── GameplayManager-TimerManagement.test.js   # Timer functionality tests (16 tests)
+    └── CategoryHandler.test.js                    # Socket handler tests (9 tests)
 ```
 
-## Current Test Coverage
+## Current Test Coverage (75 tests)
 
 ### GameRoom Class (14 tests)
 - **Player Management**: Adding players, reconnection handling
@@ -37,6 +43,17 @@ tests/
 - **Category Validation**: Name length, duplicates, entry limits
 - **State Management**: Correct state format for client
 
+### GameplayManager Class (54 tests)
+- **Turn Progression** (12 tests): Announcer rotation, team alternation, game completion
+- **Category Selection** (12 tests): User vs universal categories, usage tracking, skip functionality
+- **Scoring Logic** (14 tests): Guess tracking, entry marking, score calculation, team accumulation
+- **Timer Management** (16 tests): Pause/resume, state management, integration with game settings
+
+### CategoryHandler Class (9 tests)
+- **Category Addition**: Validation, storage, socket communication
+- **Error Handling**: Validation errors, storage failures, missing data
+- **Socket Events**: Event registration, user notifications
+
 ## Key Testing Patterns
 
 ### Mock Storage
@@ -44,7 +61,7 @@ tests/
 const mockStorage = {
   saveRoom: jest.fn(),
   getRoom: jest.fn(),
-  // ... other methods
+  saveCategories: jest.fn().mockResolvedValue()
 };
 ```
 
@@ -65,35 +82,35 @@ describe('GameRoom', () => {
 
 ## Next Steps for Full Coverage
 
-### Phase 1 - Core Server Logic (Priority)
-- [ ] `GameplayManager` class tests (turn logic, scoring)
-- [ ] Socket handlers tests (`CategoryHandler`, `GameHandler`, `RoomHandler`)
+### Phase 1 - Remaining Socket Handlers (Priority)
+- [ ] `GameHandler` class tests (game orchestration, turn management)
+- [ ] `RoomHandler` class tests (room joining, player management)
+
+### Phase 2 - Infrastructure Tests
 - [ ] Storage layer tests (`JsonFileStorage`, `RedisStorage`)
 - [ ] Error handling system tests
+- [ ] Logger and utility tests
 
-### Phase 2 - Integration Tests
+### Phase 3 - Integration Tests
 - [ ] Socket event flow tests (end-to-end)
 - [ ] Multi-client scenarios
 - [ ] Reconnection handling
 
-### Phase 3 - Client Tests (Future)
+### Phase 4 - Client Tests (Future)
 - [ ] React component tests (requires Babel setup)
 - [ ] Workflow tests with proper ES6 module support
 - [ ] Error boundary tests
 
 ## Benefits Achieved
 
-1. **Regression Prevention**: Core game logic now protected against breaking changes
-2. **Refactoring Confidence**: Safe to modify GameRoom class with test coverage
+1. **Regression Prevention**: Core game logic protected against breaking changes
+2. **Refactoring Confidence**: Safe to modify critical classes with comprehensive test coverage
 3. **Documentation**: Tests serve as living documentation of expected behavior
 4. **Development Speed**: Faster debugging with isolated unit tests
+5. **Production Safety**: CI/CD integration prevents deployment of failing tests
 
-## Test Results
-```
-Test Suites: 1 passed, 1 total
-Tests:       14 passed, 14 total
-Snapshots:   0 total
-Time:        0.313 s
-```
+## CI/CD Integration
 
-The testing foundation is now in place and ready for expansion as development continues.
+- **GitHub Actions**: Automatic test execution on push/PR
+- **Railway Deployment**: Tests must pass before deployment
+- **Quality Gates**: Comprehensive error handling and edge case coverage
