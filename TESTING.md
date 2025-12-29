@@ -38,10 +38,11 @@ tests/
     ├── RedisStorage.test.js                       # Production storage tests (27 tests)
     ├── CustomErrors.test.js                       # Error classes tests (19 tests)
     ├── ErrorHandler.test.js                       # Error handling tests (15 tests)
+    ├── ServerInitialization.test.js               # Server configuration tests (26 tests)
     └── Logger.test.js                             # Logging system tests (24 tests)
 ```
 
-## Current Test Coverage (225 tests)
+## Current Test Coverage (245 tests)
 
 ### GameRoom Class (14 tests)
 - **Player Management**: Adding players, reconnection handling
@@ -65,10 +66,11 @@ tests/
 - **JsonFileStorage** (22 tests): Development storage, file I/O operations, CRUD functionality
 - **RedisStorage** (27 tests): Production storage, Redis operations, connection management
 
-### Infrastructure System (58 tests)
+### Infrastructure System (84 tests)
 - **CustomErrors** (19 tests): Error class inheritance, serialization, error codes, validation
 - **ErrorHandler** (15 tests): Socket error handling, validation errors, global error handlers, performance logging
 - **Logger** (24 tests): Structured logging, winston integration, specialized log methods, context handling
+- **ServerInitialization** (26 tests): Environment detection, API endpoints, debug endpoints, production restrictions, error handling, data management, graceful shutdown
 
 ## Key Testing Patterns
 
@@ -101,7 +103,7 @@ describe('GameRoom', () => {
 ### Phase 1 - Infrastructure Tests (Priority)
 - [x] Error handling system tests
 - [x] Logger and utility tests
-- [ ] Server initialization and configuration tests
+- [x] Server initialization and configuration tests
 
 ### Phase 3 - Integration Tests
 - [ ] Socket event flow tests (end-to-end)
