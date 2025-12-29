@@ -1,7 +1,7 @@
 const GAME_RULES = require('../config/GameRules');
 const Logger = require('../utils/Logger');
 const ErrorHandler = require('../utils/ErrorHandler');
-const { ValidationError, StorageError, RoomError, ERROR_CODES } = require('../utils/CustomErrors');
+const { ValidationError, StorageError, ERROR_CODES } = require('../utils/CustomErrors');
 
 /**
  * Handles category-related socket events

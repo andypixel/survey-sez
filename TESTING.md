@@ -31,10 +31,16 @@ tests/
     ├── GameplayManager-CategorySelection.test.js  # Category selection tests (12 tests)
     ├── GameplayManager-ScoringLogic.test.js      # Scoring system tests (14 tests)
     ├── GameplayManager-TimerManagement.test.js   # Timer functionality tests (16 tests)
-    └── CategoryHandler.test.js                    # Socket handler tests (9 tests)
+    ├── CategoryHandler.test.js                    # Socket handler tests (9 tests)
+    ├── GameHandler.test.js                        # Game orchestration tests (27 tests)
+    ├── RoomHandler.test.js                        # Room management tests (16 tests)
+    ├── JsonFileStorage.test.js                    # Development storage tests (22 tests)
+    ├── RedisStorage.test.js                       # Production storage tests (27 tests)
+    ├── CustomErrors.test.js                       # Error classes tests (23 tests)
+    └── ErrorHandler.test.js                       # Error handling tests (15 tests)
 ```
 
-## Current Test Coverage (75 tests)
+## Current Test Coverage (201 tests)
 
 ### GameRoom Class (14 tests)
 - **Player Management**: Adding players, reconnection handling
@@ -49,10 +55,18 @@ tests/
 - **Scoring Logic** (14 tests): Guess tracking, entry marking, score calculation, team accumulation
 - **Timer Management** (16 tests): Pause/resume, state management, integration with game settings
 
-### CategoryHandler Class (9 tests)
-- **Category Addition**: Validation, storage, socket communication
-- **Error Handling**: Validation errors, storage failures, missing data
-- **Socket Events**: Event registration, user notifications
+### Socket Handlers (52 tests)
+- **CategoryHandler** (9 tests): Category addition, validation, storage, socket communication
+- **GameHandler** (27 tests): Game orchestration, turn management, authorization, state validation
+- **RoomHandler** (16 tests): Room joining, player management, team assignment, validation
+
+### Storage Layer (49 tests)
+- **JsonFileStorage** (22 tests): Development storage, file I/O operations, CRUD functionality
+- **RedisStorage** (27 tests): Production storage, Redis operations, connection management
+
+### Error Handling System (34 tests)
+- **CustomErrors** (19 tests): Error class inheritance, serialization, error codes, validation
+- **ErrorHandler** (15 tests): Socket error handling, validation errors, global error handlers, performance logging
 
 ## Key Testing Patterns
 
@@ -82,14 +96,10 @@ describe('GameRoom', () => {
 
 ## Next Steps for Full Coverage
 
-### Phase 1 - Remaining Socket Handlers (Priority)
-- [ ] `GameHandler` class tests (game orchestration, turn management)
-- [ ] `RoomHandler` class tests (room joining, player management)
-
-### Phase 2 - Infrastructure Tests
-- [ ] Storage layer tests (`JsonFileStorage`, `RedisStorage`)
-- [ ] Error handling system tests
+### Phase 1 - Infrastructure Tests (Priority)
+- [x] Error handling system tests
 - [ ] Logger and utility tests
+- [ ] Server initialization and configuration tests
 
 ### Phase 3 - Integration Tests
 - [ ] Socket event flow tests (end-to-end)
