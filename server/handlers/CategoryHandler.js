@@ -1,7 +1,7 @@
 const GAME_RULES = require('../config/GameRules');
 const Logger = require('../utils/Logger');
 const ErrorHandler = require('../utils/ErrorHandler');
-const { ValidationError, StorageError, RoomError, ERROR_CODES } = require('../utils/CustomErrors');
+const { ValidationError, StorageError, ERROR_CODES } = require('../utils/CustomErrors');
 
 /**
  * Handles category-related socket events
@@ -24,17 +24,6 @@ class CategoryHandler {
    * Handle adding custom category
    */
   static async handleAddCategory(socket, io, userSession, getOrCreateRoom, storage, categoriesData, userSessions, data) {
-    // TEST: Force different error types based on category name
-    if (data.name === 'FORCE_STORAGE_ERROR') {
-      throw new StorageError('Forced storage error for testing', 'testOperation', { test: true });
-    }
-    if (data.name === 'FORCE_ROOM_ERROR') {
-      throw new RoomError('Forced room error for testing', 'test-room', { test: true });
-    }
-    if (data.name === 'FORCE_GENERIC_ERROR') {
-      throw new Error('Forced generic error for testing');
-    }
-    
     const roomId = userSession.currentRoom;
     const playerData = userSession.getUserData(roomId);
     
@@ -102,11 +91,7 @@ class CategoryHandler {
       }
       
       // Update room state immediately to sync with persistent storage
-      const userKey = `${roomId}-${playerData.userId}`;
-      if (!room.categories.userCustom[userKey]) {
-        room.categories.userCustom[userKey] = [];
-      }
-      room.categories.userCustom[userKey].push(categoryWithCreator);
+      room.addCustomCategory(categoryWithCreator, playerData.userId);
       
       // Also update global categoriesData to keep everything in sync
       if (!categoriesData.custom[storageKey]) {

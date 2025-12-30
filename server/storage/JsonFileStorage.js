@@ -1,18 +1,16 @@
 const fs = require('fs').promises;
 const path = require('path');
-const StorageInterface = require('./StorageInterface');
 
 /**
  * JSON file-based storage implementation
  * Stores data in local JSON files for development/prototyping
  * TODO: Replace with database storage for production
  */
-class JsonFileStorage extends StorageInterface {
+class JsonFileStorage {
   /**
    * Initialize JSON file storage with file paths
    */
   constructor() {
-    super();
     this.dataDir = path.join(__dirname, '..', '..', 'data');
     this.categoriesFile = path.join(this.dataDir, 'categories.json');
     this.roomsFile = path.join(this.dataDir, 'rooms.json');

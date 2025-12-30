@@ -1,5 +1,5 @@
 const Logger = require('./Logger');
-const { BaseError, SocketError, ERROR_CODES } = require('./CustomErrors');
+const { BaseError, ValidationError, ERROR_CODES } = require('./CustomErrors');
 
 /**
  * Centralized error handling utilities for socket events, HTTP requests, and async operations
