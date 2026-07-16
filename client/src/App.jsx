@@ -45,7 +45,7 @@ function App() {
   workflows.roomJoin.callbacks = {
     setRoomId, setIsInRoom, setGameState, setShowUserSetup, setRoomSetupData,
     setSetupError, setCategoryError, getMyId: () => myId, getMyUserId: () => myUserId,
-    getRoomId: () => roomId, getGameState: () => gameState
+    getRoomId: () => roomId, getGameState: () => gameState, getShowUserSetup: () => showUserSetup
   };
   workflows.userSetup.callbacks = workflows.roomJoin.callbacks;
   workflows.gameplay.callbacks = workflows.roomJoin.callbacks;
@@ -76,20 +76,13 @@ function App() {
       }
     });
 
-    socket.on('roomSetup', (data) => workflows.userSetup.handleRoomSetup(data));
+    socket.on('roomSetup', (data) => workflows.userSetup.handleRoomSetupEvent(data));
     socket.on('gameState', (state) => {
       console.log('Received gameState from server:', state.gameState, state.roomId);
       workflows.gameplay.handleGameState(state);
     });
     socket.on('categoryAdded', (data) => workflows.gameplay.handleCategoryAdded(data));
     socket.on('categorySuccess', () => workflows.gameplay.handleCategorySuccess());
-    socket.on('roomSetup', (data) => {
-      if (showUserSetup) {
-        workflows.userSetup.handleRoomSetupUpdate(data);
-      } else {
-        workflows.userSetup.handleRoomSetup(data);
-      }
-    });
     
     socket.on('categoryError', (error) => {
       ErrorHandler.handleSocketError(error, 'Category', setCategoryError);

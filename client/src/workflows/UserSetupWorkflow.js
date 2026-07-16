@@ -55,6 +55,20 @@ class UserSetupWorkflow {
     this.socket.emit('userSetup', setupData);
   }
 
+  /**
+   * Single entry point for the server's 'roomSetup' event.
+   * Dispatches to the initial-setup path or the live-update path
+   * based on whether the user is already looking at the setup screen.
+   * @param {Object} data - Room setup data from server
+   */
+  handleRoomSetupEvent(data) {
+    if (this.callbacks.getShowUserSetup()) {
+      this.handleRoomSetupUpdate(data);
+    } else {
+      this.handleRoomSetup(data);
+    }
+  }
+
   handleRoomSetup(data) {
     const existingUserData = this.storage.getUserData(data.roomId);
     
